@@ -1,0 +1,10 @@
+
+JavaPackager Native Build
+------------------------- 
+
+/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/bin/javapackager -deploy -native -outdir . -outfile timedrop -srcdir . -srcfiles timedrop.jar -appclass io.timedrop.ui.application.ApplicationDelegate -name "timedrop" -title "timedrop"
+
+Java Run jar file in command prompt
+-----------------------------------
+
+java -jar timedrop.jar
