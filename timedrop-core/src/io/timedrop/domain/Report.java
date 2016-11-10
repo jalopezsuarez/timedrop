@@ -7,6 +7,8 @@ public class Report
 	private long idTask;
 	private String taskDescription;
 	private long taskDuration;
+	private long estimationInit;
+	private long estimationCurrent;
 
 	public long getIdProject()
 	{
@@ -56,6 +58,26 @@ public class Report
 	public void setTaskDuration(long taskDuration)
 	{
 		this.taskDuration = taskDuration;
+	}
+
+	public long getEstimationInit()
+	{
+		return estimationInit;
+	}
+
+	public void setEstimationInit(long estimationInit)
+	{
+		this.estimationInit = estimationInit;
+	}
+
+	public long getEstimationCurrent()
+	{
+		return estimationCurrent;
+	}
+
+	public void setEstimationCurrent(long estimationCurrent)
+	{
+		this.estimationCurrent = estimationCurrent;
 	}
 
 }

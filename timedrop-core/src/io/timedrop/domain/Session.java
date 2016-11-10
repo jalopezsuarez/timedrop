@@ -25,6 +25,22 @@ public class Session extends Object
 	// ~ Methods
 	// =======================================================
 
+	public void copy(Session copy)
+	{
+		if (copy != null & copy instanceof Session)
+		{
+			task.copy(copy.getTask());
+
+			idSession = copy.getIdSession();
+			initTime = copy.getInitTime();
+			duration = copy.getDuration();
+			estimation = copy.getEstimation();
+		}
+	}
+
+	// ~ Methods
+	// =======================================================
+
 	public Task getTask()
 	{
 		return task;

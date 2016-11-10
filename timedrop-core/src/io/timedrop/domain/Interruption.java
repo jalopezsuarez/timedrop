@@ -7,7 +7,6 @@ public class Interruption extends Object
 
 	private long idBreak;
 	private long initTime;
-	private long endTime;
 	private long duration;
 
 	// ~ Methods
@@ -20,8 +19,23 @@ public class Interruption extends Object
 
 		idBreak = 0;
 		initTime = System.currentTimeMillis();
-		endTime = System.currentTimeMillis();
 		duration = 0;
+	}
+
+	// ~ Methods
+	// =======================================================
+
+	public void copy(Interruption copy)
+	{
+		if (copy != null & copy instanceof Interruption)
+		{
+			session.copy(copy.getSession());
+			task.copy(copy.getTask());
+
+			idBreak = copy.getIdBreak();
+			initTime = copy.getInitTime();
+			duration = copy.getDuration();
+		}
 	}
 
 	// ~ Methods
@@ -65,16 +79,6 @@ public class Interruption extends Object
 	public void setInitTime(long initTime)
 	{
 		this.initTime = initTime;
-	}
-
-	public long getEndTime()
-	{
-		return endTime;
-	}
-
-	public void setEndTime(long endTime)
-	{
-		this.endTime = endTime;
 	}
 
 	public long getDuration()

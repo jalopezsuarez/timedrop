@@ -27,6 +27,20 @@ public class Project extends Object
 	// ~ Methods
 	// =======================================================
 
+	public void copy(Project copy)
+	{
+		if (copy != null & copy instanceof Project)
+		{
+			organization.copy(copy.getOrganization());
+			
+			idProject = copy.getIdProject();
+			description = copy.getDescription();
+		}
+	}
+
+	// ~ Methods
+	// =======================================================
+
 	public Organization getOrganization()
 	{
 		return organization;

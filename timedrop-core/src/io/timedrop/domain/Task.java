@@ -27,6 +27,20 @@ public class Task extends Object
 	// ~ Methods
 	// =======================================================
 
+	public void copy(Task copy)
+	{
+		if (copy != null & copy instanceof Task)
+		{
+			project.copy(copy.getProject());
+
+			idTask = copy.getIdTask();
+			description = copy.getDescription();
+		}
+	}
+
+	// ~ Methods
+	// =======================================================
+
 	public boolean hasProject()
 	{
 		boolean response = false;

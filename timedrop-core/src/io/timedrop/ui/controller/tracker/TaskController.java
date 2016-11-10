@@ -6,8 +6,10 @@ import io.timedrop.business.report.ReportManager;
 import io.timedrop.commons.GridHelper;
 import io.timedrop.domain.Interruption;
 import io.timedrop.domain.Organization;
+import io.timedrop.domain.Report;
 import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
+import io.timedrop.service.TaskService;
 import io.timedrop.ui.components.BasicField;
 import io.timedrop.ui.components.BasicImage;
 import io.timedrop.ui.components.BasicFrame;
@@ -184,6 +186,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		{
 			breakTask = new Task();
+
 			Organization organization = new Organization();
 			organization.setIdOrganization(1L);
 			breakTask.getProject().setOrganization(organization);
@@ -723,7 +726,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionTrackerBegin();
 				}
 			};
-			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_ENTER");
+			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_ENTER");
 			panelTrackerEditorTimer.getActionMap().put("VK_ENTER", action);
 		}
 		// -------------------------------------------------------
@@ -738,7 +741,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionTrackerTaskSelector();
 				}
 			};
-			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_ESCAPE");
+			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_ESCAPE");
 			panelTrackerEditorTimer.getActionMap().put("VK_ESCAPE", action);
 		}
 		// -------------------------------------------------------
@@ -763,25 +766,25 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		// -------------------------------------------------------
 		{
 			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false);
-			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_UP");
+			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_UP");
 			panelTrackerEditorTimer.getActionMap().put("VK_UP", trackerEstimationIncrease);
 		}
 		// -------------------------------------------------------
 		{
 			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false);
-			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_RIGHT");
+			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_RIGHT");
 			panelTrackerEditorTimer.getActionMap().put("VK_RIGHT", trackerEstimationIncrease);
 		}
 		// -------------------------------------------------------
 		{
 			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false);
-			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_DOWN");
+			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_DOWN");
 			panelTrackerEditorTimer.getActionMap().put("VK_DOWN", trackerEstimationDecrease);
 		}
 		// -------------------------------------------------------
 		{
 			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false);
-			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_LEFT");
+			panelTrackerEditorTimer.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_LEFT");
 			panelTrackerEditorTimer.getActionMap().put("VK_LEFT", trackerEstimationDecrease);
 		}
 		// -------------------------------------------------------
@@ -806,7 +809,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			public void actionPerformed(ActionEvent e)
 			{
-
 				actionTrackerTaskDecrease();
 			}
 		};
@@ -828,12 +830,12 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionTrackerDismiss();
 				}
 			};
-			getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_I");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_I");
 			getRootPane().getActionMap().put("VK_I", action);
 		}
 		// -------------------------------------------------------
 		{
-			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_MASK);
+			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_MASK);
 			Action action = new AbstractAction()
 			{
 				private static final long serialVersionUID = 1L;
@@ -851,7 +853,22 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					}
 				}
 			};
-			getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "VK_P");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_R");
+			getRootPane().getActionMap().put("VK_R", action);
+		}
+		// -------------------------------------------------------
+		{
+			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_MASK);
+			Action action = new AbstractAction()
+			{
+				private static final long serialVersionUID = 1L;
+
+				public void actionPerformed(ActionEvent e)
+				{
+					actionTrackerToggle();
+				}
+			};
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_P");
 			getRootPane().getActionMap().put("VK_P", action);
 		}
 
@@ -995,6 +1012,36 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			labelEstimationTitle.setText(trackerTask.getDescription().trim().toUpperCase() + " - " + trackerTask.getProject().getDescription().trim().toUpperCase());
 		}
+		if (trackerTask.getProject().getIdProject() > 0 && trackerTask.getIdTask() > 0)
+		{
+			try
+			{
+				TaskService taskService = new TaskService();
+				Report response = taskService.findTaskEstimationById(trackerTask);
+
+				long duration = Math.round(response.getTaskDuration() / 3600);
+
+				String timeString = String.format("%02d h", response.getEstimationCurrent());
+				valueEstimationTask.setText(timeString);
+				trackerEstimation = response.getEstimationCurrent();
+
+				valueEstimationSpent.setText(String.format("%d h", duration));
+				valueEstimationRemaining.setText(String.format("%d h", response.getEstimationCurrent() - duration));
+				valueEstimationInitial.setText(String.format("%d h", response.getEstimationInit()));
+				valueEstimationCurrent.setText(String.format("%d h", response.getEstimationCurrent()));
+			}
+			catch (Exception e)
+			{
+			}
+		}
+		else
+		{
+			valueEstimationTask.setText("--h");
+			valueEstimationSpent.setText("--");
+			valueEstimationRemaining.setText("--");
+			valueEstimationInitial.setText("--");
+			valueEstimationCurrent.setText("--");
+		}
 	}
 
 	private void actionTrackerEstimationIncrease()
@@ -1028,7 +1075,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
-
 		}
 		context.setVisible(false);
 		context.dispose();
@@ -1050,6 +1096,17 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		try
 		{
 			trackerManager.decreaseTimer();
+		}
+		catch (Exception ex)
+		{
+		}
+	}
+
+	private void actionTrackerToggle()
+	{
+		try
+		{
+			trackerManager.toggleTracker();
 		}
 		catch (Exception ex)
 		{
@@ -1167,6 +1224,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	// ~ Methods
 	// =======================================================
 
+	static boolean valueTrackerTimerBlink = false;
+
 	@Override
 	public void track(Session session, Interruption interruption)
 	{
@@ -1176,6 +1235,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			duration -= TimeUnit.HOURS.toSeconds(hours);
 			long minutes = TimeUnit.SECONDS.toMinutes(duration);
 			duration -= TimeUnit.MINUTES.toSeconds(minutes);
+			// long seconds = TimeUnit.SECONDS.toSeconds(duration);
 
 			String timeString = String.format("%02d:%02d", hours, minutes);
 			valueTrackerTimer.setText(timeString);
@@ -1188,11 +1248,20 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			duration -= TimeUnit.MINUTES.toSeconds(minutes);
 			long seconds = TimeUnit.SECONDS.toSeconds(duration);
 
-			String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+			String timeString = String.format("%02d:%02d", hours, minutes, seconds);
 			valueBreakTrackerTimer.setText(timeString);
 		}
 		{
 			valueTrackerTimerRemaining.setText("XXX");
+		}
+
+		if (trackerManager.isPaused())
+		{
+			if (valueTrackerTimerBlink)
+				valueTrackerTimer.setForeground(Color.decode("#161F26"));
+			else
+				valueTrackerTimer.setForeground(Color.decode("#ffffff"));
+			valueTrackerTimerBlink = !valueTrackerTimerBlink;
 		}
 	}
 

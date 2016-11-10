@@ -34,7 +34,7 @@ public class NotificationCenter
 		BasicPanel panel = new BasicPanel();
 		{
 			panel.setBackground(Color.decode("#212B33"));
-			panel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+			panel.setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
 
 			GridHelper layoutNotification = new GridHelper(panel);
 
@@ -162,25 +162,25 @@ public class NotificationCenter
 
 	private static void close(JDialog dialog)
 	{
-		dialog.setOpacity(1.0F);
-		dialog.setVisible(true);
-
-		int timerDelay = 10;
-		new Timer(timerDelay, new ActionListener()
+		if (dialog.isVisible() && dialog.getOpacity() >= 1.0F)
 		{
-			private int counter = 10;
-
-			@Override
-			public void actionPerformed(ActionEvent e)
+			int timerDelay = 10;
+			new Timer(timerDelay, new ActionListener()
 			{
-				counter--;
-				if (counter <= 0)
+				private int counter = 10;
+
+				@Override
+				public void actionPerformed(ActionEvent e)
 				{
-					((Timer) e.getSource()).stop();
-					dialog.setVisible(false);
+					counter--;
+					if (counter <= 0)
+					{
+						((Timer) e.getSource()).stop();
+						dialog.setVisible(false);
+					}
+					dialog.setOpacity(counter * 0.1F);
 				}
-				dialog.setOpacity(counter * 0.1F);
-			}
-		}).start();
+			}).start();
+		}
 	}
 }

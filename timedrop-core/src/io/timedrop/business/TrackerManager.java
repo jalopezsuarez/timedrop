@@ -25,6 +25,7 @@ public class TrackerManager
 	private boolean enabled;
 	private boolean running;
 	private boolean breaks;
+	private boolean paused;
 
 	private Timer timer;
 
@@ -49,6 +50,8 @@ public class TrackerManager
 
 		enabled = true;
 		running = false;
+		breaks = false;
+		paused = false;
 
 		// -------------------------------------------------------
 
@@ -69,32 +72,31 @@ public class TrackerManager
 		timer.start();
 	}
 
-	public void run(boolean update) throws Exception
+	public void run(boolean force) throws Exception
 	{
-		if (enabled && breaks)
+		if (enabled && breaks && !paused)
 		{
 			long duration = interruption.getDuration() + 1;
 			interruption.setDuration(duration);
 			interruptionService.process(interruption);
-			if (ui != null && update)
-				ui.update(session, interruption);
-			if (ui != null)
-				ui.track(session, interruption);
 		}
-		else if (enabled && running)
+		else if (enabled && running && !paused)
 		{
 			long duration = session.getDuration() + 1;
 			session.setDuration(duration);
 			sessionService.process(session);
-			if (ui != null && update)
-				ui.update(session, interruption);
-			if (ui != null)
-				ui.track(session, interruption);
 		}
 
 		// -------------------------------------------------------
 
-		notifications();
+		if (enabled && ui != null && force)
+			ui.update(session, interruption);
+		if (enabled && ui != null)
+			ui.track(session, interruption);
+
+		// -------------------------------------------------------
+
+		notifications(force);
 	}
 
 	// ~ Methods
@@ -125,20 +127,16 @@ public class TrackerManager
 		enabled = false;
 		running = false;
 		breaks = false;
+		paused = false;
 
 		// -------------------------------------------------------
 
 		Session sessionTracker = new Session();
-
-		sessionTracker.getTask().getProject().getOrganization().setDescription(task.getProject().getOrganization().getDescription());
-		sessionTracker.getTask().getProject().getOrganization().setIdOrganization(task.getProject().getOrganization().getIdOrganization());
-		sessionTracker.getTask().getProject().setDescription(task.getProject().getDescription());
-		sessionTracker.getTask().getProject().setIdProject(task.getProject().getIdProject());
-		sessionTracker.getTask().setDescription(task.getDescription());
-		sessionTracker.getTask().setIdTask(task.getIdTask());
-
 		sessionTracker.setEstimation(estimation);
 		sessionTracker.setDuration(0);
+
+		Task sessionTask = sessionTracker.getTask();
+		sessionTask.copy(task);
 
 		sessionService.generate(sessionTracker);
 		session = sessionTracker;
@@ -148,6 +146,18 @@ public class TrackerManager
 		enabled = true;
 		running = true;
 		breaks = false;
+		paused = false;
+		run(true);
+	}
+
+	public void toggleTracker() throws Exception
+	{
+		boolean status = !paused;
+		enabled = false;
+		paused = false;
+
+		enabled = true;
+		paused = status;
 		run(true);
 	}
 
@@ -164,6 +174,7 @@ public class TrackerManager
 		enabled = false;
 		running = false;
 		breaks = false;
+		paused = false;
 
 		// -------------------------------------------------------
 
@@ -179,6 +190,7 @@ public class TrackerManager
 		enabled = true;
 		running = false;
 		breaks = true;
+		paused = false;
 		run(true);
 	}
 
@@ -187,23 +199,21 @@ public class TrackerManager
 		enabled = false;
 		running = false;
 		breaks = false;
+		paused = false;
 
 		// -------------------------------------------------------
 
-		interruption.getTask().getProject().getOrganization().setDescription(task.getProject().getOrganization().getDescription());
-		interruption.getTask().getProject().getOrganization().setIdOrganization(task.getProject().getOrganization().getIdOrganization());
-		interruption.getTask().getProject().setDescription(task.getProject().getDescription());
-		interruption.getTask().getProject().setIdProject(task.getProject().getIdProject());
-		interruption.getTask().setDescription(task.getDescription());
-		interruption.getTask().setIdTask(task.getIdTask());
+		Task interruptionTask = interruption.getTask();
+		interruptionTask.copy(task);
 
-		interruptionService.process(interruption);		
+		interruptionService.process(interruption);
 
 		// -------------------------------------------------------
 
 		enabled = true;
 		running = true;
 		breaks = false;
+		paused = false;
 		run(true);
 	}
 
@@ -212,6 +222,7 @@ public class TrackerManager
 		enabled = false;
 		running = false;
 		breaks = false;
+		paused = false;
 
 		// -------------------------------------------------------
 
@@ -222,6 +233,7 @@ public class TrackerManager
 		enabled = true;
 		running = true;
 		breaks = false;
+		paused = false;
 		run(true);
 	}
 
@@ -301,12 +313,26 @@ public class TrackerManager
 	// ~ Methods
 	// =======================================================
 
-	public void notifications()
+	public void notifications(boolean force)
 	{
-		if (enabled && breaks)
+		if (enabled && paused)
+		{
+			if (internal % 300 == 0 || force)
+			{
+				if (breaks)
+				{
+					NotificationCenter.notify("Interruption " + "Paused", session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
+				}
+				else if (running)
+				{
+					NotificationCenter.notify("Tracking " + "Paused", session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
+				}
+			}
+		}
+		else if (enabled && breaks)
 		{
 			long duration = interruption.getDuration();
-			if (duration % 60 == 0)
+			if (duration % 300 == 0 || force)
 			{
 				long hours = TimeUnit.SECONDS.toHours(duration);
 				duration -= TimeUnit.HOURS.toSeconds(hours);
@@ -314,13 +340,13 @@ public class TrackerManager
 				duration -= TimeUnit.MINUTES.toSeconds(minutes);
 
 				String timeString = String.format("%02d:%02d", hours, minutes);
-				NotificationCenter.notify("Interrupted " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
+				NotificationCenter.notify("Interruption " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
 			}
 		}
 		else if (enabled && running)
 		{
 			long duration = session.getDuration();
-			if (duration % 60 == 0)
+			if (duration % 300 == 0 || force)
 			{
 				long hours = TimeUnit.SECONDS.toHours(duration);
 				duration -= TimeUnit.HOURS.toSeconds(hours);
@@ -333,7 +359,7 @@ public class TrackerManager
 		}
 		else
 		{
-			if (internal % 60 == 0)
+			if (internal % 300 == 0)
 			{
 				NotificationCenter.notify("No task", "Start tracking by selecting the task you are working on", 15);
 			}
@@ -343,6 +369,11 @@ public class TrackerManager
 	public boolean isRunning()
 	{
 		return enabled && running;
+	}
+
+	public boolean isPaused()
+	{
+		return enabled && paused;
 	}
 
 }

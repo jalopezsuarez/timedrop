@@ -19,7 +19,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-public class TaskSearchBox extends AbstractListModel<Object> implements ComboBoxModel<Object>, KeyListener, ItemListener, FocusListener, ModelSearchBox, ActionListener
+public class TaskSearchBox extends AbstractListModel<Object> implements ComboBoxModel<Object>, ModelSearchBox, KeyListener, ItemListener, FocusListener, ActionListener
 {
 	private static final long serialVersionUID = 791572948406283213L;
 
@@ -29,9 +29,12 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 	private ComboBoxEditor cbe;
 
 	private TaskService taskService = null;
-	private Task task = null;
+	private Task object = null;
 
 	private SelectorAction selectorAction = null;
+
+	// ~ Methods
+	// =======================================================
 
 	public TaskSearchBox(JComboBox<Object> jcb, Task task)
 	{
@@ -44,7 +47,7 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 		cbe.addActionListener(this);
 
 		taskService = new TaskService();
-		this.task = task;
+		object = task;
 	}
 
 	public void clearUI()
@@ -61,13 +64,39 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 		}
 	}
 
+	// ~ Methods
+	// =======================================================
+
+	public int getSize()
+	{
+		return data.size();
+	}
+
+	public Object getElementAt(int index)
+	{
+		return data.get(index);
+	}
+
+	public Object getSelectedItem()
+	{
+		return selection;
+	}
+
+	public void setSelectedItem(Object anItem)
+	{
+		selection = anItem;
+	}
+
+	// ~ Methods
+	// =======================================================
+
 	@Override
 	public void updateModel()
 	{
 		try
 		{
-			task.setDescription(cbe.getItem().toString());
-			data = taskService.fetchTasks(task);
+			object.setDescription(cbe.getItem().toString());
+			data = taskService.fetchTasks(object);
 			super.fireContentsChanged(this, 0, data.size());
 		}
 		catch (Exception ex)
@@ -81,8 +110,8 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 	{
 		try
 		{
-			task.setDescription(in);
-			data = taskService.fetchTasks(task);
+			object.setDescription(in);
+			data = taskService.fetchTasks(object);
 			super.fireContentsChanged(this, 0, data.size());
 		}
 		catch (Exception ex)
@@ -90,96 +119,93 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 		}
 		cb.hidePopup();
 		if (data.size() > 0)
-		{
 			cb.showPopup();
-			cb.setSelectedIndex(0);
+	}
+
+	// ~ Methods
+	// =======================================================
+
+	public void keyPressed(KeyEvent e)
+	{
+		if (e.getModifiers() <= 0)
+		{
+			Object source = cbe.getItem();
+			JTextField textField = (JTextField) cbe.getEditorComponent();
+			int currPos = textField.getCaretPosition();
+
+			if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
+			{
+				if (e.getKeyCode() != KeyEvent.VK_ENTER)
+				{
+					if (data != null && data.size() <= 0)
+					{
+						updateModel();
+						cbe.setItem(source);
+						textField.setCaretPosition(currPos);
+					}
+				}
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			{
+				if (selectorAction != null)
+					selectorAction.onCancel();
+			}
+			else
+			{
+				String string = textField.getText() + e.getKeyChar();
+				string = string.trim();
+				updateModel(string);
+				cbe.setItem(source);
+				textField.setCaretPosition(currPos);
+			}
 		}
 	}
 
-	public int getSize()
+	public void keyReleased(KeyEvent e)
 	{
-		return data.size();
-	}
+		if (e.getModifiers() <= 0)
+		{
+			Object source = cbe.getItem();
+			JTextField textField = (JTextField) cbe.getEditorComponent();
+			int currPos = textField.getCaretPosition();
 
-	public Object getElementAt(int index)
-	{
-		return data.get(index);
-	}
-
-	public void setSelectedItem(Object anItem)
-	{
-		selection = anItem;
-	}
-
-	public Object getSelectedItem()
-	{
-		return selection;
+			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE)
+			{
+				String string = textField.getText();
+				string = string.trim();
+				updateModel(string);
+				cbe.setItem(source);
+				textField.setCaretPosition(currPos);
+			}
+		}
 	}
 
 	public void keyTyped(KeyEvent e)
 	{
 	}
 
-	public void keyPressed(KeyEvent e)
-	{
-		Object str = cbe.getItem();
-		JTextField jtf = (JTextField) cbe.getEditorComponent();
-		int currPos = jtf.getCaretPosition();
-
-		if (e.getKeyChar() == KeyEvent.CHAR_UNDEFINED)
-		{
-			if (e.getKeyCode() != KeyEvent.VK_ENTER)
-			{
-				cbe.setItem(str);
-				jtf.setCaretPosition(currPos);
-			}
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-		{
-			if (selectorAction != null)
-				selectorAction.onCancel();
-		}
-		else
-		{
-			updateModel(cbe.getItem().toString());
-			cbe.setItem(str);
-			jtf.setCaretPosition(currPos);
-		}
-	}
-
-	public void keyReleased(KeyEvent e)
-	{
-
-	}
+	// ~ Methods
+	// =======================================================
 
 	public void itemStateChanged(ItemEvent e)
 	{
-		Object source = e.getItem();
-		if (task != null && source instanceof Task)
-		{
-			Task item = (Task) source;
-			task.setDescription(item.getDescription());
-			task.setIdTask(item.getIdTask());
-		}
-		else if (source instanceof String)
-		{
-			task.setDescription((String) source);
-			task.setIdTask(-1);
-		}
-		cbe.setItem(e.getItem().toString());
-		cb.setSelectedItem(e.getItem());
 	}
+
+	// ~ Methods
+	// =======================================================
 
 	@Override
 	public void focusGained(FocusEvent e)
 	{
-		updateModel();
 	}
 
 	@Override
 	public void focusLost(FocusEvent e)
 	{
 	}
+
+	// ~ Methods
+	// =======================================================
 
 	public void setSelectorAction(SelectorAction selector)
 	{
@@ -189,6 +215,22 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		if (data != null && data.size() > 0 && cb.getSelectedItem() instanceof Task && ((Task) cb.getSelectedItem()).getIdTask() > 0)
+		{
+			Task item = (Task) cb.getSelectedItem();
+			object.setDescription(item.getDescription().trim());
+			object.setIdTask(item.getIdTask());
+
+			updateModel(object.toString());
+			cbe.setItem(object.toString());
+			cb.setSelectedItem(object);
+		}
+		else if (data != null && data.size() <= 0 && cbe.getItem() instanceof String && ((String) cbe.getItem()).length() > 0)
+		{
+			object.setDescription(((String) cbe.getItem()).trim());
+			object.setIdTask(0);
+		}
+
 		if (selectorAction != null)
 			selectorAction.onSelection();
 	}

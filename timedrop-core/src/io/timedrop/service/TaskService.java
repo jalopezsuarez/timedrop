@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import io.timedrop.domain.Report;
 import io.timedrop.domain.Task;
 import io.timedrop.service.exception.OrganizationNotFoundException;
 
@@ -67,6 +68,66 @@ public class TaskService
 		// =======================================================
 
 		dataset.close();
+		statement.close();
+		ConnectionManager.closeConnection();
+
+		return response;
+	}
+
+	public Report findTaskEstimationById(Task task) throws Exception
+	{
+		Report response = new Report();
+
+		// -------------------------------------------------------
+
+		Statement statement = ConnectionManager.openConnection().createStatement();
+		String query = "  ";
+
+		// -------------------------------------------------------
+
+		query = " SELECT SUM (durationTask) durationTask ";
+		query += " FROM (  ";
+		query += " SELECT SUM (duration) durationTask ";
+		query += " FROM session ";
+		query += " WHERE session.idTask = " + task.getIdTask() + " ";
+		query += " UNION  ";
+		query += " SELECT SUM(duration) durationTask ";
+		query += " FROM break ";
+		query += " WHERE break.idTask = " + task.getIdTask() + " ) ";
+
+		// -------------------------------------------------------
+
+		ResultSet datasetDuration = statement.executeQuery(query);
+		while (datasetDuration.next())
+		{
+			response.setTaskDuration(datasetDuration.getLong("durationTask"));
+		}
+		datasetDuration.close();
+
+		// =======================================================
+
+		query = " SELECT session.estimation as estimationTask ";
+		query += " FROM task ";
+		query += " LEFT JOIN session ON session.idTask = task.idTask ";
+		query += " WHERE task.idTask = " + task.getIdTask() + " ";
+		query += " ORDER BY session.initTime ASC; ";
+
+		// -------------------------------------------------------
+		boolean first = true;
+		ResultSet datasetEstimation = statement.executeQuery(query);
+		while (datasetEstimation.next())
+		{
+			if (first)
+			{
+				response.setEstimationInit(datasetEstimation.getLong("estimationTask"));
+				first = false;
+			}
+			response.setEstimationCurrent(datasetEstimation.getLong("estimationTask"));
+		}
+		datasetEstimation.close();
+
+		// =======================================================
+
 		statement.close();
 		ConnectionManager.closeConnection();
 

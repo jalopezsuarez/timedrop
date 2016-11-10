@@ -23,6 +23,18 @@ public class Organization extends Object
 	// ~ Methods
 	// =======================================================
 
+	public void copy(Organization copy)
+	{
+		if (copy != null & copy instanceof Organization)
+		{
+			idOrganization = copy.getIdOrganization();
+			description = copy.getDescription();
+		}
+	}
+
+	// ~ Methods
+	// =======================================================
+
 	public long getIdOrganization()
 	{
 		return idOrganization;
