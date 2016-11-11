@@ -335,16 +335,21 @@ public class TrackerManager
 		taskService.process(session.getTask());
 	}
 
-	public void addTaskAnnotation(String annotation) throws Exception
+	public void saveTaskAnnotation(String annotation) throws Exception
 	{
 		session.setAnnotation(annotation);
 		sessionService.process(session);
 	}
 
-	public void addInterruptionAnnotation(String annotation) throws Exception
+	public void saveInterruptionAnnotation(String annotation) throws Exception
 	{
 		interruption.setAnnotation(annotation);
 		interruptionService.process(interruption);
+	}
+
+	public String getTaskAnnotation()
+	{
+		return session.getAnnotation();
 	}
 
 	// ~ Methods

@@ -896,7 +896,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionTrackerTaskAnnotation();
+				actionTrackerAnnotation();
 			}
 		};
 		// -------------------------------------------------------
@@ -920,6 +920,10 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
 					e.consume();
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+
 				}
 			}
 
@@ -945,7 +949,12 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
 					e.consume();
-					actionTrackerTaskAnnotationCommit();
+					actionTrackerAnnotationCommit();
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+					e.consume();
+					actionTrackerAnnotationDismiss();
 				}
 			}
 
@@ -1018,7 +1027,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 				public void actionPerformed(ActionEvent e)
 				{
-					actionTrackerTaskAnnotation();
+					actionTrackerAnnotation();
 				}
 			};
 			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_A");
@@ -1134,11 +1143,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					e.consume();
 					actionInterruptionCommit();
 					actionTrackerDismiss();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-				{
-					e.consume();
-					actionInterruptionTaskSelector();
 				}
 			}
 
@@ -1295,7 +1299,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 	}
 
-	private void actionTrackerTaskAnnotation()
+	private void actionTrackerAnnotation()
 	{
 		try
 		{
@@ -1303,6 +1307,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			{
 				panelTrackerAnnotation.setVisible(true);
 				panelTrackerManager.setVisible(false);
+				editorTrackerAnnotation.setText(trackerManager.getTaskAnnotation());
 				editorTrackerAnnotation.requestFocusInWindow();
 			}
 		}
@@ -1312,7 +1317,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 	}
 
-	private void actionTrackerTaskAnnotationCommit()
+	private void actionTrackerAnnotationCommit()
 	{
 		try
 		{
@@ -1320,7 +1325,23 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			{
 				panelTrackerAnnotation.setVisible(false);
 				panelTrackerManager.setVisible(true);
-				trackerManager.addTaskAnnotation(editorTrackerAnnotation.getText());
+				trackerManager.saveTaskAnnotation(editorTrackerAnnotation.getText());
+			}
+		}
+		catch (Exception ex)
+		{
+
+		}
+	}
+
+	private void actionTrackerAnnotationDismiss()
+	{
+		try
+		{
+			if (trackerManager.isRunning() || trackerManager.isPaused() || trackerManager.isInterrupted())
+			{
+				panelTrackerAnnotation.setVisible(false);
+				panelTrackerManager.setVisible(true);
 			}
 		}
 		catch (Exception ex)
@@ -1404,7 +1425,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	{
 		try
 		{
-			trackerManager.addInterruptionAnnotation(editorBreakEditorReason.getText());
+			trackerManager.saveInterruptionAnnotation(editorBreakEditorReason.getText());
 			trackerManager.commitInterruption(breakTask);
 		}
 		catch (Exception ex)
