@@ -40,6 +40,9 @@ public class ApplicationDelegate implements NativeKeyListener
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent event)
 	{
+		//System.out.println("event.getModifiers():" + event.getModifiers());
+		//System.out.println("event.getRawCode():" + event.getRawCode());
+
 		if (event.getModifiers() == 20 || event.getModifiers() == 22 && event.getRawCode() == 60)
 		{
 			if (applicationWindow != null)
