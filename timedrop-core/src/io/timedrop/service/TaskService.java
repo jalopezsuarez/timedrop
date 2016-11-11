@@ -113,28 +113,23 @@ public class TaskService
 
 		// -------------------------------------------------------
 
-		query = " SELECT SUM (summary) taskSummary ";
-		query += " FROM (  ";
-		query += " SELECT SUM (duration) summary ";
-		query += " FROM session ";
+		query = " SELECT SUM(interruption.duration) summary ";
+		query += " FROM session  ";
+		query += " LEFT JOIN session interruption ON interruption.idInterruption = session.idSession OR interruption.idInterruption IS NULL ";
 		query += " WHERE session.idTask = " + task.getIdTask() + " ";
-		query += " UNION  ";
-		query += " SELECT SUM(duration) summary ";
-		query += " FROM break ";
-		query += " WHERE break.idTask = " + task.getIdTask() + " ) ";
 
 		// -------------------------------------------------------
 
 		ResultSet datasetDuration = statement.executeQuery(query);
 		while (datasetDuration.next())
 		{
-			task.setSummary(datasetDuration.getLong("taskSummary"));
+			task.setSummary(datasetDuration.getLong("summary"));
 		}
 		datasetDuration.close();
 
 		// =======================================================
 
-		query = " SELECT session.estimation AS taskEstimation ";
+		query = " SELECT session.estimation AS estimation ";
 		query += " FROM task ";
 		query += " LEFT JOIN session ON session.idTask = task.idTask ";
 		query += " WHERE task.idTask = " + task.getIdTask() + " ";
@@ -147,10 +142,10 @@ public class TaskService
 		{
 			if (first)
 			{
-				task.setEstimation(datasetEstimation.getLong("taskEstimation"));
+				task.setEstimation(datasetEstimation.getLong("estimation"));
 				first = false;
 			}
-			task.setReestimate(datasetEstimation.getLong("taskEstimation"));
+			task.setReestimate(datasetEstimation.getLong("estimation"));
 		}
 		datasetEstimation.close();
 

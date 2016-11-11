@@ -4,10 +4,10 @@ import io.timedrop.business.TrackerInterface;
 import io.timedrop.business.TrackerManager;
 import io.timedrop.business.report.ReportManager;
 import io.timedrop.commons.GridHelper;
-import io.timedrop.domain.Interruption;
 import io.timedrop.domain.Organization;
 import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
+import io.timedrop.service.SessionService;
 import io.timedrop.service.TaskService;
 import io.timedrop.ui.components.BasicEditor;
 import io.timedrop.ui.components.BasicField;
@@ -21,10 +21,12 @@ import io.timedrop.ui.components.selector.LightComboBox;
 import io.timedrop.ui.components.selector.ProjectSearchBox;
 import io.timedrop.ui.components.selector.SelectorAction;
 import io.timedrop.ui.components.selector.TaskSearchBox;
+import io.timedrop.ui.components.table.BasicTableView;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -33,10 +35,13 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -44,6 +49,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 public class TaskController extends BasicFrame implements TrackerInterface
 {
@@ -179,6 +186,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	// -------------------------------------------------------
 
 	private BasicPanel panelBreakList;
+	private BasicTableView tableTaskInterruptions;
 
 	// ~ Methods
 	// =======================================================
@@ -454,7 +462,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimer.setForeground(Color.decode("#ffffff"));
 							valueTrackerTimer.setBackground(Color.decode("#212B33"));
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
-							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 0);
+							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 8);
 							layoutTrackerManagerTimer.constrains().fill = GridBagConstraints.BOTH;
 							layoutTrackerManagerTimer.add(valueTrackerTimer, 2, 0);
 						}
@@ -467,7 +475,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						{
 							buttonTrackerAnnotation = new BasicImage("tracking_annotation");
 							buttonTrackerAnnotation.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(3, 0, 0, 6);
+							layoutTrackerManagerEstimation.constrains().insets = new Insets(3, 0, 0, 8);
 							layoutTrackerManagerEstimation.constrains().gridheight = 2;
 							layoutTrackerManagerEstimation.add(buttonTrackerAnnotation, 0, 0);
 						}
@@ -476,7 +484,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerTimerStarted.setForeground(Color.decode("#525B61"));
 							labelTrackerTimerStarted.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().ipadx = 20;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
 							layoutTrackerManagerEstimation.add(labelTrackerTimerStarted, 1, 0);
 						}
@@ -485,9 +492,9 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerStarted.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerStarted.setBackground(Color.decode("#212B33"));
+							valueTrackerTimerStarted.setHorizontalAlignment(JLabel.RIGHT);
+							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
-							layoutTrackerManagerEstimation.constrains().anchor = GridBagConstraints.LINE_END;
-
 							layoutTrackerManagerEstimation.add(valueTrackerTimerStarted, 2, 0);
 						}
 						{
@@ -495,7 +502,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerTimerRemaining.setForeground(Color.decode("#525B61"));
 							labelTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().ipadx = 20;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
 							layoutTrackerManagerEstimation.add(labelTrackerTimerRemaining, 1, 1);
 						}
@@ -504,7 +510,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerRemaining.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().anchor = GridBagConstraints.LINE_END;
+							valueTrackerTimerRemaining.setHorizontalAlignment(JLabel.RIGHT);
+							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
 							layoutTrackerManagerEstimation.add(valueTrackerTimerRemaining, 2, 1);
 						}
@@ -548,7 +555,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			panelBreakManager = new BasicPanel();
 			panelBreakManager.setLayout(new CardLayout());
 			panelBreakManager.setBackground(Color.decode("#FFFFFF"));
-			// panelBreakManager.setPreferredSize(new Dimension(0, 150));
 			panelBreakManager.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#DCDCDC")));
 			{
 				panelBreakEmpty = new BasicPanel();
@@ -567,7 +573,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					BasicPanel panelEmptyHelper = new BasicPanel();
 					GridHelper layoutEmptyHelper = new GridHelper(panelEmptyHelper);
 					panelEmptyHelper.setBackground(Color.decode("#F3F3F3"));
-					panelEmptyHelper.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#DCDCDC")));
+					panelEmptyHelper.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.decode("#DCDCDC")));
 					{
 						buttonBreakEmptyHelper = new BasicImage("interruption_create");
 						buttonBreakEmptyHelper.setForeground(Color.decode("#9B9B9B"));
@@ -734,9 +740,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		// --------------------------------------------------------
 		{
 			panelBreakList = new BasicPanel();
+			panelBreakList.setLayout(new BorderLayout());
 			panelBreakList.setBackground(Color.decode("#ffffff"));
 			{
-
+				tableTaskInterruptions = new BasicTableView(new FactoryCellRenderer());
+				panelBreakList.add(tableTaskInterruptions, BorderLayout.CENTER);
 			}
 			layout.constrains().weightx = 1.0;
 			layout.constrains().weighty = 1.0;
@@ -758,6 +766,28 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			panelBreakEmpty.setVisible(true);
 			panelBreakTracker.setVisible(false);
 			comboTrackerProject.requestFocusInWindow();
+		}
+
+		// =======================================================
+
+		ArrayList<Object> response = null;
+		try
+		{
+			SessionService sessionService = new SessionService();
+			response = sessionService.findInterruptionsBySession(trackerManager.getSession());
+		}
+		catch (Exception ex)
+		{
+			response = new ArrayList<Object>();
+		}
+		DefaultTableModel tableModel = (DefaultTableModel) tableTaskInterruptions.getModel();
+		for (int i = tableModel.getRowCount() - 1; i > -1; i--)
+		{
+			tableModel.removeRow(i);
+		}
+		for (Object session : response)
+		{
+			tableModel.addRow(new Object[] { session });
 		}
 	}
 
@@ -997,6 +1027,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					}
 					catch (Exception ex)
 					{
+						ex.printStackTrace();
 					}
 				}
 			};
@@ -1144,6 +1175,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionInterruptionCommit();
 					actionTrackerDismiss();
 				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+					e.consume();
+					actionInterruptionTaskSelector();
+				}
 			}
 
 			@Override
@@ -1215,8 +1251,9 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				valueEstimationInitial.setText(String.format("%d h", trackerTask.getEstimation()));
 				valueEstimationCurrent.setText(String.format("%d h", trackerTask.getReestimate()));
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
+				ex.printStackTrace();
 			}
 		}
 		else
@@ -1261,6 +1298,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 		context.setVisible(false);
 		context.dispose();
@@ -1270,10 +1308,14 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	{
 		try
 		{
-			trackerManager.increaseTimer();
+			if (trackerManager.isRunning() || trackerManager.isPaused() || trackerManager.isInterrupted())
+			{
+				trackerManager.increaseTimer();
+			}
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -1281,10 +1323,14 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	{
 		try
 		{
-			trackerManager.decreaseTimer();
+			if (trackerManager.isRunning() || trackerManager.isPaused() || trackerManager.isInterrupted())
+			{
+				trackerManager.decreaseTimer();
+			}
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -1296,6 +1342,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -1313,7 +1360,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
-
+			ex.printStackTrace();
 		}
 	}
 
@@ -1330,7 +1377,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
-
+			ex.printStackTrace();
 		}
 	}
 
@@ -1346,7 +1393,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
-
+			ex.printStackTrace();
 		}
 	}
 
@@ -1358,6 +1405,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -1371,6 +1419,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			}
 			catch (Exception ex)
 			{
+				ex.printStackTrace();
 			}
 			selectorBreakProject.clearUI();
 			selectorBreakTask.clearUI();
@@ -1430,6 +1479,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 
 		selectorBreakProject.clearUI();
@@ -1455,6 +1505,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 
 		selectorBreakProject.clearUI();
@@ -1477,6 +1528,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -1488,6 +1540,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		catch (Exception ex)
 		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -1495,7 +1548,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	// =======================================================
 
 	@Override
-	public void track(Session session, Interruption interruption)
+	public void track(Session session, Session interruption)
 	{
 		{
 			long duration = session.getDuration();
@@ -1520,7 +1573,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			valueBreakTrackerTimer.setText(timeString);
 		}
 		{
-			valueTrackerTimerRemaining.setText("--h");
+			valueTrackerTimerRemaining.setText("2354h");
 		}
 
 		// -------------------------------------------------------
@@ -1554,9 +1607,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	}
 
 	@Override
-	public void update(Session session, Interruption interruption)
+	public void update(Session session, Session interruption)
 	{
-		if (trackerManager.isRunning())
 		{
 			fieldTackerTimerProject.setText(session.getTask().getProject().getDescription());
 			textTrackerTimerTask.setText(session.getTask().getDescription());
@@ -1574,4 +1626,120 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			labelBreakTrackerTitle.setText(startedString);
 		}
 	}
+
+	// Class Methods
+	// ===============================================================
+
+	private class FactoryCellRenderer extends BasicPanel implements TableCellRenderer
+	{
+		private static final long serialVersionUID = 8233159691825884868L;
+
+		BasicField fieldProjectDescription;
+		BasicField fieldTaskDescription;
+		BasicLabel labelSessionInitiated;
+		BasicLabel labelSessionDuration;
+
+		public FactoryCellRenderer()
+		{
+			super();
+
+			GridHelper layout = new GridHelper(this);
+			setBackground(Color.decode("#ffffff"));
+
+			Border borderSuperior = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#DCDCDC"));
+			Border borderDecorator = BorderFactory.createMatteBorder(0, 4, 0, 0, Color.decode("#77ABD4"));
+			setBorder(BorderFactory.createCompoundBorder(borderSuperior, borderDecorator));
+			{
+				fieldTaskDescription = new BasicField("--");
+				fieldTaskDescription.setFont(UIManager.getFont("TextField.font").deriveFont(18f));
+				fieldTaskDescription.setForeground(Color.decode("#4A4A4A"));
+				layout.constrains().weightx = 1.0;
+				layout.constrains().weighty = 1.0;
+				layout.constrains().fill = GridBagConstraints.HORIZONTAL;
+				layout.constrains().anchor = GridBagConstraints.SOUTH;
+				layout.constrains().insets = new Insets(10, 10, 0, 10);
+				layout.add(fieldTaskDescription, 0, 0);
+			}
+			{
+				fieldProjectDescription = new BasicField("--");
+				fieldProjectDescription.setFont(UIManager.getFont("Label.font").deriveFont(14f));
+				fieldProjectDescription.setForeground(Color.decode("#79ADD7"));
+				layout.constrains().weightx = 1.0;
+				layout.constrains().weighty = 1.0;
+				layout.constrains().fill = GridBagConstraints.HORIZONTAL;
+				layout.constrains().anchor = GridBagConstraints.NORTH;
+				layout.constrains().insets = new Insets(4, 10, 10, 10);
+				layout.add(fieldProjectDescription, 0, 1);
+			}
+			{
+				BasicPanel panelSessionInformation = new BasicPanel();
+				panelSessionInformation.setLayout(new BorderLayout());
+				{
+					labelSessionDuration = new BasicLabel("--");
+					labelSessionDuration.setForeground(Color.decode("#4A4A4A"));
+					labelSessionDuration.setFont(UIManager.getFont("TextField.font").deriveFont(24f));
+					labelSessionDuration.setHorizontalAlignment(JLabel.RIGHT);
+					panelSessionInformation.add(labelSessionDuration, BorderLayout.NORTH);
+				}
+				{
+					labelSessionInitiated = new BasicLabel("--");
+					labelSessionInitiated.setForeground(Color.decode("#888888"));
+					labelSessionInitiated.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
+					labelSessionInitiated.setHorizontalAlignment(JLabel.RIGHT);
+					panelSessionInformation.add(labelSessionInitiated, BorderLayout.SOUTH);
+				}
+				layout.constrains().gridheight = 2;
+				layout.constrains().anchor = GridBagConstraints.CENTER;
+				layout.constrains().insets = new Insets(0, 0, 0, 0);
+				layout.add(panelSessionInformation, 1, 0);
+			}
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+		{
+
+			if (value.getClass().equals(Session.class))
+			{
+				Session session = (Session) value;
+
+				fieldProjectDescription.setText(session.getTask().getProject().getDescription());
+				fieldTaskDescription.setText(session.getTask().getDescription());
+
+				{
+					long duration = session.getDuration();
+					long hours = TimeUnit.SECONDS.toHours(duration);
+					duration -= TimeUnit.HOURS.toSeconds(hours);
+					long minutes = TimeUnit.SECONDS.toMinutes(duration);
+					duration -= TimeUnit.MINUTES.toSeconds(minutes);
+					String timeString = String.format("%02d:%02d", hours, minutes);
+					labelSessionDuration.setText(timeString);
+				}
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+					Date resultdate = new Date(session.getInitiated());
+					String startedString = String.format("%sh", sdf.format(resultdate));
+					labelSessionInitiated.setText(startedString);
+				}
+			}
+
+			int rowHeight = (int) this.getPreferredSize().getHeight();
+			if (table.getRowHeight(row) != rowHeight)
+			{
+				table.setRowHeight(row, rowHeight);
+			}
+			if (isSelected)
+			{
+				setBackground(Color.decode("#ffffff"));
+			}
+			else
+			{
+				setBackground(Color.decode("#ffffff"));
+			}
+
+			return this;
+		}
+
+	}
+
 }

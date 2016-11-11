@@ -5,6 +5,7 @@ public class Session extends Object
 	private Task task;
 
 	private long idSession;
+	private long idInterruption;
 	private long initiated;
 	private long duration;
 	private long estimation;
@@ -20,6 +21,7 @@ public class Session extends Object
 		task = new Task();
 
 		idSession = 0;
+		idInterruption = 0;
 		initiated = 0;
 		duration = 0;
 		estimation = 0;
@@ -38,6 +40,7 @@ public class Session extends Object
 			task.copy(copy.getTask());
 
 			idSession = copy.getIdSession();
+			idInterruption = copy.getIdInterruption();
 			initiated = copy.getInitiated();
 			duration = copy.getDuration();
 			estimation = copy.getEstimation();
@@ -68,6 +71,16 @@ public class Session extends Object
 	public void setIdSession(long idSession)
 	{
 		this.idSession = idSession;
+	}
+
+	public long getIdInterruption()
+	{
+		return idInterruption;
+	}
+
+	public void setIdInterruption(long idInterruption)
+	{
+		this.idInterruption = idInterruption;
 	}
 
 	public long getInitiated()

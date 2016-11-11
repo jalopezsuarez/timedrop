@@ -2,6 +2,7 @@ package io.timedrop.service;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import io.timedrop.domain.Organization;
 import io.timedrop.domain.Project;
@@ -123,23 +124,27 @@ public class SessionService
 
 		// -------------------------------------------------------
 
-		Session sessionQuery = session;
 		Task taskQuery = session.getTask();
-
 		long idTask = taskQuery.getIdTask();
-		long idSession = sessionQuery.getIdSession();
+
+		long idSession = session.getIdSession();
+		long idInterruption = session.getIdInterruption();
 
 		long epoch = System.currentTimeMillis();
-		long duration = sessionQuery.getDuration();
-		long estimation = sessionQuery.getEstimation();
-		String annotation = sessionQuery.getAnnotation();
+		long duration = session.getDuration();
+		long estimation = session.getEstimation();
+		String annotation = session.getAnnotation();
 
 		// -------------------------------------------------------
 
 		if (idSession > 0)
 		{
-			query = " UPDATE session ";
-			query += " SET duration = " + duration + ", ";
+			query = " UPDATE session SET ";
+			if (idTask > 0)
+				query += " idTask = " + idTask + ", ";
+			if (idInterruption > 0)
+				query += " idInterruption = " + idInterruption + ", ";
+			query += " duration = " + duration + ", ";
 			query += " annotation = '" + annotation + "', ";
 			query += " version = " + epoch + " ";
 			query += " WHERE ";
@@ -150,7 +155,10 @@ public class SessionService
 		else
 		{
 			query += " INSERT INTO session ( ";
-			query += " idTask, ";
+			if (idTask > 0)
+				query += " idTask, ";
+			if (idInterruption > 0)
+				query += " idInterruption, ";
 			query += " initiated, ";
 			query += " duration, ";
 			query += " estimation, ";
@@ -158,7 +166,10 @@ public class SessionService
 			query += " record, ";
 			query += " version ";
 			query += " ) VALUES ( ";
-			query += " " + idTask + ", ";
+			if (idTask > 0)
+				query += " " + idTask + ", ";
+			if (idInterruption > 0)
+				query += " " + idInterruption + ", ";
 			query += " " + epoch + ", ";
 			query += " " + duration + ", ";
 			query += " " + estimation + ", ";
@@ -175,9 +186,6 @@ public class SessionService
 				idSession = response.getLong(1);
 				session.setIdSession(idSession);
 				session.setInitiated(epoch);
-				session.setDuration(duration);
-				session.setEstimation(estimation);
-				session.setAnnotation(annotation);
 				session.setRecord(epoch);
 				session.setVersion(epoch);
 			}
@@ -196,13 +204,13 @@ public class SessionService
 
 		// -------------------------------------------------------
 
-		Session sessionQuery = session;
-		long idSession = sessionQuery.getIdSession();
+		long idSession = session.getIdSession();
 
 		// -------------------------------------------------------
 
 		query = " SELECT ";
 		query += " idTask, ";
+		query += " idInterruption, ";
 		query += " initiated, ";
 		query += " duration, ";
 		query += " estimation, ";
@@ -217,6 +225,7 @@ public class SessionService
 		if (dataset.next())
 		{
 			session.getTask().setIdTask(dataset.getLong("idTask"));
+			session.setIdInterruption(dataset.getLong("idInterruption"));
 			session.setInitiated(dataset.getLong("initiated"));
 			session.setDuration(dataset.getLong("duration"));
 			session.setEstimation(dataset.getLong("estimation"));
@@ -230,5 +239,77 @@ public class SessionService
 		dataset.close();
 		statement.close();
 		ConnectionManager.closeConnection();
+	}
+
+	public void remove(Session session)
+	{
+
+	}
+
+	public ArrayList<Object> findInterruptionsBySession(Session session) throws Exception
+	{
+		Statement statement = ConnectionManager.openConnection().createStatement();
+		String query = " ";
+
+		// -------------------------------------------------------
+
+		long idTask = session.getTask().getIdTask();
+
+		// -------------------------------------------------------
+
+		query = " SELECT ";
+
+		query += " organization.idOrganization, ";
+		query += " organization.description organizationDescription, ";
+		query += " project.idProject, ";
+		query += " project.description projectDescription, ";
+		query += " task.idTask, ";
+		query += " task.description taskDescription, ";
+		query += " interruption.initiated sessionInitiated, ";
+		query += " interruption.duration sessionDuration ";
+
+		query += " FROM session ";
+
+		query += " LEFT JOIN session interruption ON interruption.idInterruption = session.idSession ";
+		query += " LEFT JOIN task ON task.idTask = interruption.idTask ";
+		query += " LEFT JOIN project ON project.idProject = task.idProject ";
+		query += " LEFT JOIN organization ON organization.idOrganization = project.idOrganization ";
+
+		query += " WHERE session.idTask = " + idTask + " ";
+		query += " AND session.idTask != interruption.idTask ";
+		query += " AND interruption.idInterruption IS NOT NULL ";
+		query += " AND interruption.idTask IS NOT NULL ";
+		query += " AND interruption.initiated > strftime('%s', 'now', '-1 days') * 1000 ";
+		query += " ORDER BY session.version DESC ";
+
+		// -------------------------------------------------------
+
+		ArrayList<Object> response = new ArrayList<Object>();
+		Session sessionReponse = null;
+
+		ResultSet dataset = statement.executeQuery(query);
+		while (dataset.next())
+		{
+			sessionReponse = new Session();
+
+			sessionReponse.getTask().getProject().getOrganization().setIdOrganization(dataset.getLong("idOrganization"));
+			sessionReponse.getTask().getProject().setIdProject(dataset.getLong("idProject"));
+			sessionReponse.getTask().setIdTask(dataset.getLong("idTask"));
+			sessionReponse.getTask().getProject().getOrganization().setDescription(dataset.getString("organizationDescription"));
+			sessionReponse.getTask().getProject().setDescription(dataset.getString("projectDescription"));
+			sessionReponse.getTask().setDescription(dataset.getString("taskDescription"));
+			sessionReponse.setInitiated(dataset.getLong("sessionInitiated"));
+			sessionReponse.setDuration(dataset.getLong("sessionDuration"));
+
+			response.add(sessionReponse);
+		}
+
+		// -------------------------------------------------------
+
+		dataset.close();
+		statement.close();
+		ConnectionManager.closeConnection();
+
+		return response;
 	}
 }

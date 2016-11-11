@@ -1,9 +1,12 @@
 package io.timedrop.ui.application;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -26,6 +29,8 @@ public class ApplicationDelegate implements NativeKeyListener
 	private static TaskController applicationWindow = null;
 	private TrackerManager trackerManager;
 
+	private static Dimension applicationSize = new Dimension(680, 480);
+
 	// ~ Methods
 	// =======================================================
 
@@ -40,8 +45,8 @@ public class ApplicationDelegate implements NativeKeyListener
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent event)
 	{
-		//System.out.println("event.getModifiers():" + event.getModifiers());
-		//System.out.println("event.getRawCode():" + event.getRawCode());
+		// System.out.println("event.getModifiers():" + event.getModifiers());
+		// System.out.println("event.getRawCode():" + event.getRawCode());
 
 		if (event.getModifiers() == 20 || event.getModifiers() == 22 && event.getRawCode() == 60)
 		{
@@ -55,6 +60,7 @@ public class ApplicationDelegate implements NativeKeyListener
 			// -------------------------------------------------------
 
 			applicationWindow = new TaskController(trackerManager);
+
 			applicationWindow.addWindowListener(new WindowAdapter()
 			{
 				@Override
@@ -65,18 +71,26 @@ public class ApplicationDelegate implements NativeKeyListener
 					trackerManager.setUI(null);
 				}
 			});
+			applicationWindow.addComponentListener(new ComponentAdapter()
+			{
+				public void componentResized(ComponentEvent e)
+				{
+					Component c = (Component) e.getSource();
+					applicationSize = c.getSize();
+				}
+			});
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				@Override
 				public void run()
 				{
 					applicationWindow.setLocationRelativeTo(null);
-					applicationWindow.setSize(680, 480);
-					applicationWindow.setPreferredSize(new Dimension(680, 480));
+					applicationWindow.setSize(applicationSize);
+					applicationWindow.setPreferredSize(applicationSize);
 					applicationWindow.pack();
 					applicationWindow.init();
-					applicationWindow.setSize(680, 480);
-					applicationWindow.setPreferredSize(new Dimension(680, 480));
+					applicationWindow.setSize(applicationSize);
+					applicationWindow.setPreferredSize(applicationSize);
 					applicationWindow.setLocationRelativeTo(null);
 					applicationWindow.setVisible(true);
 					applicationWindow.setExtendedState(JFrame.NORMAL);
@@ -120,6 +134,8 @@ public class ApplicationDelegate implements NativeKeyListener
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("sun.java2d.xrender", "true");
 		System.setProperty("swing.aatext", "true");
+
+		UIManager.put("ScrollBarUI", "io.timedrop.ui.components.UIScrollBar");
 
 		try
 		{

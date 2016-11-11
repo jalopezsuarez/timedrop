@@ -6,10 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.Timer;
 
-import io.timedrop.domain.Interruption;
 import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
-import io.timedrop.service.BreakService;
 import io.timedrop.service.SessionService;
 import io.timedrop.service.TaskService;
 
@@ -19,9 +17,7 @@ public class TrackerManager
 
 	private SessionService sessionService;
 	private Session session;
-
-	private BreakService interruptionService;
-	private Interruption interruption;
+	private Session interruption;
 
 	private TrackerInterface ui;
 
@@ -43,9 +39,7 @@ public class TrackerManager
 
 		sessionService = new SessionService();
 		session = new Session();
-
-		interruptionService = new BreakService();
-		interruption = new Interruption();
+		interruption = new Session();
 
 		// -------------------------------------------------------
 
@@ -83,7 +77,7 @@ public class TrackerManager
 		{
 			long duration = interruption.getDuration() + 1;
 			interruption.setDuration(duration);
-			interruptionService.process(interruption);
+			sessionService.process(interruption);
 		}
 		else if (enabled && running && !paused)
 		{
@@ -167,11 +161,11 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
-		Interruption interruptionTracker = new Interruption();
-		interruptionTracker.setSession(session);
+		Session interruptionTracker = new Session();
+		interruptionTracker.setIdInterruption(session.getIdSession());
 		interruptionTracker.setDuration(0);
 
-		interruptionService.process(interruptionTracker);
+		sessionService.process(interruptionTracker);
 		interruption = interruptionTracker;
 
 		// -------------------------------------------------------
@@ -196,10 +190,8 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
-		Task interruptionTask = interruption.getTask();
-		interruptionTask.copy(task);
-
-		interruptionService.process(interruption);
+		interruption.getTask().copy(task);
+		sessionService.generate(interruption);
 
 		// -------------------------------------------------------
 
@@ -223,7 +215,7 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
-		interruptionService.remove(interruption);
+		sessionService.remove(interruption);
 
 		// -------------------------------------------------------
 
@@ -300,7 +292,7 @@ public class TrackerManager
 		long duration = interruption.getDuration();
 		duration = duration + 60;
 		interruption.setDuration(duration);
-		interruptionService.process(interruption);
+		sessionService.process(interruption);
 		ui.track(session, interruption);
 
 		// -------------------------------------------------------
@@ -318,7 +310,7 @@ public class TrackerManager
 		duration = duration - 60;
 		duration = duration > 0 ? duration : 0;
 		interruption.setDuration(duration);
-		interruptionService.process(interruption);
+		sessionService.process(interruption);
 		ui.track(session, interruption);
 
 		// -------------------------------------------------------
@@ -344,12 +336,17 @@ public class TrackerManager
 	public void saveInterruptionAnnotation(String annotation) throws Exception
 	{
 		interruption.setAnnotation(annotation);
-		interruptionService.process(interruption);
+		sessionService.process(interruption);
 	}
 
 	public String getTaskAnnotation()
 	{
 		return session.getAnnotation();
+	}
+
+	public Session getSession()
+	{
+		return session;
 	}
 
 	// ~ Methods
