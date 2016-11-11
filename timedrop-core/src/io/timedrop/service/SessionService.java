@@ -123,23 +123,27 @@ public class SessionService
 
 		// -------------------------------------------------------
 
-		Session sessionQuery = session;
 		Task taskQuery = session.getTask();
-
 		long idTask = taskQuery.getIdTask();
-		long idSession = sessionQuery.getIdSession();
+
+		long idSession = session.getIdSession();
+		long idInterruption = session.getIdInterruption();
 
 		long epoch = System.currentTimeMillis();
-		long duration = sessionQuery.getDuration();
-		long estimation = sessionQuery.getEstimation();
-		String annotation = sessionQuery.getAnnotation();
+		long duration = session.getDuration();
+		long estimation = session.getEstimation();
+		String annotation = session.getAnnotation();
 
 		// -------------------------------------------------------
 
 		if (idSession > 0)
 		{
-			query = " UPDATE session ";
-			query += " SET duration = " + duration + ", ";
+			query = " UPDATE session SET ";
+			if (idTask > 0)
+				query += " idTask = " + idTask + ", ";
+			if (idInterruption > 0)
+				query += " idInterruption = " + idInterruption + ", ";
+			query += " duration = " + duration + ", ";
 			query += " annotation = '" + annotation + "', ";
 			query += " version = " + epoch + " ";
 			query += " WHERE ";
@@ -150,7 +154,10 @@ public class SessionService
 		else
 		{
 			query += " INSERT INTO session ( ";
-			query += " idTask, ";
+			if (idTask > 0)
+				query += " idTask, ";
+			if (idInterruption > 0)
+				query += " idInterruption, ";
 			query += " initiated, ";
 			query += " duration, ";
 			query += " estimation, ";
@@ -158,7 +165,10 @@ public class SessionService
 			query += " record, ";
 			query += " version ";
 			query += " ) VALUES ( ";
-			query += " " + idTask + ", ";
+			if (idTask > 0)
+				query += " " + idTask + ", ";
+			if (idInterruption > 0)
+				query += " " + idInterruption + ", ";
 			query += " " + epoch + ", ";
 			query += " " + duration + ", ";
 			query += " " + estimation + ", ";
@@ -175,9 +185,6 @@ public class SessionService
 				idSession = response.getLong(1);
 				session.setIdSession(idSession);
 				session.setInitiated(epoch);
-				session.setDuration(duration);
-				session.setEstimation(estimation);
-				session.setAnnotation(annotation);
 				session.setRecord(epoch);
 				session.setVersion(epoch);
 			}
@@ -196,13 +203,13 @@ public class SessionService
 
 		// -------------------------------------------------------
 
-		Session sessionQuery = session;
-		long idSession = sessionQuery.getIdSession();
+		long idSession = session.getIdSession();
 
 		// -------------------------------------------------------
 
 		query = " SELECT ";
 		query += " idTask, ";
+		query += " idInterruption, ";
 		query += " initiated, ";
 		query += " duration, ";
 		query += " estimation, ";
@@ -217,6 +224,7 @@ public class SessionService
 		if (dataset.next())
 		{
 			session.getTask().setIdTask(dataset.getLong("idTask"));
+			session.setIdInterruption(dataset.getLong("idInterruption"));
 			session.setInitiated(dataset.getLong("initiated"));
 			session.setDuration(dataset.getLong("duration"));
 			session.setEstimation(dataset.getLong("estimation"));
@@ -230,5 +238,10 @@ public class SessionService
 		dataset.close();
 		statement.close();
 		ConnectionManager.closeConnection();
+	}
+
+	public void remove(Session session)
+	{
+
 	}
 }

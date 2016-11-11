@@ -68,7 +68,8 @@ public class ConnectionManager
 			{
 				query += " CREATE TABLE IF NOT EXISTS session ( ";
 				query += " idSession INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
-				query += " idTask INTEGER NOT NULL, ";
+				query += " idTask INTEGER NULL DEFAULT NULL, ";
+				query += " idInterruption INTEGER NULL DEFAULT NULL, ";
 				query += " initiated INTEGER NOT NULL, ";
 				query += " duration INTEGER NOT NULL DEFAULT 0, ";
 				query += " estimation INTEGER NOT NULL DEFAULT 0, ";
@@ -76,21 +77,7 @@ public class ConnectionManager
 				query += " record INTEGER NOT NULL, ";
 				query += " version INTEGER NOT NULL, ";
 				query += " FOREIGN KEY (idTask) REFERENCES task(idTask) ON DELETE CASCADE ";
-				query += " ); ";
-			}
-			// ----------------------------------------------------------
-			{
-				query += " CREATE TABLE IF NOT EXISTS break ( ";
-				query += " idBreak INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
-				query += " idSession INTEGER NOT NULL, ";
-				query += " idTask INTEGER NULL DEFAULT NULL, ";
-				query += " initiated INTEGER NOT NULL, ";
-				query += " duration INTEGER NOT NULL DEFAULT 0, ";
-				query += " annotation TEXT NOT NULL DEFAULT '', ";
-				query += " record INTEGER NOT NULL, ";
-				query += " version INTEGER NOT NULL, ";
-				query += " FOREIGN KEY (idSession) REFERENCES session(idSession) ON DELETE CASCADE ";
-				query += " FOREIGN KEY (idTask) REFERENCES task(idTask) ON DELETE CASCADE ";
+				query += " FOREIGN KEY (idInterruption) REFERENCES session(idSession) ON DELETE CASCADE ";
 				query += " ); ";
 			}
 			// ===========================================================

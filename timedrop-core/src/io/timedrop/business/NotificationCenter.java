@@ -27,7 +27,7 @@ import javax.swing.UIManager;
 public class NotificationCenter
 {
 	private static int speedon = 10;
-	private static float opacity = 0.8F;
+	private static float opacity = 0.9F;
 
 	public static void notify(String title, String message, long seconds)
 	{

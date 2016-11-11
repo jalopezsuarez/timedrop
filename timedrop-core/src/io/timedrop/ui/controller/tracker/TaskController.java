@@ -4,7 +4,6 @@ import io.timedrop.business.TrackerInterface;
 import io.timedrop.business.TrackerManager;
 import io.timedrop.business.report.ReportManager;
 import io.timedrop.commons.GridHelper;
-import io.timedrop.domain.Interruption;
 import io.timedrop.domain.Organization;
 import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
@@ -454,7 +453,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimer.setForeground(Color.decode("#ffffff"));
 							valueTrackerTimer.setBackground(Color.decode("#212B33"));
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
-							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 0);
+							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 8);
 							layoutTrackerManagerTimer.constrains().fill = GridBagConstraints.BOTH;
 							layoutTrackerManagerTimer.add(valueTrackerTimer, 2, 0);
 						}
@@ -476,7 +475,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerTimerStarted.setForeground(Color.decode("#525B61"));
 							labelTrackerTimerStarted.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().ipadx = 20;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
 							layoutTrackerManagerEstimation.add(labelTrackerTimerStarted, 1, 0);
 						}
@@ -485,9 +483,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerStarted.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerStarted.setBackground(Color.decode("#212B33"));
+							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
-							layoutTrackerManagerEstimation.constrains().anchor = GridBagConstraints.LINE_END;
-
 							layoutTrackerManagerEstimation.add(valueTrackerTimerStarted, 2, 0);
 						}
 						{
@@ -495,7 +492,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerTimerRemaining.setForeground(Color.decode("#525B61"));
 							labelTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().ipadx = 20;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
 							layoutTrackerManagerEstimation.add(labelTrackerTimerRemaining, 1, 1);
 						}
@@ -504,7 +500,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerRemaining.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().anchor = GridBagConstraints.LINE_END;
+							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
 							layoutTrackerManagerEstimation.add(valueTrackerTimerRemaining, 2, 1);
 						}
@@ -1144,6 +1140,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionInterruptionCommit();
 					actionTrackerDismiss();
 				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+					e.consume();
+					actionInterruptionTaskSelector();
+				}
 			}
 
 			@Override
@@ -1495,7 +1496,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	// =======================================================
 
 	@Override
-	public void track(Session session, Interruption interruption)
+	public void track(Session session, Session interruption)
 	{
 		{
 			long duration = session.getDuration();
@@ -1520,7 +1521,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			valueBreakTrackerTimer.setText(timeString);
 		}
 		{
-			valueTrackerTimerRemaining.setText("--h");
+			valueTrackerTimerRemaining.setText("2354h");
 		}
 
 		// -------------------------------------------------------
@@ -1554,7 +1555,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	}
 
 	@Override
-	public void update(Session session, Interruption interruption)
+	public void update(Session session, Session interruption)
 	{
 		if (trackerManager.isRunning())
 		{
@@ -1574,4 +1575,5 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			labelBreakTrackerTitle.setText(startedString);
 		}
 	}
+
 }
