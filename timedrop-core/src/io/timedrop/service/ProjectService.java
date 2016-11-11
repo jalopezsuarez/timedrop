@@ -29,8 +29,8 @@ public class ProjectService
 		query += " idProject, ";
 		query += " idOrganization, ";
 		query += " description, ";
-		query += " changeDate, ";
-		query += " recordDate ";
+		query += " record, ";
+		query += " version ";
 		query += " FROM project ";
 
 		query += " WHERE LENGTH(TRIM(project.description)) > 0 ";

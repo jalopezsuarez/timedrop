@@ -20,7 +20,7 @@ public class ReportService
 		query += " project.description as projectDescription, ";
 		query += " task.idTask, ";
 		query += " task.description as taskDescription, ";
-		query += " SUM(session.duration) as taskDuration ";
+		query += " SUM(session.duration) as taskSummary ";
 		query += " FROM project ";
 		query += " LEFT JOIN task ON task.idProject = project.idProject ";
 		query += " LEFT JOIN session ON session.idTask = task.idTask ";
@@ -41,7 +41,7 @@ public class ReportService
 			reportReponse.setProjectDescription(dataset.getString("projectDescription"));
 			reportReponse.setIdTask(dataset.getLong("idTask"));
 			reportReponse.setTaskDescription(dataset.getString("taskDescription"));
-			reportReponse.setTaskDuration(dataset.getLong("taskDuration"));
+			reportReponse.setTaskSummary(dataset.getLong("taskSummary"));
 
 			response.add(reportReponse);
 		}

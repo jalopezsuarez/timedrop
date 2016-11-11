@@ -4,12 +4,44 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import io.timedrop.domain.Report;
 import io.timedrop.domain.Task;
 import io.timedrop.service.exception.OrganizationNotFoundException;
 
 public class TaskService
 {
+	public void process(Task task) throws Exception
+	{
+		Statement statement = ConnectionManager.openConnection().createStatement();
+		String query = " ";
+
+		// -------------------------------------------------------
+
+		long idTask = task.getIdTask();
+
+		String description = task.getDescription();
+		String annotation = task.getAnnotation();
+		long epoch = System.currentTimeMillis();
+
+		// -------------------------------------------------------
+
+		if (idTask > 0)
+		{
+			query = " UPDATE task ";
+			query += " SET description = '" + description + "', ";
+			query += " annotation = '" + annotation + "', ";
+			query += " version = " + epoch + " ";
+			query += " WHERE ";
+			query += " idTask = " + idTask + " ; ";
+
+			statement.executeUpdate(query);
+		}
+
+		// -------------------------------------------------------
+
+		statement.close();
+		ConnectionManager.closeConnection();
+	}
+
 	public ArrayList<Object> fetchTasks(Task task) throws Exception
 	{
 		long idOrganization = task.getProject().getOrganization().getIdOrganization();
@@ -30,8 +62,8 @@ public class TaskService
 		query += " task.idProject, ";
 		query += " project.idOrganization AS idOrganization, ";
 		query += " task.description, ";
-		query += " task.changeDate, ";
-		query += " task.recordDate ";
+		query += " task.record, ";
+		query += " task.version ";
 
 		query += " FROM task ";
 		query += " LEFT JOIN project ON project.idProject = task.idProject ";
@@ -74,24 +106,20 @@ public class TaskService
 		return response;
 	}
 
-	public Report findTaskEstimationById(Task task) throws Exception
+	public void findTaskEstimationById(Task task) throws Exception
 	{
-		Report response = new Report();
-
-		// -------------------------------------------------------
-
 		Statement statement = ConnectionManager.openConnection().createStatement();
 		String query = "  ";
 
 		// -------------------------------------------------------
 
-		query = " SELECT SUM (durationTask) durationTask ";
+		query = " SELECT SUM (summary) taskSummary ";
 		query += " FROM (  ";
-		query += " SELECT SUM (duration) durationTask ";
+		query += " SELECT SUM (duration) summary ";
 		query += " FROM session ";
 		query += " WHERE session.idTask = " + task.getIdTask() + " ";
 		query += " UNION  ";
-		query += " SELECT SUM(duration) durationTask ";
+		query += " SELECT SUM(duration) summary ";
 		query += " FROM break ";
 		query += " WHERE break.idTask = " + task.getIdTask() + " ) ";
 
@@ -100,17 +128,17 @@ public class TaskService
 		ResultSet datasetDuration = statement.executeQuery(query);
 		while (datasetDuration.next())
 		{
-			response.setTaskDuration(datasetDuration.getLong("durationTask"));
+			task.setSummary(datasetDuration.getLong("taskSummary"));
 		}
 		datasetDuration.close();
 
 		// =======================================================
 
-		query = " SELECT session.estimation as estimationTask ";
+		query = " SELECT session.estimation AS taskEstimation ";
 		query += " FROM task ";
 		query += " LEFT JOIN session ON session.idTask = task.idTask ";
 		query += " WHERE task.idTask = " + task.getIdTask() + " ";
-		query += " ORDER BY session.initTime ASC; ";
+		query += " ORDER BY session.initiated ASC; ";
 
 		// -------------------------------------------------------
 		boolean first = true;
@@ -119,10 +147,10 @@ public class TaskService
 		{
 			if (first)
 			{
-				response.setEstimationInit(datasetEstimation.getLong("estimationTask"));
+				task.setEstimation(datasetEstimation.getLong("taskEstimation"));
 				first = false;
 			}
-			response.setEstimationCurrent(datasetEstimation.getLong("estimationTask"));
+			task.setReestimate(datasetEstimation.getLong("taskEstimation"));
 		}
 		datasetEstimation.close();
 
@@ -130,7 +158,5 @@ public class TaskService
 
 		statement.close();
 		ConnectionManager.closeConnection();
-
-		return response;
 	}
 }

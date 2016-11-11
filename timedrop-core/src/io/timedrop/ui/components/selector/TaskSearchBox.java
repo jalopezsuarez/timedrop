@@ -218,8 +218,14 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 		if (data != null && data.size() > 0 && cb.getSelectedItem() instanceof Task && ((Task) cb.getSelectedItem()).getIdTask() > 0)
 		{
 			Task item = (Task) cb.getSelectedItem();
-			object.setDescription(item.getDescription().trim());
 			object.setIdTask(item.getIdTask());
+			object.setDescription(item.getDescription());
+			object.setAnnotation(item.getAnnotation());
+			object.setRecord(item.getRecord());
+			object.setVersion(item.getVersion());
+			object.setEstimation(item.getEstimation());
+			object.setReestimate(item.getReestimate());
+			object.setSummary(item.getSummary());
 
 			updateModel(object.toString());
 			cbe.setItem(object.toString());
@@ -227,8 +233,14 @@ public class TaskSearchBox extends AbstractListModel<Object> implements ComboBox
 		}
 		else if (data != null && data.size() <= 0 && cbe.getItem() instanceof String && ((String) cbe.getItem()).length() > 0)
 		{
-			object.setDescription(((String) cbe.getItem()).trim());
 			object.setIdTask(0);
+			object.setDescription(((String) cbe.getItem()).trim());
+			object.setAnnotation("");
+			object.setRecord(System.currentTimeMillis());
+			object.setVersion(System.currentTimeMillis());
+			object.setEstimation(0);
+			object.setReestimate(0);
+			object.setSummary(0);
 		}
 
 		if (selectorAction != null)

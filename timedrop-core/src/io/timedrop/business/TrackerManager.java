@@ -11,9 +11,12 @@ import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
 import io.timedrop.service.BreakService;
 import io.timedrop.service.SessionService;
+import io.timedrop.service.TaskService;
 
 public class TrackerManager
 {
+	private TaskService taskService;
+
 	private SessionService sessionService;
 	private Session session;
 
@@ -36,6 +39,8 @@ public class TrackerManager
 
 	public TrackerManager()
 	{
+		taskService = new TaskService();
+
 		sessionService = new SessionService();
 		session = new Session();
 
@@ -48,7 +53,7 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
-		enabled = true;
+		enabled = false;
 		running = false;
 		breaks = false;
 		paused = false;
@@ -96,7 +101,7 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
-		notifications(force);
+		notifications(false);
 	}
 
 	// ~ Methods
@@ -105,7 +110,6 @@ public class TrackerManager
 	public void setUI(TrackerInterface ui)
 	{
 		this.ui = ui;
-
 	}
 
 	public void updateUI()
@@ -147,26 +151,11 @@ public class TrackerManager
 		running = true;
 		breaks = false;
 		paused = false;
+
+		// -------------------------------------------------------
+
 		run(true);
-	}
-
-	public void toggleTracker() throws Exception
-	{
-		boolean status = !paused;
-		enabled = false;
-		paused = false;
-
-		enabled = true;
-		paused = status;
-		run(true);
-	}
-
-	// ~ Methods
-	// =======================================================
-
-	public boolean isInterrupted()
-	{
-		return breaks;
+		notifications(true);
 	}
 
 	public void startInterruption() throws Exception
@@ -191,7 +180,11 @@ public class TrackerManager
 		running = false;
 		breaks = true;
 		paused = false;
+
+		// -------------------------------------------------------
+
 		run(true);
+		notifications(true);
 	}
 
 	public void commitInterruption(Task task) throws Exception
@@ -214,7 +207,11 @@ public class TrackerManager
 		running = true;
 		breaks = false;
 		paused = false;
+
+		// -------------------------------------------------------
+
 		run(true);
+		notifications(true);
 	}
 
 	public void cancelInterruption() throws Exception
@@ -234,7 +231,26 @@ public class TrackerManager
 		running = true;
 		breaks = false;
 		paused = false;
+
+		// -------------------------------------------------------
+
 		run(true);
+		notifications(true);
+	}
+
+	public void toggleTracker() throws Exception
+	{
+		boolean status = !paused;
+		enabled = false;
+		paused = false;
+
+		enabled = true;
+		paused = status;
+
+		// -------------------------------------------------------
+
+		run(true);
+		notifications(true);
 	}
 
 	// ~ Methods
@@ -313,6 +329,27 @@ public class TrackerManager
 	// ~ Methods
 	// =======================================================
 
+	public void saveTaskDescription(String description) throws Exception
+	{
+		session.getTask().setDescription(description);
+		taskService.process(session.getTask());
+	}
+
+	public void addTaskAnnotation(String annotation) throws Exception
+	{
+		session.setAnnotation(annotation);
+		sessionService.process(session);
+	}
+
+	public void addInterruptionAnnotation(String annotation) throws Exception
+	{
+		interruption.setAnnotation(annotation);
+		interruptionService.process(interruption);
+	}
+
+	// ~ Methods
+	// =======================================================
+
 	public void notifications(boolean force)
 	{
 		if (enabled && paused)
@@ -357,7 +394,7 @@ public class TrackerManager
 				NotificationCenter.notify("Tracking " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
 			}
 		}
-		else
+		else if (enabled)
 		{
 			if (internal % 300 == 0)
 			{
@@ -366,14 +403,22 @@ public class TrackerManager
 		}
 	}
 
+	// ~ Methods
+	// =======================================================
+
 	public boolean isRunning()
 	{
-		return enabled && running;
+		return running;
+	}
+
+	public boolean isInterrupted()
+	{
+		return breaks;
 	}
 
 	public boolean isPaused()
 	{
-		return enabled && paused;
+		return paused;
 	}
 
 }

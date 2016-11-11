@@ -4,11 +4,30 @@ public class Report
 {
 	private long idProject;
 	private String projectDescription;
+
 	private long idTask;
 	private String taskDescription;
-	private long taskDuration;
-	private long estimationInit;
-	private long estimationCurrent;
+	private long taskEstimation;
+	private long taskRestimate;
+	private long taskSummary;
+
+	// ~ Methods
+	// =======================================================
+
+	public Report()
+	{
+		idProject = 0;
+		projectDescription = "";
+
+		idTask = 0;
+		taskDescription = "";
+		taskEstimation = 0;
+		taskRestimate = 0;
+		taskSummary = 0;
+	}
+
+	// ~ Methods
+	// =======================================================
 
 	public long getIdProject()
 	{
@@ -50,34 +69,34 @@ public class Report
 		this.taskDescription = taskDescription;
 	}
 
-	public long getTaskDuration()
+	public long getTaskEstimation()
 	{
-		return taskDuration;
+		return taskEstimation;
 	}
 
-	public void setTaskDuration(long taskDuration)
+	public void setTaskEstimation(long taskEstimation)
 	{
-		this.taskDuration = taskDuration;
+		this.taskEstimation = taskEstimation;
 	}
 
-	public long getEstimationInit()
+	public long getTaskRestimate()
 	{
-		return estimationInit;
+		return taskRestimate;
 	}
 
-	public void setEstimationInit(long estimationInit)
+	public void setTaskRestimate(long taskRestimate)
 	{
-		this.estimationInit = estimationInit;
+		this.taskRestimate = taskRestimate;
 	}
 
-	public long getEstimationCurrent()
+	public long getTaskSummary()
 	{
-		return estimationCurrent;
+		return taskSummary;
 	}
 
-	public void setEstimationCurrent(long estimationCurrent)
+	public void setTaskSummary(long taskSummary)
 	{
-		this.estimationCurrent = estimationCurrent;
+		this.taskSummary = taskSummary;
 	}
 
 }

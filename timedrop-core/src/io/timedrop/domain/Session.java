@@ -5,9 +5,12 @@ public class Session extends Object
 	private Task task;
 
 	private long idSession;
-	private long initTime;
+	private long initiated;
 	private long duration;
 	private long estimation;
+	private String annotation;
+	private long record;
+	private long version;
 
 	// ~ Methods
 	// =======================================================
@@ -17,9 +20,12 @@ public class Session extends Object
 		task = new Task();
 
 		idSession = 0;
-		initTime = 0;
+		initiated = 0;
 		duration = 0;
 		estimation = 0;
+		annotation = "";
+		record = System.currentTimeMillis();
+		version = System.currentTimeMillis();
 	}
 
 	// ~ Methods
@@ -32,9 +38,12 @@ public class Session extends Object
 			task.copy(copy.getTask());
 
 			idSession = copy.getIdSession();
-			initTime = copy.getInitTime();
+			initiated = copy.getInitiated();
 			duration = copy.getDuration();
 			estimation = copy.getEstimation();
+			annotation = copy.getAnnotation();
+			record = copy.getRecord();
+			version = copy.getVersion();
 		}
 	}
 
@@ -61,14 +70,14 @@ public class Session extends Object
 		this.idSession = idSession;
 	}
 
-	public long getInitTime()
+	public long getInitiated()
 	{
-		return initTime;
+		return initiated;
 	}
 
-	public void setInitTime(long initTime)
+	public void setInitiated(long initiated)
 	{
-		this.initTime = initTime;
+		this.initiated = initiated;
 	}
 
 	public long getDuration()
@@ -89,6 +98,36 @@ public class Session extends Object
 	public void setEstimation(long estimation)
 	{
 		this.estimation = estimation;
+	}
+
+	public String getAnnotation()
+	{
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation)
+	{
+		this.annotation = annotation;
+	}
+
+	public long getRecord()
+	{
+		return record;
+	}
+
+	public void setRecord(long record)
+	{
+		this.record = record;
+	}
+
+	public long getVersion()
+	{
+		return version;
+	}
+
+	public void setVersion(long version)
+	{
+		this.version = version;
 	}
 
 }

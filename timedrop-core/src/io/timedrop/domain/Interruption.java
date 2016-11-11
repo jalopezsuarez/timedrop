@@ -6,8 +6,11 @@ public class Interruption extends Object
 	private Task task;
 
 	private long idBreak;
-	private long initTime;
+	private long initiated;
 	private long duration;
+	private String annotation;
+	private long record;
+	private long version;
 
 	// ~ Methods
 	// =======================================================
@@ -18,8 +21,11 @@ public class Interruption extends Object
 		task = new Task();
 
 		idBreak = 0;
-		initTime = System.currentTimeMillis();
+		initiated = System.currentTimeMillis();
 		duration = 0;
+		annotation = "";
+		record = System.currentTimeMillis();
+		version = System.currentTimeMillis();
 	}
 
 	// ~ Methods
@@ -33,8 +39,11 @@ public class Interruption extends Object
 			task.copy(copy.getTask());
 
 			idBreak = copy.getIdBreak();
-			initTime = copy.getInitTime();
+			initiated = copy.getInitiated();
 			duration = copy.getDuration();
+			annotation = copy.getAnnotation();
+			record = copy.getRecord();
+			version = copy.getVersion();
 		}
 	}
 
@@ -71,14 +80,14 @@ public class Interruption extends Object
 		this.idBreak = idBreak;
 	}
 
-	public long getInitTime()
+	public long getInitiated()
 	{
-		return initTime;
+		return initiated;
 	}
 
-	public void setInitTime(long initTime)
+	public void setInitiated(long initiated)
 	{
-		this.initTime = initTime;
+		this.initiated = initiated;
 	}
 
 	public long getDuration()
@@ -89,6 +98,36 @@ public class Interruption extends Object
 	public void setDuration(long duration)
 	{
 		this.duration = duration;
+	}
+
+	public String getAnnotation()
+	{
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation)
+	{
+		this.annotation = annotation;
+	}
+
+	public long getRecord()
+	{
+		return record;
+	}
+
+	public void setRecord(long record)
+	{
+		this.record = record;
+	}
+
+	public long getVersion()
+	{
+		return version;
+	}
+
+	public void setVersion(long version)
+	{
+		this.version = version;
 	}
 
 }

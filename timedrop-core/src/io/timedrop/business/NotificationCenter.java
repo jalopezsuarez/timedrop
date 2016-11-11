@@ -26,6 +26,9 @@ import javax.swing.UIManager;
 
 public class NotificationCenter
 {
+	private static int speedon = 10;
+	private static float opacity = 0.8F;
+
 	public static void notify(String title, String message, long seconds)
 	{
 		JDialog dialog = new JDialog();
@@ -141,8 +144,7 @@ public class NotificationCenter
 		dialog.setOpacity(0.0F);
 		dialog.setVisible(true);
 
-		int timerDelay = 10;
-		new Timer(timerDelay, new ActionListener()
+		new Timer(speedon, new ActionListener()
 		{
 			private int counter = 0;
 
@@ -150,7 +152,7 @@ public class NotificationCenter
 			public void actionPerformed(ActionEvent e)
 			{
 				counter++;
-				if (counter >= 10)
+				if (counter >= (int) (opacity * 10))
 				{
 					((Timer) e.getSource()).stop();
 					dialog.setVisible(true);
@@ -162,12 +164,11 @@ public class NotificationCenter
 
 	private static void close(JDialog dialog)
 	{
-		if (dialog.isVisible() && dialog.getOpacity() >= 1.0F)
+		if (dialog.isVisible() && dialog.getOpacity() >= opacity)
 		{
-			int timerDelay = 10;
-			new Timer(timerDelay, new ActionListener()
+			new Timer(speedon, new ActionListener()
 			{
-				private int counter = 10;
+				private int counter = (int) (opacity * 10);
 
 				@Override
 				public void actionPerformed(ActionEvent e)

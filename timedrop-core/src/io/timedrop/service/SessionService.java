@@ -28,66 +28,81 @@ public class SessionService
 
 		// -------------------------------------------------------
 
+		long epoch = System.currentTimeMillis();
+
 		Statement statement = ConnectionManager.openConnection().createStatement();
 		String query = "  ";
 
 		// -------------------------------------------------------
 
-		long epoch = System.currentTimeMillis();
-
 		long idProject = projectQuery.getIdProject();
-		String projectString = projectQuery.getDescription();
-
-		if (idProject <= 0 && projectString != null && projectString instanceof String)
 		{
-			query = " INSERT INTO project ( ";
-			query += " idOrganization, ";
-			query += " description, ";
-			query += " changeDate, ";
-			query += " recordDate ";
-			query += " ) VALUES ( ";
-			query += " " + idOrganization + ", ";
-			query += " '" + projectString + "', ";
-			query += " " + epoch + ", ";
-			query += " " + epoch + " ";
-			query += " ) ; ";
+			String description = projectQuery.getDescription();
+			String annotation = projectQuery.getAnnotation();
 
-			statement.executeUpdate(query);
-			ResultSet response = statement.getGeneratedKeys();
-			if (response.next())
+			if (idProject <= 0 && description != null && description instanceof String)
 			{
-				idProject = response.getLong(1);
-				session.getTask().getProject().setIdProject(idProject);
-				session.getTask().getProject().setDescription(projectString);
+				query = " INSERT INTO project ( ";
+				query += " idOrganization, ";
+				query += " description, ";
+				query += " annotation, ";
+				query += " record, ";
+				query += " version ";
+				query += " ) VALUES ( ";
+				query += " " + idOrganization + ", ";
+				query += " '" + description + "', ";
+				query += " '" + annotation + "', ";
+				query += " " + epoch + ", ";
+				query += " " + epoch + " ";
+				query += " ) ; ";
+
+				statement.executeUpdate(query);
+				ResultSet response = statement.getGeneratedKeys();
+				if (response.next())
+				{
+					idProject = response.getLong(1);
+					session.getTask().getProject().setIdProject(idProject);
+					session.getTask().getProject().setDescription(description);
+					session.getTask().getProject().setAnnotation(annotation);
+					session.getTask().getProject().setRecord(epoch);
+					session.getTask().getProject().setVersion(epoch);
+				}
 			}
 		}
-
 		// -------------------------------------------------------
 
 		long idTask = taskQuery.getIdTask();
-		String taskString = taskQuery.getDescription();
-
-		if (idTask <= 0 && taskString != null && taskString instanceof String)
 		{
-			query = " INSERT INTO task ( ";
-			query += " idProject, ";
-			query += " description, ";
-			query += " changeDate, ";
-			query += " recordDate ";
-			query += " ) VALUES ( ";
-			query += " " + idProject + ", ";
-			query += " '" + taskString + "', ";
-			query += " " + epoch + ", ";
-			query += " " + epoch + " ";
-			query += " ) ; ";
+			String description = taskQuery.getDescription();
+			String annotation = taskQuery.getAnnotation();
 
-			statement.executeUpdate(query);
-			ResultSet response = statement.getGeneratedKeys();
-			if (response.next())
+			if (idTask <= 0 && description != null && description instanceof String)
 			{
-				idTask = response.getLong(1);
-				session.getTask().setIdTask(idTask);
-				session.getTask().setDescription(taskString);
+				query = " INSERT INTO task ( ";
+				query += " idProject, ";
+				query += " description, ";
+				query += " annotation, ";
+				query += " record, ";
+				query += " version ";
+				query += " ) VALUES ( ";
+				query += " " + idProject + ", ";
+				query += " '" + description + "', ";
+				query += " '" + annotation + "', ";
+				query += " " + epoch + ", ";
+				query += " " + epoch + " ";
+				query += " ) ; ";
+
+				statement.executeUpdate(query);
+				ResultSet response = statement.getGeneratedKeys();
+				if (response.next())
+				{
+					idTask = response.getLong(1);
+					session.getTask().setIdTask(idTask);
+					session.getTask().setDescription(description);
+					session.getTask().setAnnotation(annotation);
+					session.getTask().setRecord(epoch);
+					session.getTask().setVersion(epoch);
+				}
 			}
 		}
 
@@ -111,19 +126,22 @@ public class SessionService
 		Session sessionQuery = session;
 		Task taskQuery = session.getTask();
 
+		long idTask = taskQuery.getIdTask();
+		long idSession = sessionQuery.getIdSession();
+
 		long epoch = System.currentTimeMillis();
 		long duration = sessionQuery.getDuration();
 		long estimation = sessionQuery.getEstimation();
-
-		long idSession = sessionQuery.getIdSession();
-		long idTask = taskQuery.getIdTask();
+		String annotation = sessionQuery.getAnnotation();
 
 		// -------------------------------------------------------
 
 		if (idSession > 0)
 		{
 			query = " UPDATE session ";
-			query += " SET duration = " + duration + " ";
+			query += " SET duration = " + duration + ", ";
+			query += " annotation = '" + annotation + "', ";
+			query += " version = " + epoch + " ";
 			query += " WHERE ";
 			query += " idSession = " + idSession + " ; ";
 
@@ -133,14 +151,20 @@ public class SessionService
 		{
 			query += " INSERT INTO session ( ";
 			query += " idTask, ";
+			query += " initiated, ";
+			query += " duration, ";
 			query += " estimation, ";
-			query += " initTime, ";
-			query += " duration ";
+			query += " annotation, ";
+			query += " record, ";
+			query += " version ";
 			query += " ) VALUES ( ";
 			query += " " + idTask + ", ";
-			query += " " + estimation + ", ";
 			query += " " + epoch + ", ";
-			query += " " + duration + " ";
+			query += " " + duration + ", ";
+			query += " " + estimation + ", ";
+			query += " '" + annotation + "', ";
+			query += " " + epoch + ", ";
+			query += " " + epoch + " ";
 			query += " ); ";
 
 			statement.executeUpdate(query);
@@ -150,8 +174,12 @@ public class SessionService
 			{
 				idSession = response.getLong(1);
 				session.setIdSession(idSession);
-				session.setInitTime(epoch);
+				session.setInitiated(epoch);
 				session.setDuration(duration);
+				session.setEstimation(estimation);
+				session.setAnnotation(annotation);
+				session.setRecord(epoch);
+				session.setVersion(epoch);
 			}
 		}
 
@@ -175,8 +203,12 @@ public class SessionService
 
 		query = " SELECT ";
 		query += " idTask, ";
-		query += " initTime, ";
-		query += " duration ";
+		query += " initiated, ";
+		query += " duration, ";
+		query += " estimation, ";
+		query += " annotation, ";
+		query += " record, ";
+		query += " version ";
 		query += " FROM session ";
 		query += " WHERE ";
 		query += " idSession = " + idSession + " ; ";
@@ -185,8 +217,12 @@ public class SessionService
 		if (dataset.next())
 		{
 			session.getTask().setIdTask(dataset.getLong("idTask"));
-			session.setInitTime(dataset.getLong("initTime"));
+			session.setInitiated(dataset.getLong("initiated"));
 			session.setDuration(dataset.getLong("duration"));
+			session.setEstimation(dataset.getLong("estimation"));
+			session.setAnnotation(dataset.getString("annotation"));
+			session.setRecord(dataset.getLong("record"));
+			session.setVersion(dataset.getLong("version"));
 		}
 
 		// -------------------------------------------------------

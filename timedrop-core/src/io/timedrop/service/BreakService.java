@@ -57,13 +57,16 @@ public class BreakService
 
 		long epoch = System.currentTimeMillis();
 		long duration = interruption.getDuration();
+		String annotation = interruption.getAnnotation();
 
 		// -------------------------------------------------------
 
 		if (idInterruption > 0)
 		{
 			query = " UPDATE break ";
-			query += " SET duration = " + duration + " ";
+			query += " SET duration = " + duration + ", ";
+			query += " annotation = '" + annotation + "', ";
+			query += " version = " + epoch + " ";
 			if (idTask > 0)
 			{
 				query += ", idTask = " + idTask + " ";
@@ -81,8 +84,11 @@ public class BreakService
 			{
 				query += " idTask, ";
 			}
-			query += " initTime, ";
-			query += " duration ";
+			query += " initiated, ";
+			query += " duration, ";
+			query += " annotation, ";
+			query += " record, ";
+			query += " version ";
 			query += " ) VALUES ( ";
 			query += " " + idSession + ", ";
 			if (idTask > 0)
@@ -90,7 +96,10 @@ public class BreakService
 				query += " " + idTask + ", ";
 			}
 			query += " " + epoch + ", ";
-			query += " " + duration + " ";
+			query += " " + duration + ", ";
+			query += " '" + annotation + "', ";
+			query += " " + epoch + ", ";
+			query += " " + epoch + " ";
 			query += " ); ";
 
 			statement.executeUpdate(query);
@@ -100,6 +109,12 @@ public class BreakService
 			{
 				idInterruption = response.getLong(1);
 				interruption.setIdBreak(idInterruption);
+
+				interruption.setInitiated(epoch);
+				interruption.setDuration(duration);
+				interruption.setAnnotation(annotation);
+				interruption.setRecord(epoch);
+				interruption.setVersion(epoch);
 			}
 		}
 
@@ -109,13 +124,9 @@ public class BreakService
 		ConnectionManager.closeConnection();
 	}
 
-	public Interruption fetchInterruption(Interruption breaks) throws Exception
-	{
-		return null;
-	}
-
 	public void remove(Interruption interruption)
 	{
 
 	}
+
 }

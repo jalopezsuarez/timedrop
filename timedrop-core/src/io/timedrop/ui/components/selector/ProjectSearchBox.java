@@ -218,8 +218,11 @@ public class ProjectSearchBox extends AbstractListModel<Object> implements Combo
 		if (data != null && data.size() > 0 && cb.getSelectedItem() instanceof Project && ((Project) cb.getSelectedItem()).getIdProject() > 0)
 		{
 			Project item = (Project) cb.getSelectedItem();
-			object.setDescription(item.getDescription().trim());
 			object.setIdProject(item.getIdProject());
+			object.setDescription(item.getDescription());
+			object.setAnnotation(item.getAnnotation());
+			object.setRecord(item.getRecord());
+			object.setVersion(item.getVersion());
 
 			updateModel(object.toString());
 			cbe.setItem(object.toString());
@@ -227,8 +230,11 @@ public class ProjectSearchBox extends AbstractListModel<Object> implements Combo
 		}
 		else if (data != null && data.size() <= 0 && cbe.getItem() instanceof String && ((String) cbe.getItem()).length() > 0)
 		{
-			object.setDescription(((String) cbe.getItem()).trim());
 			object.setIdProject(0);
+			object.setDescription(((String) cbe.getItem()).trim());
+			object.setAnnotation("");
+			object.setRecord(System.currentTimeMillis());
+			object.setVersion(System.currentTimeMillis());
 		}
 
 		if (selectorAction != null)

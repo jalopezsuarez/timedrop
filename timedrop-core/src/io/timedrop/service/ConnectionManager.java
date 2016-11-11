@@ -14,7 +14,7 @@ public class ConnectionManager
 	{
 		if (connection != null && connection instanceof Connection && !connection.isClosed())
 		{
-			System.out.println("Database Ready!");
+			// System.out.println("Database Ready!");
 		}
 		else
 		{
@@ -35,8 +35,9 @@ public class ConnectionManager
 				query += " CREATE TABLE IF NOT EXISTS organization ( ";
 				query += " idOrganization INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
 				query += " description TEXT NOT NULL, ";
-				query += " changeDate INTEGER NOT NULL, ";
-				query += " recordDate INTEGER NOT NULL ";
+				query += " annotation TEXT NOT NULL DEFAULT '', ";
+				query += " record INTEGER NOT NULL, ";
+				query += " version INTEGER NOT NULL ";
 				query += " ); ";
 			}
 			// ----------------------------------------------------------
@@ -45,8 +46,9 @@ public class ConnectionManager
 				query += " idProject INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
 				query += " idOrganization INTEGER NOT NULL, ";
 				query += " description TEXT NOT NULL, ";
-				query += " changeDate INTEGER NOT NULL, ";
-				query += " recordDate INTEGER NOT NULL, ";
+				query += " annotation TEXT NOT NULL DEFAULT '', ";
+				query += " record INTEGER NOT NULL, ";
+				query += " version INTEGER NOT NULL, ";
 				query += " FOREIGN KEY (idOrganization) REFERENCES organization(idOrganization) ON DELETE CASCADE ";
 				query += " ); ";
 			}
@@ -56,8 +58,9 @@ public class ConnectionManager
 				query += " idTask INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
 				query += " idProject INTEGER NOT NULL, ";
 				query += " description TEXT NOT NULL, ";
-				query += " changeDate INTEGER NOT NULL, ";
-				query += " recordDate INTEGER NOT NULL, ";
+				query += " annotation TEXT NOT NULL DEFAULT '', ";
+				query += " record INTEGER NOT NULL, ";
+				query += " version INTEGER NOT NULL, ";
 				query += " FOREIGN KEY (idProject) REFERENCES project(idProject) ON DELETE CASCADE ";
 				query += " ); ";
 			}
@@ -66,9 +69,12 @@ public class ConnectionManager
 				query += " CREATE TABLE IF NOT EXISTS session ( ";
 				query += " idSession INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
 				query += " idTask INTEGER NOT NULL, ";
-				query += " estimation INTEGER NOT NULL, ";
-				query += " initTime INTEGER NOT NULL, ";
+				query += " initiated INTEGER NOT NULL, ";
 				query += " duration INTEGER NOT NULL DEFAULT 0, ";
+				query += " estimation INTEGER NOT NULL DEFAULT 0, ";
+				query += " annotation TEXT NOT NULL DEFAULT '', ";
+				query += " record INTEGER NOT NULL, ";
+				query += " version INTEGER NOT NULL, ";
 				query += " FOREIGN KEY (idTask) REFERENCES task(idTask) ON DELETE CASCADE ";
 				query += " ); ";
 			}
@@ -78,8 +84,11 @@ public class ConnectionManager
 				query += " idBreak INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
 				query += " idSession INTEGER NOT NULL, ";
 				query += " idTask INTEGER NULL DEFAULT NULL, ";
-				query += " initTime INTEGER NOT NULL, ";
+				query += " initiated INTEGER NOT NULL, ";
 				query += " duration INTEGER NOT NULL DEFAULT 0, ";
+				query += " annotation TEXT NOT NULL DEFAULT '', ";
+				query += " record INTEGER NOT NULL, ";
+				query += " version INTEGER NOT NULL, ";
 				query += " FOREIGN KEY (idSession) REFERENCES session(idSession) ON DELETE CASCADE ";
 				query += " FOREIGN KEY (idTask) REFERENCES task(idTask) ON DELETE CASCADE ";
 				query += " ); ";
@@ -97,7 +106,7 @@ public class ConnectionManager
 				{
 					Statement statementDebug = connection.createStatement();
 					String queryDebug = " ";
-					queryDebug += " INSERT INTO organization (idOrganization, description, changeDate, recordDate) ";
+					queryDebug += " INSERT INTO organization (idOrganization, description, record, version) ";
 					queryDebug += " VALUES (1, 'DEFAULT', 0, 0) ";
 					statementDebug.executeUpdate(queryDebug);
 					statementDebug.close();

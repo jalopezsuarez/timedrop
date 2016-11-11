@@ -6,6 +6,13 @@ public class Task extends Object
 
 	private long idTask;
 	private String description;
+	private String annotation;
+	private long record;
+	private long version;
+
+	private long estimation;
+	private long reestimate;
+	private long summary;
 
 	// ~ Methods
 	// =======================================================
@@ -16,6 +23,13 @@ public class Task extends Object
 
 		idTask = 0;
 		description = "";
+		annotation = "";
+		record = System.currentTimeMillis();
+		version = System.currentTimeMillis();
+
+		estimation = 0;
+		reestimate = 0;
+		summary = 0;
 	}
 
 	@Override
@@ -35,6 +49,13 @@ public class Task extends Object
 
 			idTask = copy.getIdTask();
 			description = copy.getDescription();
+			annotation = copy.getAnnotation();
+			record = copy.getRecord();
+			version = copy.getVersion();
+
+			estimation = copy.getEstimation();
+			reestimate = copy.getReestimate();
+			summary = copy.getSummary();
 		}
 	}
 
@@ -81,9 +102,6 @@ public class Task extends Object
 		this.project = project;
 	}
 
-	// ~ Methods
-	// =======================================================
-
 	public long getIdTask()
 	{
 		return idTask;
@@ -102,6 +120,66 @@ public class Task extends Object
 	public void setDescription(String description)
 	{
 		this.description = description;
+	}
+
+	public String getAnnotation()
+	{
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation)
+	{
+		this.annotation = annotation;
+	}
+
+	public long getRecord()
+	{
+		return record;
+	}
+
+	public void setRecord(long record)
+	{
+		this.record = record;
+	}
+
+	public long getVersion()
+	{
+		return version;
+	}
+
+	public void setVersion(long version)
+	{
+		this.version = version;
+	}
+
+	public long getEstimation()
+	{
+		return estimation;
+	}
+
+	public void setEstimation(long estimation)
+	{
+		this.estimation = estimation;
+	}
+
+	public long getReestimate()
+	{
+		return reestimate;
+	}
+
+	public void setReestimate(long reestimate)
+	{
+		this.reestimate = reestimate;
+	}
+
+	public long getSummary()
+	{
+		return summary;
+	}
+
+	public void setSummary(long summary)
+	{
+		this.summary = summary;
 	}
 
 }

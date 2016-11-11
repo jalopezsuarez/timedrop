@@ -4,6 +4,9 @@ public class Organization extends Object
 {
 	private long idOrganization;
 	private String description;
+	private String annotation;
+	private long record;
+	private long version;
 
 	// ~ Methods
 	// =======================================================
@@ -12,6 +15,9 @@ public class Organization extends Object
 	{
 		idOrganization = 0;
 		description = "";
+		annotation = "";
+		record = System.currentTimeMillis();
+		version = System.currentTimeMillis();
 	}
 
 	@Override
@@ -29,6 +35,9 @@ public class Organization extends Object
 		{
 			idOrganization = copy.getIdOrganization();
 			description = copy.getDescription();
+			annotation = copy.getAnnotation();
+			record = copy.getRecord();
+			version = copy.getVersion();
 		}
 	}
 
@@ -53,6 +62,36 @@ public class Organization extends Object
 	public void setDescription(String description)
 	{
 		this.description = description;
+	}
+
+	public String getAnnotation()
+	{
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation)
+	{
+		this.annotation = annotation;
+	}
+
+	public long getRecord()
+	{
+		return record;
+	}
+
+	public void setRecord(long record)
+	{
+		this.record = record;
+	}
+
+	public long getVersion()
+	{
+		return version;
+	}
+
+	public void setVersion(long version)
+	{
+		this.version = version;
 	}
 
 }

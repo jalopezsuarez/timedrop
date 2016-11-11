@@ -21,7 +21,6 @@ public class BasicField extends JTextArea
 
 		setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		setFont(UIManager.getFont("TextField.font").deriveFont(14f));
-		setCaretColor(Color.decode("#ffffff"));
 		setForeground(Color.decode("#000000"));
 		setBackground(Color.decode("#ffffff"));
 
