@@ -2,7 +2,7 @@ package io.timedrop.business;
 
 import io.timedrop.commons.GridHelper;
 import io.timedrop.ui.components.BasicPanel;
-import io.timedrop.ui.components.BasicText;
+import io.timedrop.ui.components.BasicField;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,7 +41,7 @@ public class NotificationCenter
 
 			GridHelper layoutNotification = new GridHelper(panel);
 
-			BasicText labelTitle = new BasicText(title);
+			BasicField labelTitle = new BasicField(title);
 			labelTitle.setFont(UIManager.getFont("TextField.font").deriveFont(Font.BOLD, 13f));
 			labelTitle.setForeground(Color.decode("#ffffff"));
 			labelTitle.setBackground(Color.decode("#212B33"));
@@ -50,7 +50,7 @@ public class NotificationCenter
 			layoutNotification.constrains().insets = new Insets(0, 0, 6, 0);
 			layoutNotification.add(labelTitle, 0, 0);
 
-			BasicText labelMessage = new BasicText(message);
+			BasicField labelMessage = new BasicField(message);
 			labelMessage.setFont(UIManager.getFont("TextField.font").deriveFont(Font.PLAIN, 13f));
 			labelMessage.setForeground(Color.decode("#ffffff"));
 			labelMessage.setBackground(Color.decode("#212B33"));
