@@ -1100,7 +1100,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			@Override
 			public void onCancel()
 			{
-
+				actionTrackerDismiss();
 			}
 		});
 
@@ -1523,8 +1523,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 		else
 		{
-			timerTrackerTimerBlink.stop();
-			timerTrackerTimerBlink = null;
+			if (timerTrackerTimerBlink != null)
+			{
+				timerTrackerTimerBlink.stop();
+				timerTrackerTimerBlink = null;
+			}
 			valueTrackerTimer.setForeground(Color.decode("#ffffff"));
 		}
 	}

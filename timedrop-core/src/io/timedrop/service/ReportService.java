@@ -25,7 +25,7 @@ public class ReportService
 		query += " LEFT JOIN task ON task.idProject = project.idProject ";
 		query += " LEFT JOIN session ON session.idTask = task.idTask ";
 		query += " GROUP BY task.idTask ";
-		query += " ORDER BY session.initTime DESC ";
+		query += " ORDER BY session.initiated DESC ";
 
 		// -------------------------------------------------------
 

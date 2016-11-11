@@ -52,7 +52,7 @@ public class LightComboBox<E> extends JComboBox<E>
 	{
 		super.updateUI();
 
-		setFont(UIManager.getFont("TextField.font").deriveFont(22f));
+		setFont(UIManager.getFont("TextField.font").deriveFont(20f));
 		setForeground(Color.decode("#4A4A4A"));
 		setBackground(Color.decode("#F3F3F3"));
 
