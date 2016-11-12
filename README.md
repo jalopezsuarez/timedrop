@@ -1,1 +1,3 @@
-# timedrop
+# Timedrop
+
+Interruption based Time Tracker.
