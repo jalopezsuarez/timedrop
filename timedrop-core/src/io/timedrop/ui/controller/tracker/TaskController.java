@@ -496,7 +496,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
 							layoutTrackerManagerEstimation.add(valueTrackerTimerStarted, 2, 0);
-						}
+						} 
 						{
 							labelTrackerTimerRemaining = new BasicLabel("REMAINING");
 							labelTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));

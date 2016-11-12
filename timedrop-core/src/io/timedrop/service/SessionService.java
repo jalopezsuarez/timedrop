@@ -245,7 +245,7 @@ public class SessionService
 	{
 
 	}
-
+ 
 	public ArrayList<Object> findInterruptionsBySession(Session session) throws Exception
 	{
 		Statement statement = ConnectionManager.openConnection().createStatement();
