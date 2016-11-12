@@ -105,8 +105,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	private BasicImage buttonEstimationDecrease;
 	private BasicLabel valueEstimationTask;
 
-	private BasicLabel labelEstimationSpent;
-	private BasicLabel valueEstimationSpent;
+	private BasicLabel labelEstimationWorking;
+	private BasicLabel valueEstimationWorking;
 
 	private BasicLabel labelEstimationRemaining;
 	private BasicLabel valueEstimationRemaining;
@@ -122,22 +122,23 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	private BasicPanel panelTrackerManager;
 
 	private BasicText textTrackerTimerTask;
-	private BasicField fieldTackerTimerProject;
+	private BasicText textTrackerTimerProject;
 
 	private BasicImage buttonTrackerTimerIncrease;
 	private BasicImage buttonTrackerTimerDecrease;
 
 	private BasicLabel valueTrackerTimer;
-
-	private BasicLabel labelTrackerTimerStarted;
 	private BasicLabel valueTrackerTimerStarted;
-
-	private BasicLabel labelTrackerTimerRemaining;
 	private BasicLabel valueTrackerTimerRemaining;
 
 	// -------------------------------------------------------
 
+	private BasicPanel panelTrackerDetails;
 	private BasicPanel panelTrackerAnnotation;
+
+	private BasicImage buttonTrackerDetails;
+	private BasicLabel labelTrackerDetails;
+	private BasicEditor editorTrackerDetails;
 
 	private BasicImage buttonTrackerAnnotation;
 	private BasicLabel labelTrackerAnnotation;
@@ -301,6 +302,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						GridHelper layoutTrackerEditorEstimation = new GridHelper(panelTrackerEditorEstimator);
 						{
 							buttonEstimationDecrease = new BasicImage("estimate_decrease");
+							buttonEstimationDecrease.setToolTipText("Decrease estimation DOWN");
 							layoutTrackerEditorEstimation.constrains().gridheight = 2;
 							layoutTrackerEditorEstimation.constrains().anchor = GridBagConstraints.CENTER;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(0, 10, 0, 5);
@@ -308,6 +310,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						}
 						{
 							buttonEstimationIncrease = new BasicImage("estimate_increase");
+							buttonEstimationIncrease.setToolTipText("Increase estimation UP");
 							layoutTrackerEditorEstimation.constrains().gridheight = 2;
 							layoutTrackerEditorEstimation.constrains().anchor = GridBagConstraints.CENTER;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(0, 5, 0, 5);
@@ -324,28 +327,28 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							layoutTrackerEditorEstimation.add(valueEstimationTask, 2, 1);
 						}
 						{
-							labelEstimationSpent = new BasicLabel("SPENT HOURS");
-							labelEstimationSpent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
-							labelEstimationSpent.setForeground(Color.decode("#A6AEB4"));
-							labelEstimationSpent.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 28;
+							labelEstimationWorking = new BasicLabel("WORKING");
+							labelEstimationWorking.setFont(UIManager.getFont("Label.font").deriveFont(12f));
+							labelEstimationWorking.setForeground(Color.decode("#A6AEB4"));
+							labelEstimationWorking.setBackground(Color.decode("#161F26"));
+							layoutTrackerEditorEstimation.constrains().ipadx = 10;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(5, 0, 0, 0);
-							layoutTrackerEditorEstimation.add(labelEstimationSpent, 3, 1);
+							layoutTrackerEditorEstimation.add(labelEstimationWorking, 3, 1);
 						}
 						{
-							valueEstimationSpent = new BasicLabel("--");
-							valueEstimationSpent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
-							valueEstimationSpent.setForeground(Color.decode("#ffffff"));
-							valueEstimationSpent.setBackground(Color.decode("#161F26"));
+							valueEstimationWorking = new BasicLabel("--");
+							valueEstimationWorking.setFont(UIManager.getFont("Label.font").deriveFont(12f));
+							valueEstimationWorking.setForeground(Color.decode("#ffffff"));
+							valueEstimationWorking.setBackground(Color.decode("#161F26"));
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(5, 0, 0, 0);
-							layoutTrackerEditorEstimation.add(valueEstimationSpent, 4, 1);
+							layoutTrackerEditorEstimation.add(valueEstimationWorking, 4, 1);
 						}
 						{
 							labelEstimationRemaining = new BasicLabel("REMAINING");
 							labelEstimationRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationRemaining.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationRemaining.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 28;
+							layoutTrackerEditorEstimation.constrains().ipadx = 10;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 0, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationRemaining, 3, 2);
 						}
@@ -362,7 +365,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelEstimationInitial.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationInitial.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationInitial.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 28;
+							layoutTrackerEditorEstimation.constrains().ipadx = 10;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(4, 0, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationInitial, 5, 1);
 						}
@@ -379,7 +382,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelEstimationCurrent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationCurrent.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationCurrent.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 28;
+							layoutTrackerEditorEstimation.constrains().ipadx = 10;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 0, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationCurrent, 5, 2);
 						}
@@ -424,16 +427,16 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							panelTrackerManagerInformation.add(textTrackerTimerTask, BorderLayout.NORTH);
 						}
 						{
-							fieldTackerTimerProject = new BasicField("Start tracking by selecting the task you are working on");
-							fieldTackerTimerProject.setBackground(Color.decode("#212B33"));
-							fieldTackerTimerProject.setForeground(Color.decode("#A6AEB4"));
-							fieldTackerTimerProject.setFont(UIManager.getFont("Label.font").deriveFont(14f));
-							panelTrackerManagerInformation.add(fieldTackerTimerProject, BorderLayout.CENTER);
+							textTrackerTimerProject = new BasicText("Start tracking by selecting the task you are working on");
+							textTrackerTimerProject.setBackground(Color.decode("#212B33"));
+							textTrackerTimerProject.setForeground(Color.decode("#A6AEB4"));
+							textTrackerTimerProject.setFont(UIManager.getFont("Label.font").deriveFont(14f));
+							panelTrackerManagerInformation.add(textTrackerTimerProject, BorderLayout.CENTER);
 						}
 						layoutTrackerManager.constrains().gridheight = 2;
 						layoutTrackerManager.constrains().gridwidth = 1;
 						layoutTrackerManager.constrains().weightx = 1.0;
-						layoutTrackerManager.constrains().insets = new Insets(12, 12, 12, 12);
+						layoutTrackerManager.constrains().insets = new Insets(12, 12, 12, 6);
 						layoutTrackerManager.add(panelTrackerManagerInformation, 0, 0);
 					}
 					{
@@ -443,17 +446,17 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						{
 							buttonTrackerTimerDecrease = new BasicImage("tracking_decrease");
 							buttonTrackerTimerDecrease.setBackground(Color.decode("#212B33"));
+							buttonTrackerTimerDecrease.setToolTipText("Decrease tracking time");
+							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
-							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 10);
-							layoutTrackerManagerTimer.constrains().fill = GridBagConstraints.HORIZONTAL;
 							layoutTrackerManagerTimer.add(buttonTrackerTimerDecrease, 0, 0);
 						}
 						{
 							buttonTrackerTimerIncrease = new BasicImage("tracking_increase");
 							buttonTrackerTimerIncrease.setBackground(Color.decode("#212B33"));
+							buttonTrackerTimerIncrease.setToolTipText("Increase tracking time");
+							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
-							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 10);
-							layoutTrackerManagerTimer.constrains().fill = GridBagConstraints.HORIZONTAL;
 							layoutTrackerManagerTimer.add(buttonTrackerTimerIncrease, 1, 0);
 						}
 						{
@@ -461,31 +464,27 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimer.setFont(UIManager.getFont("TextField.font").deriveFont(32f));
 							valueTrackerTimer.setForeground(Color.decode("#ffffff"));
 							valueTrackerTimer.setBackground(Color.decode("#212B33"));
+							valueTrackerTimer.setHorizontalAlignment(JLabel.RIGHT);
+							valueTrackerTimer.setToolTipText("Pause/Resume current task CTRL+P");
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
-							layoutTrackerManagerTimer.constrains().insets = new Insets(4, 0, 0, 8);
-							layoutTrackerManagerTimer.constrains().fill = GridBagConstraints.BOTH;
+							layoutTrackerManagerTimer.constrains().gridwidth = 3;
 							layoutTrackerManagerTimer.add(valueTrackerTimer, 2, 0);
 						}
-						layoutTrackerManager.add(panelTrackerManagerTimer, 1, 0);
-					}
-					{
-						BasicPanel panelTrackerManagerEstimation = new BasicPanel();
-						panelTrackerManagerEstimation.setBackground(Color.decode("#212B33"));
-						GridHelper layoutTrackerManagerEstimation = new GridHelper(panelTrackerManagerEstimation);
+						{
+							buttonTrackerDetails = new BasicImage("tracking_details");
+							buttonTrackerDetails.setBackground(Color.decode("#212B33"));
+							buttonTrackerDetails.setToolTipText("Task information CTRL+D");
+							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
+							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
+							layoutTrackerManagerTimer.add(buttonTrackerDetails, 0, 1);
+						}
 						{
 							buttonTrackerAnnotation = new BasicImage("tracking_annotation");
 							buttonTrackerAnnotation.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(3, 0, 0, 10);
-							layoutTrackerManagerEstimation.constrains().gridheight = 2;
-							layoutTrackerManagerEstimation.add(buttonTrackerAnnotation, 0, 0);
-						}
-						{
-							labelTrackerTimerStarted = new BasicLabel("STARTED");
-							labelTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
-							labelTrackerTimerStarted.setForeground(Color.decode("#525B61"));
-							labelTrackerTimerStarted.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
-							layoutTrackerManagerEstimation.add(labelTrackerTimerStarted, 1, 0);
+							buttonTrackerAnnotation.setToolTipText("Session annotations CTRL+S");
+							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
+							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
+							layoutTrackerManagerTimer.add(buttonTrackerAnnotation, 1, 1);
 						}
 						{
 							valueTrackerTimerStarted = new BasicLabel("--:--h");
@@ -493,31 +492,59 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerStarted.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerStarted.setBackground(Color.decode("#212B33"));
 							valueTrackerTimerStarted.setHorizontalAlignment(JLabel.RIGHT);
-							layoutTrackerManagerEstimation.constrains().ipadx = 5;
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
-							layoutTrackerManagerEstimation.add(valueTrackerTimerStarted, 2, 0);
+							valueTrackerTimerStarted.setToolTipText("Generate tracker report CTRL+R");
+							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
+							layoutTrackerManagerTimer.add(valueTrackerTimerStarted, 2, 1);
 						}
 						{
-							labelTrackerTimerRemaining = new BasicLabel("REMAINING");
-							labelTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
-							labelTrackerTimerRemaining.setForeground(Color.decode("#525B61"));
-							labelTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
-							layoutTrackerManagerEstimation.add(labelTrackerTimerRemaining, 1, 1);
+							BasicLabel separator = new BasicLabel(" / ");
+							separator.setFont(UIManager.getFont("Label.font").deriveFont(12f));
+							separator.setForeground(Color.decode("#A6AEB4"));
+							separator.setBackground(Color.decode("#212B33"));
+							separator.setHorizontalAlignment(JLabel.CENTER);
+							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
+							layoutTrackerManagerTimer.add(separator, 3, 1);
 						}
 						{
 							valueTrackerTimerRemaining = new BasicLabel("--h");
 							valueTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerRemaining.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
-							valueTrackerTimerRemaining.setHorizontalAlignment(JLabel.RIGHT);
-							layoutTrackerManagerEstimation.constrains().ipadx = 5;
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
-							layoutTrackerManagerEstimation.add(valueTrackerTimerRemaining, 2, 1);
+							valueTrackerTimerRemaining.setHorizontalAlignment(JLabel.LEFT);
+							valueTrackerTimerRemaining.setToolTipText("Generate tracker report CTRL+R");
+							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
+							layoutTrackerManagerTimer.add(valueTrackerTimerRemaining, 4, 1);
 						}
-						layoutTrackerManager.add(panelTrackerManagerEstimation, 1, 1);
+						layoutTrackerManager.constrains().insets = new Insets(0, 6, 6, 12);
+						layoutTrackerManager.add(panelTrackerManagerTimer, 1, 0);
 					}
 					panelTrackerSection.add(panelTrackerManager);
+				}
+				{
+					panelTrackerDetails = new BasicPanel();
+					panelTrackerDetails.setLayout(new BorderLayout());
+					panelTrackerDetails.setBackground(Color.decode("#212B33"));
+					panelTrackerDetails.setVisible(false);
+					{
+						{
+							labelTrackerDetails = new BasicLabel("TASK DETAILS");
+							labelTrackerDetails.setFont(UIManager.getFont("Label.font").deriveFont(12f));
+							labelTrackerDetails.setForeground(Color.decode("#525B61"));
+							labelTrackerDetails.setBackground(Color.decode("#212B33"));
+							labelTrackerDetails.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
+							panelTrackerDetails.add(labelTrackerDetails, BorderLayout.NORTH);
+						}
+						{
+							editorTrackerDetails = new BasicEditor();
+							editorTrackerDetails.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
+							editorTrackerDetails.setCaretColor(Color.decode("#ffffff"));
+							editorTrackerDetails.setForeground(Color.decode("#ffffff"));
+							editorTrackerDetails.setBackground(Color.decode("#212B33"));
+							editorTrackerDetails.setBorder(BorderFactory.createEmptyBorder(0, 12, 6, 6));
+							panelTrackerDetails.add(editorTrackerDetails, BorderLayout.CENTER);
+						}
+						panelTrackerSection.add(panelTrackerDetails);
+					}
 				}
 				{
 					panelTrackerAnnotation = new BasicPanel();
@@ -526,7 +553,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					panelTrackerAnnotation.setVisible(false);
 					{
 						{
-							labelTrackerAnnotation = new BasicLabel("ANNOTATION");
+							labelTrackerAnnotation = new BasicLabel("SESSION ANNOTATIONS");
 							labelTrackerAnnotation.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerAnnotation.setForeground(Color.decode("#525B61"));
 							labelTrackerAnnotation.setBackground(Color.decode("#212B33"));
@@ -575,13 +602,14 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					panelEmptyHelper.setBackground(Color.decode("#F3F3F3"));
 					panelEmptyHelper.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.decode("#DCDCDC")));
 					{
-						buttonBreakEmptyHelper = new BasicImage("interruption_create");
+						buttonBreakEmptyHelper = new BasicImage("interruption_create_b");
 						buttonBreakEmptyHelper.setForeground(Color.decode("#9B9B9B"));
 						buttonBreakEmptyHelper.setBackground(Color.decode("#F3F3F3"));
+						buttonBreakEmptyHelper.setToolTipText("Interrupt current task CTRL+I");
 						layoutEmptyHelper.constrains().weighty = 1.0;
 						layoutEmptyHelper.constrains().fill = GridBagConstraints.HORIZONTAL;
 						layoutEmptyHelper.constrains().anchor = GridBagConstraints.CENTER;
-						layoutEmptyHelper.constrains().insets = new Insets(0, 20, 0, 20);
+						layoutEmptyHelper.constrains().insets = new Insets(0, 25, 0, 20);
 						layoutEmptyHelper.add(buttonBreakEmptyHelper, 0, 0);
 					}
 					{
@@ -933,6 +961,15 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				actionTrackerTaskDecrease();
 			}
 		};
+		Action trackerTimerDetails = new AbstractAction()
+		{
+			private static final long serialVersionUID = 4805192530293724961L;
+
+			public void actionPerformed(ActionEvent e)
+			{
+				actionTrackerDetails();
+			}
+		};
 		Action trackerTimerAnnotation = new AbstractAction()
 		{
 			private static final long serialVersionUID = 4805192530293724961L;
@@ -946,9 +983,41 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		{
 			buttonTrackerTimerIncrease.addActionListener(trackerTimerIncrease);
 			buttonTrackerTimerDecrease.addActionListener(trackerTimerDecrease);
+
+			buttonTrackerDetails.addActionListener(trackerTimerDetails);
 			buttonTrackerAnnotation.addActionListener(trackerTimerAnnotation);
 		}
 		// =======================================================
+
+		textTrackerTimerProject.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent e)
+			{
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					e.consume();
+					actionTrackerDismiss();
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+					actionTrackerDismiss();
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				actionTrackerProjectDescription();
+			}
+		});
+
+		// -------------------------------------------------------
 
 		textTrackerTimerTask.addKeyListener(new KeyListener()
 		{
@@ -963,10 +1032,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
 					e.consume();
+					actionTrackerDismiss();
 				}
 				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				{
-
+					actionTrackerDismiss();
 				}
 			}
 
@@ -974,6 +1044,36 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			public void keyReleased(KeyEvent e)
 			{
 				actionTrackerTaskDescription();
+			}
+		});
+
+		// -------------------------------------------------------
+
+		editorTrackerDetails.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent e)
+			{
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					e.consume();
+					actionTrackerDetailsCommit();
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				{
+					e.consume();
+					actionTrackerDetailsDismiss();
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
 			}
 		});
 
@@ -1095,7 +1195,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 				public void actionPerformed(ActionEvent e)
 				{
-
+					actionTrackerDetails();
 				}
 			};
 			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ctrlStroke, "VK_D");
@@ -1280,14 +1380,32 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 				long duration = Math.round(trackerTask.getSummary() / 3600);
 
-				String timeString = String.format("%02d h", trackerTask.getReestimate());
+				String timeString = String.format("%02dh", trackerTask.getReestimate());
 				valueEstimationTask.setText(timeString);
 				trackerEstimation = trackerTask.getReestimate();
+				valueEstimationWorking.setText(String.format("%dh", duration));
+				valueEstimationRemaining.setText(String.format("%dh", trackerTask.getReestimate() - duration));
 
-				valueEstimationSpent.setText(String.format("%d h", duration));
-				valueEstimationRemaining.setText(String.format("%d h", trackerTask.getReestimate() - duration));
-				valueEstimationInitial.setText(String.format("%d h", trackerTask.getEstimation()));
-				valueEstimationCurrent.setText(String.format("%d h", trackerTask.getReestimate()));
+				if (trackerTask.getEstimation() > 0)
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM");
+					Date resultdate = new Date(trackerTask.getDateEstimation());
+					valueEstimationInitial.setText(String.format("%dh. %s", trackerTask.getEstimation(), sdf.format(resultdate)));
+				}
+				else
+				{
+					valueEstimationInitial.setText("--");
+				}
+				if (trackerTask.getReestimate() > 0)
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM");
+					Date resultdate = new Date(trackerTask.getDateReestimate());
+					valueEstimationCurrent.setText(String.format("%dh. %s", trackerTask.getReestimate(), sdf.format(resultdate)));
+				}
+				else
+				{
+					valueEstimationCurrent.setText("--");
+				}
 			}
 			catch (Exception ex)
 			{
@@ -1298,7 +1416,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		{
 			trackerEstimation = 0;
 			valueEstimationTask.setText("--h");
-			valueEstimationSpent.setText("--");
+			valueEstimationWorking.setText("--");
 			valueEstimationRemaining.setText("--");
 			valueEstimationInitial.setText("--");
 			valueEstimationCurrent.setText("--");
@@ -1325,10 +1443,12 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		{
 			trackerManager.startTracker(trackerTask, trackerEstimation);
 
-			trackerTask.setDescription("");
 			trackerTask.setIdTask(0);
-			trackerTask.getProject().setDescription("");
+			trackerTask.setDescription("");
+			trackerTask.setAnnotation("");
 			trackerTask.getProject().setIdProject(0);
+			trackerTask.getProject().setDescription("");
+			trackerTask.getProject().setAnnotation("");
 			trackerEstimation = 0;
 
 			selectorTrackerProject.clearUI();
@@ -1372,11 +1492,74 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 	}
 
+	private void actionTrackerProjectDescription()
+	{
+		try
+		{
+			trackerManager.saveProjectDescription(textTrackerTimerProject.getText());
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
 	private void actionTrackerTaskDescription()
 	{
 		try
 		{
 			trackerManager.saveTaskDescription(textTrackerTimerTask.getText());
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	private void actionTrackerDetails()
+	{
+		try
+		{
+			if (trackerManager.isRunning() || trackerManager.isPaused() || trackerManager.isInterrupted())
+			{
+				panelTrackerDetails.setVisible(true);
+				panelTrackerManager.setVisible(false);
+				editorTrackerDetails.setText(trackerManager.getTaskAnnotations());
+				editorTrackerDetails.requestFocusInWindow();
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	private void actionTrackerDetailsCommit()
+	{
+		try
+		{
+			if (trackerManager.isRunning() || trackerManager.isPaused() || trackerManager.isInterrupted())
+			{
+				panelTrackerDetails.setVisible(false);
+				panelTrackerManager.setVisible(true);
+				trackerManager.saveTaskAnnotations(editorTrackerDetails.getText());
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	private void actionTrackerDetailsDismiss()
+	{
+		try
+		{
+			if (trackerManager.isRunning() || trackerManager.isPaused() || trackerManager.isInterrupted())
+			{
+				panelTrackerDetails.setVisible(false);
+				panelTrackerManager.setVisible(true);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -1392,7 +1575,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			{
 				panelTrackerAnnotation.setVisible(true);
 				panelTrackerManager.setVisible(false);
-				editorTrackerAnnotation.setText(trackerManager.getTaskAnnotation());
+				editorTrackerAnnotation.setText(trackerManager.getSessionAnnotations());
 				editorTrackerAnnotation.requestFocusInWindow();
 			}
 		}
@@ -1410,7 +1593,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			{
 				panelTrackerAnnotation.setVisible(false);
 				panelTrackerManager.setVisible(true);
-				trackerManager.saveTaskAnnotation(editorTrackerAnnotation.getText());
+				trackerManager.saveSessionAnnotations(editorTrackerAnnotation.getText());
 			}
 		}
 		catch (Exception ex)
@@ -1648,7 +1831,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	public void update(Session session, Session interruption)
 	{
 		{
-			fieldTackerTimerProject.setText(session.getTask().getProject().getDescription());
+			textTrackerTimerProject.setText(session.getTask().getProject().getDescription());
 			textTrackerTimerTask.setText(session.getTask().getDescription());
 
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

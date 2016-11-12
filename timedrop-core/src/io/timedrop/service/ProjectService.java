@@ -10,6 +10,39 @@ import io.timedrop.service.exception.OrganizationNotFoundException;
 public class ProjectService
 {
 
+	public void process(Project project) throws Exception
+	{
+		Statement statement = ConnectionManager.openConnection().createStatement();
+		String query = " ";
+
+		// -------------------------------------------------------
+
+		long idProject = project.getIdProject();
+
+		String description = project.getDescription();
+		String annotation = project.getAnnotation();
+		long epoch = System.currentTimeMillis();
+
+		// -------------------------------------------------------
+
+		if (idProject > 0)
+		{
+			query = " UPDATE project ";
+			query += " SET description = '" + description + "', ";
+			query += " annotation = '" + annotation + "', ";
+			query += " version = " + epoch + " ";
+			query += " WHERE ";
+			query += " idProject = " + idProject + " ; ";
+
+			statement.executeUpdate(query);
+		}
+
+		// -------------------------------------------------------
+
+		statement.close();
+		ConnectionManager.closeConnection();
+	}
+
 	public ArrayList<Object> fetchProjects(Project project) throws Exception
 	{
 		long idOrganization = project.getOrganization().getIdOrganization();
@@ -29,6 +62,7 @@ public class ProjectService
 		query += " idProject, ";
 		query += " idOrganization, ";
 		query += " description, ";
+		query += " annotation, ";
 		query += " record, ";
 		query += " version ";
 		query += " FROM project ";
@@ -57,6 +91,10 @@ public class ProjectService
 			projectResponse.getOrganization().setIdOrganization(dataset.getLong("idOrganization"));
 
 			projectResponse.setDescription(dataset.getString("description"));
+			projectResponse.setAnnotation(dataset.getString("annotation"));
+
+			projectResponse.setRecord(dataset.getLong("record"));
+			projectResponse.setVersion(dataset.getLong("version"));
 
 			response.add(projectResponse);
 		}

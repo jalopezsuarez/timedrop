@@ -8,11 +8,13 @@ import javax.swing.Timer;
 
 import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
+import io.timedrop.service.ProjectService;
 import io.timedrop.service.SessionService;
 import io.timedrop.service.TaskService;
 
 public class TrackerManager
 {
+	private ProjectService projectService;
 	private TaskService taskService;
 
 	private SessionService sessionService;
@@ -35,6 +37,7 @@ public class TrackerManager
 
 	public TrackerManager()
 	{
+		projectService = new ProjectService();
 		taskService = new TaskService();
 
 		sessionService = new SessionService();
@@ -321,13 +324,25 @@ public class TrackerManager
 	// ~ Methods
 	// =======================================================
 
+	public void saveProjectDescription(String description) throws Exception
+	{
+		session.getTask().getProject().setDescription(description);
+		projectService.process(session.getTask().getProject());
+	}
+
 	public void saveTaskDescription(String description) throws Exception
 	{
 		session.getTask().setDescription(description);
 		taskService.process(session.getTask());
 	}
 
-	public void saveTaskAnnotation(String annotation) throws Exception
+	public void saveTaskAnnotations(String annotation) throws Exception
+	{
+		session.getTask().setAnnotation(annotation);
+		taskService.process(session.getTask());
+	}
+
+	public void saveSessionAnnotations(String annotation) throws Exception
 	{
 		session.setAnnotation(annotation);
 		sessionService.process(session);
@@ -339,7 +354,12 @@ public class TrackerManager
 		sessionService.process(interruption);
 	}
 
-	public String getTaskAnnotation()
+	public String getTaskAnnotations()
+	{
+		return session.getTask().getAnnotation();
+	}
+
+	public String getSessionAnnotations()
 	{
 		return session.getAnnotation();
 	}

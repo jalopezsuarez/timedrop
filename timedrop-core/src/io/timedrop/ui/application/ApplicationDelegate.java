@@ -1,5 +1,6 @@
 package io.timedrop.ui.application;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
@@ -15,9 +16,11 @@ import java.util.logging.LogManager;
 import io.timedrop.business.TrackerManager;
 import io.timedrop.ui.controller.tracker.TaskController;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -141,12 +144,25 @@ public class ApplicationDelegate implements NativeKeyListener
 	{
 		LogManager.getLogManager().reset();
 
+		// -------------------------------------------------------
+
 		System.setProperty("apple.awt.graphics.UseQuartz", "true");
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("sun.java2d.xrender", "true");
 		System.setProperty("swing.aatext", "true");
 
+		// -------------------------------------------------------
+
 		UIManager.put("ScrollBarUI", "io.timedrop.ui.components.UIScrollBar");
+		{
+			UIManager.put("ToolTip.background", Color.decode("#efefef"));
+			UIManager.put("ToolTip.foreground", Color.decode("#4A4A4A"));
+			Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#9B9B9B"));
+			Border padding = BorderFactory.createEmptyBorder(2, 2, 2, 2);
+			UIManager.put("ToolTip.border", BorderFactory.createCompoundBorder(border, padding));
+		}
+
+		// -------------------------------------------------------
 
 		try
 		{

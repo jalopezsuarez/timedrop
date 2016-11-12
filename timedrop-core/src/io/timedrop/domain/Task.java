@@ -12,6 +12,8 @@ public class Task extends Object
 
 	private long estimation;
 	private long reestimate;
+	private long dateEstimation;
+	private long dateReestimate;
 	private long summary;
 
 	// ~ Methods
@@ -29,6 +31,8 @@ public class Task extends Object
 
 		estimation = 0;
 		reestimate = 0;
+		dateEstimation = System.currentTimeMillis();
+		dateReestimate = System.currentTimeMillis();
 		summary = 0;
 	}
 
@@ -55,6 +59,8 @@ public class Task extends Object
 
 			estimation = copy.getEstimation();
 			reestimate = copy.getReestimate();
+			dateEstimation = copy.getDateEstimation();
+			dateReestimate = copy.getDateReestimate();
 			summary = copy.getSummary();
 		}
 	}
@@ -170,6 +176,26 @@ public class Task extends Object
 	public void setReestimate(long reestimate)
 	{
 		this.reestimate = reestimate;
+	}
+
+	public long getDateEstimation()
+	{
+		return dateEstimation;
+	}
+
+	public void setDateEstimation(long dateEstimation)
+	{
+		this.dateEstimation = dateEstimation;
+	}
+
+	public long getDateReestimate()
+	{
+		return dateReestimate;
+	}
+
+	public void setDateReestimate(long dateReestimate)
+	{
+		this.dateReestimate = dateReestimate;
 	}
 
 	public long getSummary()

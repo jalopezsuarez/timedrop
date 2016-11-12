@@ -62,6 +62,7 @@ public class TaskService
 		query += " task.idProject, ";
 		query += " project.idOrganization AS idOrganization, ";
 		query += " task.description, ";
+		query += " task.annotation, ";
 		query += " task.record, ";
 		query += " task.version ";
 
@@ -93,6 +94,10 @@ public class TaskService
 			taskResponse.getProject().getOrganization().setIdOrganization(dataset.getLong("idOrganization"));
 
 			taskResponse.setDescription(dataset.getString("description"));
+			taskResponse.setAnnotation(dataset.getString("annotation"));
+
+			taskResponse.setRecord(dataset.getLong("record"));
+			taskResponse.setVersion(dataset.getLong("version"));
 
 			response.add(taskResponse);
 		}
@@ -129,7 +134,9 @@ public class TaskService
 
 		// =======================================================
 
-		query = " SELECT session.estimation AS estimation ";
+		query = " SELECT ";
+		query += " session.estimation AS estimation, ";
+		query += " session.version AS datetime ";
 		query += " FROM task ";
 		query += " LEFT JOIN session ON session.idTask = task.idTask ";
 		query += " WHERE task.idTask = " + task.getIdTask() + " ";
@@ -140,12 +147,14 @@ public class TaskService
 		ResultSet datasetEstimation = statement.executeQuery(query);
 		while (datasetEstimation.next())
 		{
-			if (first)
+			if (first && datasetEstimation.getLong("estimation") > 0)
 			{
 				task.setEstimation(datasetEstimation.getLong("estimation"));
+				task.setDateEstimation(datasetEstimation.getLong("datetime"));
 				first = false;
 			}
 			task.setReestimate(datasetEstimation.getLong("estimation"));
+			task.setDateReestimate(datasetEstimation.getLong("datetime"));
 		}
 		datasetEstimation.close();
 
