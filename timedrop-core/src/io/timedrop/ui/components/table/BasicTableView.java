@@ -29,7 +29,7 @@ public class BasicTableView extends JScrollPane
 		BasicTable table = (BasicTable) getViewport().getView();
 		table.setDefaultRenderer(Object.class, render);
 
-		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		setBorder(BorderFactory.createEmptyBorder());
 		setBackground(Color.red);

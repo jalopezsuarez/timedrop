@@ -475,7 +475,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						{
 							buttonTrackerAnnotation = new BasicImage("tracking_annotation");
 							buttonTrackerAnnotation.setBackground(Color.decode("#212B33"));
-							layoutTrackerManagerEstimation.constrains().insets = new Insets(3, 0, 0, 8);
+							layoutTrackerManagerEstimation.constrains().insets = new Insets(3, 0, 0, 10);
 							layoutTrackerManagerEstimation.constrains().gridheight = 2;
 							layoutTrackerManagerEstimation.add(buttonTrackerAnnotation, 0, 0);
 						}
@@ -496,7 +496,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
 							layoutTrackerManagerEstimation.add(valueTrackerTimerStarted, 2, 0);
-						} 
+						}
 						{
 							labelTrackerTimerRemaining = new BasicLabel("REMAINING");
 							labelTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
@@ -791,6 +791,19 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 	}
 
+	/**
+	 * Definicion de la navegacion con teclado (CTRL / WIN / CMD).
+	 * <ul>
+	 * <li>CTRL+SHIFT / WIN+SHIFT / CMD+SHIFT: MOSTRAR TRACKER</li>
+	 * <li>ENTER: Adelante / Siguiente paso</li>
+	 * <li>ESC: Atras / Cerrar tracker</li>
+	 * <li>CTRL+P / WIN+P / CMD+P: Pausar/Reanudar tarea actual</li>
+	 * <li>CTRL+R / WIN+R / CMD+R: Genear informe de trabajo</li>
+	 * <li>CTRL+I / WIN+I / CMD+I: Iniciar interrupcion</li>
+	 * <li>CTRL+S / WIN+S / CMD+S: Realizar una anotacion sobre la sesion</li>
+	 * <li>CTRL+D / WIN+D / CMD+D: Editar el detalle de la tarea</li>
+	 * </ul>
+	 */
 	public void events()
 	{
 		selectorTrackerProject.setSelectorAction(new SelectorAction()
@@ -996,7 +1009,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 		// =======================================================
 		{
-			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.META_MASK);
+			KeyStroke ctrlStroke = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK);
+			KeyStroke metaStroke = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.META_MASK);
 			Action action = new AbstractAction()
 			{
 				private static final long serialVersionUID = 1L;
@@ -1007,12 +1021,14 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionTrackerDismiss();
 				}
 			};
-			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_I");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ctrlStroke, "VK_I");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(metaStroke, "VK_I");
 			getRootPane().getActionMap().put("VK_I", action);
 		}
 		// -------------------------------------------------------
 		{
-			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_MASK);
+			KeyStroke ctrlStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK);
+			KeyStroke metaStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_MASK);
 			Action action = new AbstractAction()
 			{
 				private static final long serialVersionUID = 1L;
@@ -1031,12 +1047,14 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					}
 				}
 			};
-			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_R");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ctrlStroke, "VK_R");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(metaStroke, "VK_R");
 			getRootPane().getActionMap().put("VK_R", action);
 		}
 		// -------------------------------------------------------
 		{
-			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_MASK);
+			KeyStroke ctrlStroke = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK);
+			KeyStroke metaStroke = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_MASK);
 			Action action = new AbstractAction()
 			{
 				private static final long serialVersionUID = 1L;
@@ -1046,12 +1064,14 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionTrackerToggle();
 				}
 			};
-			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_P");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ctrlStroke, "VK_P");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(metaStroke, "VK_P");
 			getRootPane().getActionMap().put("VK_P", action);
 		}
 		// -------------------------------------------------------
 		{
-			KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.META_MASK);
+			KeyStroke ctrlStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
+			KeyStroke metaStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_MASK);
 			Action action = new AbstractAction()
 			{
 				private static final long serialVersionUID = 1L;
@@ -1061,8 +1081,26 @@ public class TaskController extends BasicFrame implements TrackerInterface
 					actionTrackerAnnotation();
 				}
 			};
-			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "VK_A");
-			getRootPane().getActionMap().put("VK_A", action);
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ctrlStroke, "VK_S");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(metaStroke, "VK_S");
+			getRootPane().getActionMap().put("VK_S", action);
+		}
+		// -------------------------------------------------------
+		{
+			KeyStroke ctrlStroke = KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK);
+			KeyStroke metaStroke = KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.META_MASK);
+			Action action = new AbstractAction()
+			{
+				private static final long serialVersionUID = 1L;
+
+				public void actionPerformed(ActionEvent e)
+				{
+
+				}
+			};
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ctrlStroke, "VK_D");
+			getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(metaStroke, "VK_D");
+			getRootPane().getActionMap().put("VK_D", action);
 		}
 
 		// =======================================================
@@ -1690,7 +1728,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				}
 				layout.constrains().gridheight = 2;
 				layout.constrains().anchor = GridBagConstraints.CENTER;
-				layout.constrains().insets = new Insets(0, 0, 0, 0);
+				layout.constrains().insets = new Insets(0, 0, 0, 15);
 				layout.add(panelSessionInformation, 1, 0);
 			}
 		}
