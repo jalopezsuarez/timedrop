@@ -245,6 +245,7 @@ public class SessionService
 	{
 
 	}
+<<<<<<< HEAD
 
 	public ArrayList<Object> findInterruptionsBySession(Session session) throws Exception
 	{
@@ -312,4 +313,6 @@ public class SessionService
 
 		return response;
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/jalopezsuarez/timedrop.git
 }

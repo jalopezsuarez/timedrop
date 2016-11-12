@@ -492,7 +492,10 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerStarted.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerStarted.setBackground(Color.decode("#212B33"));
+<<<<<<< HEAD
 							valueTrackerTimerStarted.setHorizontalAlignment(JLabel.RIGHT);
+=======
+>>>>>>> branch 'master' of https://github.com/jalopezsuarez/timedrop.git
 							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 0, 0);
 							layoutTrackerManagerEstimation.add(valueTrackerTimerStarted, 2, 0);
@@ -510,7 +513,10 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerRemaining.setForeground(Color.decode("#A6AEB4"));
 							valueTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
+<<<<<<< HEAD
 							valueTrackerTimerRemaining.setHorizontalAlignment(JLabel.RIGHT);
+=======
+>>>>>>> branch 'master' of https://github.com/jalopezsuarez/timedrop.git
 							layoutTrackerManagerEstimation.constrains().ipadx = 5;
 							layoutTrackerManagerEstimation.constrains().insets = new Insets(0, 0, 6, 0);
 							layoutTrackerManagerEstimation.add(valueTrackerTimerRemaining, 2, 1);
@@ -1627,6 +1633,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 	}
 
+<<<<<<< HEAD
 	// Class Methods
 	// ===============================================================
 
@@ -1742,4 +1749,6 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 	}
 
+=======
+>>>>>>> branch 'master' of https://github.com/jalopezsuarez/timedrop.git
 }

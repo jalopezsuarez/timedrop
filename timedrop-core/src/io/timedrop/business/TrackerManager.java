@@ -190,8 +190,15 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
+<<<<<<< HEAD
 		interruption.getTask().copy(task);
 		sessionService.generate(interruption);
+=======
+		Task interruptionTask = interruption.getTask();
+		interruptionTask.copy(task);
+
+		sessionService.process(interruption);
+>>>>>>> branch 'master' of https://github.com/jalopezsuarez/timedrop.git
 
 		// -------------------------------------------------------
 
