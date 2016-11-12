@@ -50,66 +50,77 @@ public class ApplicationDelegate implements NativeKeyListener
 
 		if (event.getModifiers() == 18 || event.getModifiers() == 20 || event.getModifiers() == 22 && event.getRawCode() == 60)
 		{
+			if (applicationWindow != null && !applicationWindow.isActive() && !applicationWindow.isFocused())
+			{
+				applicationWindow.setVisible(false);
+				applicationWindow.dispose();
+				applicationWindow = null;
+			}
 			if (applicationWindow != null)
 			{
 				applicationWindow.setVisible(false);
 				applicationWindow.dispose();
 				applicationWindow = null;
 			}
-
-			// -------------------------------------------------------
-
-			applicationWindow = new TaskController(trackerManager);
-
-			applicationWindow.addWindowListener(new WindowAdapter()
+			else
 			{
-				@Override
-				public void windowClosing(WindowEvent e)
+				// -------------------------------------------------------
+
+				applicationWindow = new TaskController(trackerManager);
+				applicationWindow.requestFocusInWindow();
+
+				// -------------------------------------------------------
+
+				applicationWindow.addWindowListener(new WindowAdapter()
 				{
-					super.windowClosing(e);
-					applicationWindow = null;
-					trackerManager.setUI(null);
-				}
-			});
-			applicationWindow.addComponentListener(new ComponentAdapter()
-			{
-				public void componentResized(ComponentEvent e)
-				{
-					Component c = (Component) e.getSource();
-					applicationSize = c.getSize();
-				}
-			});
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					applicationWindow.setLocationRelativeTo(null);
-					applicationWindow.setSize(applicationSize);
-					applicationWindow.setPreferredSize(applicationSize);
-					applicationWindow.pack();
-					applicationWindow.init();
-					applicationWindow.setSize(applicationSize);
-					applicationWindow.setPreferredSize(applicationSize);
-					applicationWindow.setLocationRelativeTo(null);
-					applicationWindow.setVisible(true);
-					applicationWindow.setExtendedState(JFrame.NORMAL);
-					applicationWindow.toFront();
-					applicationWindow.setAlwaysOnTop(true);
-					try
+					@Override
+					public void windowClosing(WindowEvent e)
 					{
-						final Point oldMouseLocation = MouseInfo.getPointerInfo().getLocation();
-						Robot robot = new Robot();
-						robot.mouseMove(applicationWindow.getX() + (applicationWindow.getWidth() / 2), applicationWindow.getY() + (applicationWindow.getHeight() / 2));
-						robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-						robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-						robot.mouseMove((int) oldMouseLocation.getX(), (int) oldMouseLocation.getY());
+						super.windowClosing(e);
+						applicationWindow = null;
+						trackerManager.setUI(null);
 					}
-					catch (Exception ex)
+				});
+				applicationWindow.addComponentListener(new ComponentAdapter()
+				{
+					public void componentResized(ComponentEvent e)
 					{
+						Component c = (Component) e.getSource();
+						applicationSize = c.getSize();
 					}
-				}
-			});
+				});
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						applicationWindow.setLocationRelativeTo(null);
+						applicationWindow.setSize(applicationSize);
+						applicationWindow.setPreferredSize(applicationSize);
+						applicationWindow.pack();
+						applicationWindow.init();
+						applicationWindow.setSize(applicationSize);
+						applicationWindow.setPreferredSize(applicationSize);
+						applicationWindow.setLocationRelativeTo(null);
+						applicationWindow.setVisible(true);
+						applicationWindow.setExtendedState(JFrame.NORMAL);
+						applicationWindow.toFront();
+						applicationWindow.setAlwaysOnTop(true);
+						try
+						{
+							final Point oldMouseLocation = MouseInfo.getPointerInfo().getLocation();
+							Robot robot = new Robot();
+							robot.mouseMove(applicationWindow.getX() + (applicationWindow.getWidth() / 2), applicationWindow.getY() + (applicationWindow.getHeight() / 2));
+							robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+							robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+							robot.mouseMove((int) oldMouseLocation.getX(), (int) oldMouseLocation.getY());
+						}
+						catch (Exception ex)
+						{
+						}
+					}
+				});
+			}
 		}
 	}
 
