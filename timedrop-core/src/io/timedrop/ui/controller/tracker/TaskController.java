@@ -1741,5 +1741,4 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 
 	}
-
 }
