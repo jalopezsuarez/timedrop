@@ -137,6 +137,10 @@ public class SessionService
 
 		// -------------------------------------------------------
 
+		long initiated = epoch - (duration * 1000);
+
+		// -------------------------------------------------------
+
 		if (idSession > 0)
 		{
 			query = " UPDATE session SET ";
@@ -144,6 +148,7 @@ public class SessionService
 				query += " idTask = " + idTask + ", ";
 			if (idInterruption > 0)
 				query += " idInterruption = " + idInterruption + ", ";
+			query += " initiated = " + initiated + ", ";
 			query += " duration = " + duration + ", ";
 			query += " annotation = '" + annotation + "', ";
 			query += " version = " + epoch + " ";
@@ -151,6 +156,10 @@ public class SessionService
 			query += " idSession = " + idSession + " ; ";
 
 			statement.executeUpdate(query);
+			{
+				session.setInitiated(initiated);
+				session.setVersion(epoch);
+			}
 		}
 		else
 		{
@@ -241,9 +250,27 @@ public class SessionService
 		ConnectionManager.closeConnection();
 	}
 
-	public void remove(Session session)
+	public void remove(Session session) throws Exception
 	{
+		Statement statement = ConnectionManager.openConnection().createStatement();
+		String query = " ";
 
+		// -------------------------------------------------------
+
+		long idSession = session.getIdSession();
+
+		// -------------------------------------------------------
+
+		query = " DELETE  ";
+		query += " FROM session  ";
+		query += " WHERE  ";
+		query += " session.idSession = " + idSession + " ";
+
+		// -------------------------------------------------------
+
+		statement.executeUpdate(query);
+		statement.close();
+		ConnectionManager.closeConnection();
 	}
 
 	public ArrayList<Object> findInterruptionsBySession(Session session) throws Exception

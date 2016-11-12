@@ -218,7 +218,13 @@ public class TrackerManager
 
 		// -------------------------------------------------------
 
+		long duration = session.getDuration();
+		duration = duration + interruption.getDuration();
 		sessionService.remove(interruption);
+
+		session.setDuration(duration);
+		sessionService.process(session);
+		ui.track(session, interruption);
 
 		// -------------------------------------------------------
 
@@ -319,6 +325,11 @@ public class TrackerManager
 		// -------------------------------------------------------
 
 		enabled = true;
+	}
+
+	public void removeInterruption(Session session) throws Exception
+	{
+		sessionService.remove(session);
 	}
 
 	// ~ Methods

@@ -32,7 +32,7 @@ public class ApplicationDelegate implements NativeKeyListener
 	private static TaskController applicationWindow = null;
 	private TrackerManager trackerManager;
 
-	private static Dimension applicationSize = new Dimension(680, 480);
+	private static Dimension applicationSize = new Dimension(700, 500);
 
 	// ~ Methods
 	// =======================================================
@@ -53,7 +53,7 @@ public class ApplicationDelegate implements NativeKeyListener
 
 		if (event.getModifiers() == 18 || event.getModifiers() == 20 || event.getModifiers() == 22 && event.getRawCode() == 60)
 		{
-			if (applicationWindow != null && !applicationWindow.isActive() && !applicationWindow.isFocused())
+			if (applicationWindow != null && !applicationWindow.isActive())
 			{
 				applicationWindow.setVisible(false);
 				applicationWindow.dispose();
@@ -70,8 +70,11 @@ public class ApplicationDelegate implements NativeKeyListener
 				// -------------------------------------------------------
 
 				applicationWindow = new TaskController(trackerManager);
-				applicationWindow.requestFocusInWindow();
 
+				// -------------------------------------------------------
+				applicationWindow.setAutoRequestFocus(true);
+				applicationWindow.toFront();
+				applicationWindow.requestFocusInWindow();
 				// -------------------------------------------------------
 
 				applicationWindow.addWindowListener(new WindowAdapter()

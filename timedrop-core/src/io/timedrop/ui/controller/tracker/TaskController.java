@@ -34,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -187,6 +189,10 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	// -------------------------------------------------------
 
 	private BasicPanel panelBreakList;
+
+	private BasicLabel labelInterruptionsTitle;
+	private BasicLabel labelInterruptionsSummary;
+
 	private BasicTableView tableTaskInterruptions;
 
 	// ~ Methods
@@ -284,6 +290,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				}
 				{
 					panelTrackerEditorTimer = new BasicPanel();
+					panelTrackerEditorTimer.setFocusTraversalPolicyProvider(true);
 					panelTrackerEditorTimer.setBackground(Color.decode("#212B33"));
 					panelTrackerEditorTimer.setLayout(new BorderLayout());
 					{
@@ -327,12 +334,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							layoutTrackerEditorEstimation.add(valueEstimationTask, 2, 1);
 						}
 						{
-							labelEstimationWorking = new BasicLabel("WORKING");
+							labelEstimationWorking = new BasicLabel("WORKED");
 							labelEstimationWorking.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationWorking.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationWorking.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 10;
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(5, 0, 0, 0);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 15, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationWorking, 3, 1);
 						}
 						{
@@ -340,7 +346,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueEstimationWorking.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationWorking.setForeground(Color.decode("#ffffff"));
 							valueEstimationWorking.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(5, 0, 0, 0);
+							valueEstimationWorking.setHorizontalAlignment(JLabel.RIGHT);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationWorking, 4, 1);
 						}
 						{
@@ -348,8 +355,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelEstimationRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationRemaining.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationRemaining.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 10;
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 0, 0, 0);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 15, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationRemaining, 3, 2);
 						}
 						{
@@ -357,7 +363,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueEstimationRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationRemaining.setForeground(Color.decode("#ffffff"));
 							valueEstimationRemaining.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 0, 0, 0);
+							valueEstimationRemaining.setHorizontalAlignment(JLabel.RIGHT);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationRemaining, 4, 2);
 						}
 						{
@@ -365,8 +372,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelEstimationInitial.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationInitial.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationInitial.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 10;
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(4, 0, 0, 0);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 25, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationInitial, 5, 1);
 						}
 						{
@@ -374,7 +380,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueEstimationInitial.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationInitial.setForeground(Color.decode("#ffffff"));
 							valueEstimationInitial.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(4, 0, 0, 0);
+							valueEstimationInitial.setHorizontalAlignment(JLabel.RIGHT);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationInitial, 6, 1);
 						}
 						{
@@ -382,8 +389,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							labelEstimationCurrent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationCurrent.setForeground(Color.decode("#A6AEB4"));
 							labelEstimationCurrent.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().ipadx = 10;
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 0, 0, 0);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 25, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationCurrent, 5, 2);
 						}
 						{
@@ -391,7 +397,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 							valueEstimationCurrent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationCurrent.setForeground(Color.decode("#ffffff"));
 							valueEstimationCurrent.setBackground(Color.decode("#161F26"));
-							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 0, 0, 0);
+							valueEstimationCurrent.setHorizontalAlignment(JLabel.RIGHT);
+							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationCurrent, 6, 2);
 						}
 						{
@@ -588,7 +595,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				GridHelper layoutBreakEmpty = new GridHelper(panelBreakEmpty);
 				panelBreakEmpty.setBackground(Color.decode("#FFFFFF"));
 				{
-					labelBreakEmptyTitle = new BasicLabel("BREAKS ACTIVITY");
+					labelBreakEmptyTitle = new BasicLabel("INTERRUPTIONS");
 					labelBreakEmptyTitle.setForeground(Color.decode("#9B9B9B"));
 					labelBreakEmptyTitle.setBackground(Color.decode("#FFFFFF"));
 					labelBreakEmptyTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
@@ -642,7 +649,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						panelBreakTrackerProject = new BasicPanel();
 						GridHelper layoutBreakTrackerProject = new GridHelper(panelBreakTrackerProject);
 						{
-							labelBreakEditorProject = new BasicLabel("BREAK PROJECT");
+							labelBreakEditorProject = new BasicLabel("INTERRUPTION PROJECT");
 							labelBreakEditorProject.setForeground(Color.decode("#9B9B9B"));
 							labelBreakEditorProject.setBackground(Color.decode("#FFFFFF"));
 							labelBreakEditorProject.setFont(UIManager.getFont("Label.font").deriveFont(12f));
@@ -663,7 +670,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 						panelBreakTrackerTask = new BasicPanel();
 						GridHelper layoutBreakTrackerTask = new GridHelper(panelBreakTrackerTask);
 						{
-							labelBreakEditorTask = new BasicLabel("BREAK TASK");
+							labelBreakEditorTask = new BasicLabel("INTERRUPTION TASK");
 							labelBreakEditorTask.setForeground(Color.decode("#9B9B9B"));
 							labelBreakEditorTask.setBackground(Color.decode("#FFFFFF"));
 							labelBreakEditorTask.setFont(UIManager.getFont("Label.font").deriveFont(12f));
@@ -771,6 +778,31 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			panelBreakList.setLayout(new BorderLayout());
 			panelBreakList.setBackground(Color.decode("#ffffff"));
 			{
+				BasicPanel panelInterruptionsTitle = new BasicPanel();
+				panelInterruptionsTitle.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#DCDCDC")));
+				GridHelper layoutInterruptionsTitle = new GridHelper(panelInterruptionsTitle);
+				{
+					labelInterruptionsTitle = new BasicLabel("TODAY");
+					labelInterruptionsTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
+					labelInterruptionsTitle.setForeground(Color.decode("#9B9B9B"));
+					labelInterruptionsTitle.setBackground(Color.decode("#FFFFFF"));
+					layoutInterruptionsTitle.constrains().weightx = 1.0;
+					layoutInterruptionsTitle.constrains().anchor = GridBagConstraints.CENTER;
+					layoutInterruptionsTitle.constrains().insets = new Insets(2, 8, 2, 8);
+					layoutInterruptionsTitle.add(labelInterruptionsTitle, 0, 0);
+				}
+				{
+					labelInterruptionsSummary = new BasicLabel("--");
+					labelInterruptionsSummary.setFont(UIManager.getFont("Label.font").deriveFont(12f));
+					labelInterruptionsSummary.setForeground(Color.decode("#9B9B9B"));
+					labelInterruptionsSummary.setBackground(Color.decode("#FFFFFF"));
+					layoutInterruptionsTitle.constrains().anchor = GridBagConstraints.CENTER;
+					layoutInterruptionsTitle.constrains().insets = new Insets(2, 8, 2, 8);
+					layoutInterruptionsTitle.add(labelInterruptionsSummary, 1, 0);
+				}
+				panelBreakList.add(panelInterruptionsTitle, BorderLayout.NORTH);
+			}
+			{
 				tableTaskInterruptions = new BasicTableView(new FactoryCellRenderer());
 				panelBreakList.add(tableTaskInterruptions, BorderLayout.CENTER);
 			}
@@ -817,6 +849,10 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		{
 			tableModel.addRow(new Object[] { session });
 		}
+
+		// -------------------------------------------------------
+
+		updateInterruptionSummary();
 	}
 
 	/**
@@ -900,7 +936,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionTrackerEstimationIncrease();
+				if (e.getModifiers() != ActionEvent.MOUSE_EVENT_MASK)
+					actionTrackerEstimationIncrease();
 			}
 		};
 		Action trackerEstimationDecrease = new AbstractAction()
@@ -909,7 +946,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionTrackerEstimationDecrease();
+				if (e.getModifiers() != ActionEvent.MOUSE_EVENT_MASK)
+					actionTrackerEstimationDecrease();
 			}
 		};
 		// -------------------------------------------------------
@@ -937,19 +975,80 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			panelTrackerEditorTimer.getActionMap().put("VK_LEFT", trackerEstimationDecrease);
 		}
 		// -------------------------------------------------------
+		buttonEstimationIncrease.addActionListener(trackerEstimationIncrease);
+		buttonEstimationDecrease.addActionListener(trackerEstimationDecrease);
+		// -------------------------------------------------------
+		buttonEstimationIncrease.addMouseListener(new MouseAdapter()
 		{
-			buttonEstimationIncrease.addActionListener(trackerEstimationIncrease);
-			buttonEstimationDecrease.addActionListener(trackerEstimationDecrease);
-		}
-		// =======================================================
+			private Timer timerMousePressed = null;
+			private int accelerationMousePressed = 250;
 
+			public void mousePressed(MouseEvent e)
+			{
+				actionTrackerEstimationIncrease();
+				timerMousePressed = new Timer(accelerationMousePressed, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (timerMousePressed.getDelay() <= 25)
+							actionTrackerEstimationIncrease();
+						timerMousePressed.setDelay(25);
+					}
+				});
+				timerMousePressed.setCoalesce(true);
+				timerMousePressed.setRepeats(true);
+				timerMousePressed.start();
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				if (timerMousePressed != null)
+					timerMousePressed.stop();
+				timerMousePressed = null;
+			}
+		});
+
+		buttonEstimationDecrease.addMouseListener(new MouseAdapter()
+		{
+			private Timer timerMousePressed = null;
+			private int accelerationMousePressed = 250;
+
+			public void mousePressed(MouseEvent e)
+			{
+				actionTrackerEstimationDecrease();
+				timerMousePressed = new Timer(accelerationMousePressed, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (timerMousePressed.getDelay() <= 25)
+							actionTrackerEstimationDecrease();
+						timerMousePressed.setDelay(25);
+					}
+				});
+				timerMousePressed.setCoalesce(true);
+				timerMousePressed.setRepeats(true);
+				timerMousePressed.start();
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				if (timerMousePressed != null)
+					timerMousePressed.stop();
+				timerMousePressed = null;
+			}
+		});
+
+		// =======================================================
 		Action trackerTimerIncrease = new AbstractAction()
 		{
 			private static final long serialVersionUID = 4805192530293724961L;
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionTrackerTaskIncrease();
+				if (e.getModifiers() != ActionEvent.MOUSE_EVENT_MASK)
+					actionTrackerTaskIncrease();
 			}
 		};
 		Action trackerTimerDecrease = new AbstractAction()
@@ -958,7 +1057,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionTrackerTaskDecrease();
+				if (e.getModifiers() != ActionEvent.MOUSE_EVENT_MASK)
+					actionTrackerTaskDecrease();
 			}
 		};
 		Action trackerTimerDetails = new AbstractAction()
@@ -983,10 +1083,73 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		{
 			buttonTrackerTimerIncrease.addActionListener(trackerTimerIncrease);
 			buttonTrackerTimerDecrease.addActionListener(trackerTimerDecrease);
-
 			buttonTrackerDetails.addActionListener(trackerTimerDetails);
 			buttonTrackerAnnotation.addActionListener(trackerTimerAnnotation);
 		}
+		// -------------------------------------------------------
+
+		buttonTrackerTimerIncrease.addMouseListener(new MouseAdapter()
+		{
+			private Timer timerMousePressed = null;
+			private int accelerationMousePressed = 250;
+
+			public void mousePressed(MouseEvent e)
+			{
+				actionTrackerTaskIncrease();
+				timerMousePressed = new Timer(accelerationMousePressed, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (timerMousePressed.getDelay() <= 25)
+							actionTrackerTaskIncrease();
+						timerMousePressed.setDelay(25);
+					}
+				});
+				timerMousePressed.setCoalesce(true);
+				timerMousePressed.setRepeats(true);
+				timerMousePressed.start();
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				if (timerMousePressed != null)
+					timerMousePressed.stop();
+				timerMousePressed = null;
+			}
+		});
+
+		buttonTrackerTimerDecrease.addMouseListener(new MouseAdapter()
+		{
+			private Timer timerMousePressed = null;
+			private int accelerationMousePressed = 250;
+
+			public void mousePressed(MouseEvent e)
+			{
+				actionTrackerTaskDecrease();
+				timerMousePressed = new Timer(accelerationMousePressed, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (timerMousePressed.getDelay() <= 25)
+							actionTrackerTaskDecrease();
+						timerMousePressed.setDelay(25);
+					}
+				});
+				timerMousePressed.setCoalesce(true);
+				timerMousePressed.setRepeats(true);
+				timerMousePressed.start();
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				if (timerMousePressed != null)
+					timerMousePressed.stop();
+				timerMousePressed = null;
+			}
+		});
+
 		// =======================================================
 
 		textTrackerTimerProject.addKeyListener(new KeyListener()
@@ -1221,22 +1384,24 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 		// =======================================================
 
-		Action breakTimerIncrease = new AbstractAction()
+		Action breakTrackerIncrease = new AbstractAction()
 		{
 			private static final long serialVersionUID = 4805192530293724961L;
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionInterruptionIncrease();
+				if (e.getModifiers() != ActionEvent.MOUSE_EVENT_MASK)
+					actionInterruptionIncrease();
 			}
 		};
-		Action breakTimerDecrease = new AbstractAction()
+		Action breakTrackerDecrease = new AbstractAction()
 		{
 			private static final long serialVersionUID = 4805192530293724961L;
 
 			public void actionPerformed(ActionEvent e)
 			{
-				actionInterruptionDecrease();
+				if (e.getModifiers() != ActionEvent.MOUSE_EVENT_MASK)
+					actionInterruptionDecrease();
 			}
 		};
 		Action breakTrackerCommit = new AbstractAction()
@@ -1259,11 +1424,74 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		};
 		// -------------------------------------------------------
 		{
-			buttonBreakTrackerIncrease.addActionListener(breakTimerIncrease);
-			buttonBreakTrackerDecrease.addActionListener(breakTimerDecrease);
+			buttonBreakTrackerIncrease.addActionListener(breakTrackerIncrease);
+			buttonBreakTrackerDecrease.addActionListener(breakTrackerDecrease);
 			buttonBreakTrackerCommit.addActionListener(breakTrackerCommit);
 			buttonBreakTrackerCancel.addActionListener(breakTrackerCancel);
 		}
+		// -------------------------------------------------------
+
+		buttonBreakTrackerIncrease.addMouseListener(new MouseAdapter()
+		{
+			private Timer timerMousePressed = null;
+			private int accelerationMousePressed = 250;
+
+			public void mousePressed(MouseEvent e)
+			{
+				actionInterruptionIncrease();
+				timerMousePressed = new Timer(accelerationMousePressed, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (timerMousePressed.getDelay() <= 25)
+							actionInterruptionIncrease();
+						timerMousePressed.setDelay(25);
+					}
+				});
+				timerMousePressed.setCoalesce(true);
+				timerMousePressed.setRepeats(true);
+				timerMousePressed.start();
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				if (timerMousePressed != null)
+					timerMousePressed.stop();
+				timerMousePressed = null;
+			}
+		});
+
+		buttonBreakTrackerDecrease.addMouseListener(new MouseAdapter()
+		{
+			private Timer timerMousePressed = null;
+			private int accelerationMousePressed = 250;
+
+			public void mousePressed(MouseEvent e)
+			{
+				actionInterruptionDecrease();
+				timerMousePressed = new Timer(accelerationMousePressed, new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (timerMousePressed.getDelay() <= 25)
+							actionInterruptionDecrease();
+						timerMousePressed.setDelay(25);
+					}
+				});
+				timerMousePressed.setCoalesce(true);
+				timerMousePressed.setRepeats(true);
+				timerMousePressed.start();
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				if (timerMousePressed != null)
+					timerMousePressed.stop();
+				timerMousePressed = null;
+			}
+		});
 
 		// =======================================================
 
@@ -1380,11 +1608,27 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 				long duration = Math.round(trackerTask.getSummary() / 3600);
 
+				// -------------------------------------------------------
+
 				String timeString = String.format("%02dh", trackerTask.getReestimate());
 				valueEstimationTask.setText(timeString);
 				trackerEstimation = trackerTask.getReestimate();
 				valueEstimationWorking.setText(String.format("%dh", duration));
-				valueEstimationRemaining.setText(String.format("%dh", trackerTask.getReestimate() - duration));
+
+				// -------------------------------------------------------
+
+				long remaining = trackerEstimation - duration;
+				valueEstimationRemaining.setText(String.format("%dh", remaining));
+				if (remaining > 0)
+				{
+					valueEstimationRemaining.setForeground(Color.decode("#77d2c2"));
+				}
+				else
+				{
+					valueEstimationRemaining.setForeground(Color.decode("#E97C5F"));
+				}
+
+				// -------------------------------------------------------
 
 				if (trackerTask.getEstimation() > 0)
 				{
@@ -1426,15 +1670,39 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	private void actionTrackerEstimationIncrease()
 	{
 		trackerEstimation++;
-		String timeString = String.format("%02d h", trackerEstimation);
+		String timeString = String.format("%02dh", trackerEstimation);
 		valueEstimationTask.setText(timeString);
+
+		long duration = Math.round(trackerTask.getSummary() / 3600);
+		long remaining = trackerEstimation - duration;
+		valueEstimationRemaining.setText(String.format("%dh", remaining));
+		if (remaining > 0)
+		{
+			valueEstimationRemaining.setForeground(Color.decode("#77d2c2"));
+		}
+		else
+		{
+			valueEstimationRemaining.setForeground(Color.decode("#E97C5F"));
+		}
 	}
 
 	private void actionTrackerEstimationDecrease()
 	{
 		trackerEstimation = trackerEstimation > 0 ? --trackerEstimation : 0;
-		String timeString = String.format("%02d h", trackerEstimation);
+		String timeString = String.format("%02dh", trackerEstimation);
 		valueEstimationTask.setText(timeString);
+
+		long duration = Math.round(trackerTask.getSummary() / 3600);
+		long remaining = trackerEstimation - duration;
+		valueEstimationRemaining.setText(String.format("%dh", remaining));
+		if (remaining > 0)
+		{
+			valueEstimationRemaining.setForeground(Color.decode("#77d2c2"));
+		}
+		else
+		{
+			valueEstimationRemaining.setForeground(Color.decode("#E97C5F"));
+		}
 	}
 
 	private void actionTrackerBegin()
@@ -1646,6 +1914,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			selectorBreakTask.clearUI();
 			panelBreakEmpty.setVisible(false);
 			panelBreakTracker.setVisible(true);
+			comboBreakEditorProject.requestFocusInWindow();
 		}
 	}
 
@@ -1693,29 +1962,36 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 	private void actionInterruptionCommit()
 	{
-		try
+		if (breakTask.hasTask())
 		{
-			trackerManager.saveInterruptionAnnotation(editorBreakEditorReason.getText());
-			trackerManager.commitInterruption(breakTask);
+			try
+			{
+				trackerManager.saveInterruptionAnnotation(editorBreakEditorReason.getText());
+				trackerManager.commitInterruption(breakTask);
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+
+			selectorBreakProject.clearUI();
+			selectorBreakTask.clearUI();
+			editorBreakEditorReason.setText("");
+
+			panelBreakEmpty.setVisible(true);
+			panelBreakTracker.setVisible(false);
+			panelBreakTrackerProject.setVisible(true);
+			panelBreakTrackerTask.setVisible(false);
+			panelBreakTrackerReason.setVisible(false);
+
+			labelBreakEditorProject.setText("BREAK PROJECT");
+			labelBreakEditorTask.setText("BREAK TASK");
+			labelBreakEditorReason.setText("REASON");
+
+			// -------------------------------------------------------
+
+			updateInterruptionSummary();
 		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-
-		selectorBreakProject.clearUI();
-		selectorBreakTask.clearUI();
-		editorBreakEditorReason.setText("");
-
-		panelBreakEmpty.setVisible(true);
-		panelBreakTracker.setVisible(false);
-		panelBreakTrackerProject.setVisible(true);
-		panelBreakTrackerTask.setVisible(false);
-		panelBreakTrackerReason.setVisible(false);
-
-		labelBreakEditorProject.setText("BREAK PROJECT");
-		labelBreakEditorTask.setText("BREAK TASK");
-		labelBreakEditorReason.setText("REASON");
 	}
 
 	private void actionInterruptionCancel()
@@ -1783,6 +2059,19 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			valueTrackerTimer.setText(timeString);
 		}
 		{
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			Date resultdate = new Date(session.getInitiated());
+			String startedString = String.format("%sh", sdf.format(resultdate));
+			valueTrackerTimerStarted.setText(startedString);
+		}
+		if (trackerManager.isInterrupted())
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			Date resultdate = new Date(interruption.getInitiated());
+			String startedString = String.format("Break started at %sh", sdf.format(resultdate));
+			labelBreakTrackerTitle.setText(startedString);
+		}
+		{
 			long duration = interruption.getDuration();
 			long hours = TimeUnit.SECONDS.toHours(duration);
 			duration -= TimeUnit.HOURS.toSeconds(hours);
@@ -1794,7 +2083,20 @@ public class TaskController extends BasicFrame implements TrackerInterface
 			valueBreakTrackerTimer.setText(timeString);
 		}
 		{
-			valueTrackerTimerRemaining.setText("2354h");
+			long duration = Math.round(session.getDuration() / 3600);
+			long estimation = session.getEstimation();
+			long summary = Math.round(session.getTask().getSummary() / 3600);
+			long remaining = estimation - duration - summary;
+
+			valueTrackerTimerRemaining.setText(String.format("%dh", remaining));
+			if (remaining > 0)
+			{
+				valueTrackerTimerRemaining.setForeground(Color.decode("#77d2c2"));
+			}
+			else
+			{
+				valueTrackerTimerRemaining.setForeground(Color.decode("#E97C5F"));
+			}
 		}
 
 		// -------------------------------------------------------
@@ -1833,7 +2135,8 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		{
 			textTrackerTimerProject.setText(session.getTask().getProject().getDescription());
 			textTrackerTimerTask.setText(session.getTask().getDescription());
-
+		}
+		{
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 			Date resultdate = new Date(session.getInitiated());
 			String startedString = String.format("%sh", sdf.format(resultdate));
@@ -1848,6 +2151,35 @@ public class TaskController extends BasicFrame implements TrackerInterface
 		}
 	}
 
+	private void updateInterruptionSummary()
+	{
+		long valueInterruptionsSummary = 0;
+		String stringInterruptionsSummary = "--x";
+		DefaultTableModel tableModel = (DefaultTableModel) tableTaskInterruptions.getModel();
+		for (int i = 0; i < tableModel.getRowCount(); i++)
+		{
+			Object response = tableModel.getValueAt(i, 0);
+			if (response != null && response instanceof Session)
+			{
+				Session session = (Session) tableModel.getValueAt(i, 0);
+				valueInterruptionsSummary += session.getDuration();
+			}
+		}
+		if (valueInterruptionsSummary > 0)
+		{
+			long duration = valueInterruptionsSummary;
+			long hours = TimeUnit.SECONDS.toHours(duration);
+			duration -= TimeUnit.HOURS.toSeconds(hours);
+			long minutes = TimeUnit.SECONDS.toMinutes(duration);
+			duration -= TimeUnit.MINUTES.toSeconds(minutes);
+			if (hours > 0)
+				stringInterruptionsSummary = String.format("%02d h %02d min", hours, minutes);
+			else
+				stringInterruptionsSummary = String.format("%02d min", minutes);
+		}
+		labelInterruptionsSummary.setText(stringInterruptionsSummary);
+	}
+
 	// Class Methods
 	// ===============================================================
 
@@ -1855,10 +2187,11 @@ public class TaskController extends BasicFrame implements TrackerInterface
 	{
 		private static final long serialVersionUID = 8233159691825884868L;
 
-		BasicField fieldProjectDescription;
-		BasicField fieldTaskDescription;
-		BasicLabel labelSessionInitiated;
-		BasicLabel labelSessionDuration;
+		private BasicField fieldProjectDescription;
+		private BasicField fieldTaskDescription;
+		private BasicLabel labelSessionInitiated;
+		private BasicLabel labelSessionDuration;
+		private BasicImage buttonSessionRemove;
 
 		public FactoryCellRenderer()
 		{
@@ -1875,10 +2208,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				fieldTaskDescription.setFont(UIManager.getFont("TextField.font").deriveFont(18f));
 				fieldTaskDescription.setForeground(Color.decode("#4A4A4A"));
 				layout.constrains().weightx = 1.0;
-				layout.constrains().weighty = 1.0;
-				layout.constrains().fill = GridBagConstraints.HORIZONTAL;
-				layout.constrains().anchor = GridBagConstraints.SOUTH;
-				layout.constrains().insets = new Insets(10, 10, 0, 10);
+				layout.constrains().insets = new Insets(8, 8, 0, 0);
 				layout.add(fieldTaskDescription, 0, 0);
 			}
 			{
@@ -1886,10 +2216,7 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				fieldProjectDescription.setFont(UIManager.getFont("Label.font").deriveFont(14f));
 				fieldProjectDescription.setForeground(Color.decode("#79ADD7"));
 				layout.constrains().weightx = 1.0;
-				layout.constrains().weighty = 1.0;
-				layout.constrains().fill = GridBagConstraints.HORIZONTAL;
-				layout.constrains().anchor = GridBagConstraints.NORTH;
-				layout.constrains().insets = new Insets(4, 10, 10, 10);
+				layout.constrains().insets = new Insets(2, 8, 8, 0);
 				layout.add(fieldProjectDescription, 0, 1);
 			}
 			{
@@ -1911,15 +2238,22 @@ public class TaskController extends BasicFrame implements TrackerInterface
 				}
 				layout.constrains().gridheight = 2;
 				layout.constrains().anchor = GridBagConstraints.CENTER;
-				layout.constrains().insets = new Insets(0, 0, 0, 15);
+				layout.constrains().insets = new Insets(0, 0, 0, 10);
 				layout.add(panelSessionInformation, 1, 0);
+			}
+			{
+				buttonSessionRemove = new BasicImage("interruption_remove");
+				layout.constrains().weighty = 1.0;
+				layout.constrains().gridheight = 2;
+				layout.constrains().anchor = GridBagConstraints.CENTER;
+				layout.constrains().insets = new Insets(0, 0, 0, 5);
+				layout.add(buttonSessionRemove, 2, 0);
 			}
 		}
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
-
 			if (value.getClass().equals(Session.class))
 			{
 				Session session = (Session) value;
@@ -1960,6 +2294,5 @@ public class TaskController extends BasicFrame implements TrackerInterface
 
 			return this;
 		}
-
 	}
 }
