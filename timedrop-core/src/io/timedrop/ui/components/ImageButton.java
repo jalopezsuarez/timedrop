@@ -16,14 +16,14 @@ import javax.swing.UIManager;
 
 import java.lang.reflect.Field;
 
-public class BasicImage extends JButton
+public class ImageButton extends JButton
 {
 	private static final long serialVersionUID = 4459447389586086397L;
 
 	BufferedImage image;
 	ImageIcon size;
 
-	public BasicImage(String resource)
+	public ImageButton(String resource)
 	{
 		try
 		{

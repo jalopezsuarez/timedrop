@@ -1,16 +1,15 @@
 package io.timedrop.ui.components;
 
 import java.awt.Color;
-
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-public class BasicButton extends JButton
+public class TextField extends JTextArea
 {
-	private static final long serialVersionUID = 4459447389586086397L;
+	private static final long serialVersionUID = -4774315726767256374L;
 
-	public BasicButton(String title)
+	public TextField(String title)
 	{
 		super(title);
 	}
@@ -25,10 +24,10 @@ public class BasicButton extends JButton
 		setForeground(Color.decode("#000000"));
 		setBackground(Color.decode("#ffffff"));
 
-		setOpaque(false);
-		setContentAreaFilled(false);
-		setBorderPainted(false);
-		setFocusPainted(false);
+		setBorder(null);
+		setWrapStyleWord(true);
+		setLineWrap(true);
+		setEditable(false);
+		setFocusable(false);
 	}
-
 }

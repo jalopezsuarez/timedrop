@@ -5,11 +5,11 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-public class BasicFrame extends JFrame
+public class Frame extends JFrame
 {
 	private static final long serialVersionUID = 8835071375271679830L;
 
-	public BasicFrame()
+	public Frame()
 	{
 		super();
 

@@ -3,21 +3,16 @@ package io.timedrop.ui.components;
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-public class BasicLabel extends JLabel
+public class Panel extends JPanel
 {
-	private static final long serialVersionUID = -7276865993246658109L;
+	private static final long serialVersionUID = -4925723751800337729L;
 
-	public BasicLabel()
+	public Panel()
 	{
 		super();
-	}
-
-	public BasicLabel(String label)
-	{
-		super(label);
 	}
 
 	@Override

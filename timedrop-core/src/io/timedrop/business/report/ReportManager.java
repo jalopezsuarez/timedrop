@@ -43,7 +43,7 @@ public class ReportManager
 				html.append("<td>" + response.getProjectDescription() + "</td>\n");
 				html.append("<td>" + response.getTaskDescription() + "</td>\n");
 
-				long duration = response.getTaskSummary();
+				long duration = response.getTaskSummary() / 1000;
 				long hours = TimeUnit.SECONDS.toHours(duration);
 				duration -= TimeUnit.HOURS.toSeconds(hours);
 				long minutes = TimeUnit.SECONDS.toMinutes(duration);

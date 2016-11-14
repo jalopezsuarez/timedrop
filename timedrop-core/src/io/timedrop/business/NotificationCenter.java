@@ -1,8 +1,8 @@
 package io.timedrop.business;
 
-import io.timedrop.commons.GridHelper;
-import io.timedrop.ui.components.BasicPanel;
-import io.timedrop.ui.components.BasicField;
+import io.timedrop.ui.components.Panel;
+import io.timedrop.ui.components.TextField;
+import io.timedrop.ui.components.layout.GridHelper;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,14 +34,14 @@ public class NotificationCenter
 		JDialog dialog = new JDialog();
 		dialog.setMinimumSize(new Dimension(360, 70));
 
-		BasicPanel panel = new BasicPanel();
+		Panel panel = new Panel();
 		{
 			panel.setBackground(Color.decode("#212B33"));
 			panel.setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
 
 			GridHelper layoutNotification = new GridHelper(panel);
 
-			BasicField labelTitle = new BasicField(title);
+			TextField labelTitle = new TextField(title);
 			labelTitle.setFont(UIManager.getFont("TextField.font").deriveFont(Font.BOLD, 13f));
 			labelTitle.setForeground(Color.decode("#ffffff"));
 			labelTitle.setBackground(Color.decode("#212B33"));
@@ -50,7 +50,7 @@ public class NotificationCenter
 			layoutNotification.constrains().insets = new Insets(0, 0, 6, 0);
 			layoutNotification.add(labelTitle, 0, 0);
 
-			BasicField labelMessage = new BasicField(message);
+			TextField labelMessage = new TextField(message);
 			labelMessage.setFont(UIManager.getFont("TextField.font").deriveFont(Font.PLAIN, 13f));
 			labelMessage.setForeground(Color.decode("#ffffff"));
 			labelMessage.setBackground(Color.decode("#212B33"));

@@ -306,7 +306,7 @@ public class SessionService
 		query += " AND session.idTask != interruption.idTask ";
 		query += " AND interruption.idInterruption IS NOT NULL ";
 		query += " AND interruption.idTask IS NOT NULL ";
-		query += " AND interruption.initiated > strftime('%s', 'now', '-1 days') * 1000 ";
+		query += " AND DATE(interruption.initiated/1000,'unixepoch') = DATE('now') ";
 		query += " ORDER BY session.version DESC ";
 
 		// -------------------------------------------------------

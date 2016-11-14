@@ -8,11 +8,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-public class BasicTable extends JTable
+public class Table extends JTable
 {
 	private static final long serialVersionUID = -1350656893711208356L;
 
-	public BasicTable(TableModel model)
+	public Table(TableModel model)
 	{
 		super(model);
 
