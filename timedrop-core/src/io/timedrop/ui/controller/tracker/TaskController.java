@@ -399,7 +399,7 @@ public class TaskController extends Frame implements TrackerInterface
 							valueEstimationCurrent.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationCurrent, 6, 2);
-						}
+						} 
 						{
 							layoutTrackerEditorEstimation.constrains().gridheight = 2;
 							layoutTrackerEditorEstimation.constrains().gridwidth = 1;
