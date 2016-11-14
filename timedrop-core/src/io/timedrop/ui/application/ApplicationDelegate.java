@@ -53,7 +53,7 @@ public class ApplicationDelegate implements NativeKeyListener
 
 		if (event.getModifiers() == 18 || event.getModifiers() == 20 || event.getModifiers() == 22 && event.getRawCode() == 60)
 		{
-			if (applicationWindow != null && !applicationWindow.isActive())
+			if (applicationWindow != null && !applicationWindow.isFocused())
 			{
 				applicationWindow.setVisible(false);
 				applicationWindow.dispose();

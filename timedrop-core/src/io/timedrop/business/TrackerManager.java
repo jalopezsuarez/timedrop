@@ -266,6 +266,7 @@ public class TrackerManager
 		long duration = session.getDuration();
 		duration = duration + 60;
 		session.setDuration(duration);
+
 		sessionService.process(session);
 		ui.track(session, interruption);
 
@@ -284,6 +285,7 @@ public class TrackerManager
 		duration = duration - 60;
 		duration = duration > 0 ? duration : 0;
 		session.setDuration(duration);
+
 		sessionService.process(session);
 		ui.track(session, interruption);
 
@@ -301,6 +303,7 @@ public class TrackerManager
 		long duration = interruption.getDuration();
 		duration = duration + 60;
 		interruption.setDuration(duration);
+
 		sessionService.process(interruption);
 		ui.track(session, interruption);
 
@@ -319,6 +322,7 @@ public class TrackerManager
 		duration = duration - 60;
 		duration = duration > 0 ? duration : 0;
 		interruption.setDuration(duration);
+
 		sessionService.process(interruption);
 		ui.track(session, interruption);
 

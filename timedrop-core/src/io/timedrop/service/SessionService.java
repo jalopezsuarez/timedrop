@@ -131,13 +131,10 @@ public class SessionService
 		long idInterruption = session.getIdInterruption();
 
 		long epoch = System.currentTimeMillis();
+		long initiated = session.getInitiated();
 		long duration = session.getDuration();
 		long estimation = session.getEstimation();
 		String annotation = session.getAnnotation();
-
-		// -------------------------------------------------------
-
-		long initiated = epoch - (duration * 1000);
 
 		// -------------------------------------------------------
 
