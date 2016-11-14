@@ -3,16 +3,16 @@ package io.timedrop.ui.components;
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
-import javax.swing.JTextArea;
+import javax.swing.JButton;
 import javax.swing.UIManager;
 
-public class BasicEditor extends JTextArea
+public class Button extends JButton
 {
-	private static final long serialVersionUID = -4774315726767456374L;
+	private static final long serialVersionUID = 4459447389586086397L;
 
-	public BasicEditor()
+	public Button(String title)
 	{
-		super();
+		super(title);
 	}
 
 	@Override
@@ -25,10 +25,10 @@ public class BasicEditor extends JTextArea
 		setForeground(Color.decode("#000000"));
 		setBackground(Color.decode("#ffffff"));
 
-		setBorder(null);
-		setWrapStyleWord(true);
-		setLineWrap(true);
-		setEditable(true);
-		setFocusable(true);
+		setOpaque(false);
+		setContentAreaFilled(false);
+		setBorderPainted(false);
+		setFocusPainted(false);
 	}
+
 }

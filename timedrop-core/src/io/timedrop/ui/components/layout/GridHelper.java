@@ -1,4 +1,4 @@
-package io.timedrop.commons;
+package io.timedrop.ui.components.layout;
 
 import java.awt.Component;
 import java.awt.Container;

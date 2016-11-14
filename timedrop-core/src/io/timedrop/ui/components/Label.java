@@ -1,17 +1,23 @@
 package io.timedrop.ui.components;
 
 import java.awt.Color;
+
 import javax.swing.BorderFactory;
-import javax.swing.JTextArea;
+import javax.swing.JLabel;
 import javax.swing.UIManager;
 
-public class BasicField extends JTextArea
+public class Label extends JLabel
 {
-	private static final long serialVersionUID = -4774315726767256374L;
+	private static final long serialVersionUID = -7276865993246658109L;
 
-	public BasicField(String title)
+	public Label()
 	{
-		super(title);
+		super();
+	}
+
+	public Label(String label)
+	{
+		super(label);
 	}
 
 	@Override
@@ -23,11 +29,6 @@ public class BasicField extends JTextArea
 		setFont(UIManager.getFont("TextField.font").deriveFont(14f));
 		setForeground(Color.decode("#000000"));
 		setBackground(Color.decode("#ffffff"));
-
-		setBorder(null);
-		setWrapStyleWord(true);
-		setLineWrap(true);
-		setEditable(false);
-		setFocusable(false);
 	}
+
 }

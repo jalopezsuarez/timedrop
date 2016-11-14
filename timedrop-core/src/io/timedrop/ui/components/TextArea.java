@@ -6,13 +6,18 @@ import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-public class BasicText extends JTextArea
+public class TextArea extends JTextArea
 {
 	private static final long serialVersionUID = -4774315726767256374L;
 
-	public BasicText(String title)
+	public TextArea(String title)
 	{
 		super(title);
+	}
+
+	public TextArea()
+	{
+		super();
 	}
 
 	@Override
