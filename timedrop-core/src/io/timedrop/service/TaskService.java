@@ -140,7 +140,7 @@ public class TaskService
 		query += " LEFT JOIN session ON session.idTask = task.idTask ";
 		query += " WHERE task.idTask = " + task.getIdTask() + " ";
 		query += " ORDER BY session.initiated ASC; ";
-
+ 
 		// -------------------------------------------------------
 		boolean first = true;
 		ResultSet datasetEstimation = statement.executeQuery(query);
