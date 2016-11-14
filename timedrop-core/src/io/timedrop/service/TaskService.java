@@ -118,9 +118,8 @@ public class TaskService
 
 		// -------------------------------------------------------
 
-		query = " SELECT SUM(interruption.duration) summary ";
+		query = " SELECT SUM(session.duration) summary ";
 		query += " FROM session  ";
-		query += " LEFT JOIN session interruption ON interruption.idInterruption = session.idSession OR interruption.idInterruption IS NULL ";
 		query += " WHERE session.idTask = " + task.getIdTask() + " ";
 
 		// -------------------------------------------------------

@@ -394,7 +394,7 @@ public class TaskController extends Frame implements TrackerInterface
 						{
 							valueEstimationCurrent = new Label("--");
 							valueEstimationCurrent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
-							valueEstimationCurrent.setForeground(Color.decode("#ffffff"));
+							valueEstimationCurrent.setForeground(Color.decode("#edc45a"));
 							valueEstimationCurrent.setBackground(Color.decode("#161F26"));
 							valueEstimationCurrent.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 10, 0, 0);
