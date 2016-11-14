@@ -1,5 +1,5 @@
 package io.timedrop.ui.controller.tracker;
-   
+    
 import io.timedrop.business.TrackerInterface;
 import io.timedrop.business.TrackerManager;
 import io.timedrop.business.report.ReportManager;
