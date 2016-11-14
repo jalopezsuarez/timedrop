@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>timedrop</groupId>
 	<artifactId>timedrop</artifactId>
-	<version>0.25</version>
+	<version>0.30</version>
 
 	<dependencies>
 		<dependency>

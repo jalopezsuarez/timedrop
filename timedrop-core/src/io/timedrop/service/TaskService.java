@@ -119,7 +119,7 @@ public class TaskService
 		// -------------------------------------------------------
 
 		query = " SELECT SUM(session.duration) summary ";
-		query += " FROM session  ";
+		query += " FROM session  "; 
 		query += " WHERE session.idTask = " + task.getIdTask() + " ";
 
 		// -------------------------------------------------------
