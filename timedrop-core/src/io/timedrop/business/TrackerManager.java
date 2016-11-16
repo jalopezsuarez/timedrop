@@ -418,7 +418,7 @@ public class TrackerManager
 				String timeString = String.format("%02d:%02d", hours, minutes);
 				NotificationCenter.notify("Interruption " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
 			}
-			if (duration % 60 == 0)
+			if (duration % 3600 == 0)
 			{
 				NotificationSound.play();
 			}
@@ -436,7 +436,7 @@ public class TrackerManager
 				String timeString = String.format("%02d:%02d", hours, minutes);
 				NotificationCenter.notify("Tracking " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
 			}
-			if (duration % 60 == 0)
+			if (duration % 3600 == 0)
 			{
 				NotificationSound.play();
 			}
