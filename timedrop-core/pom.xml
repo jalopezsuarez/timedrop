@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>timedrop</groupId>
 	<artifactId>timedrop</artifactId>
-	<version>0.30</version>
+	<version>0.35</version>
 
 	<dependencies>
 		<dependency>
@@ -26,7 +26,7 @@
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
-		</resources> 
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

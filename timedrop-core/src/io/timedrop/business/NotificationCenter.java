@@ -36,7 +36,7 @@ public class NotificationCenter
 
 		Panel panel = new Panel();
 		{
-			panel.setBackground(Color.decode("#212B33"));
+			panel.setBackground(Color.decode("#202020"));
 			panel.setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
 
 			GridHelper layoutNotification = new GridHelper(panel);
@@ -44,7 +44,7 @@ public class NotificationCenter
 			TextField labelTitle = new TextField(title);
 			labelTitle.setFont(UIManager.getFont("TextField.font").deriveFont(Font.BOLD, 13f));
 			labelTitle.setForeground(Color.decode("#ffffff"));
-			labelTitle.setBackground(Color.decode("#212B33"));
+			labelTitle.setBackground(Color.decode("#202020"));
 
 			layoutNotification.constrains().weightx = 1.0;
 			layoutNotification.constrains().insets = new Insets(0, 0, 6, 0);
@@ -53,7 +53,7 @@ public class NotificationCenter
 			TextField labelMessage = new TextField(message);
 			labelMessage.setFont(UIManager.getFont("TextField.font").deriveFont(Font.PLAIN, 13f));
 			labelMessage.setForeground(Color.decode("#ffffff"));
-			labelMessage.setBackground(Color.decode("#212B33"));
+			labelMessage.setBackground(Color.decode("#202020"));
 
 			layoutNotification.constrains().weightx = 1.0;
 			layoutNotification.constrains().weighty = 1.0;

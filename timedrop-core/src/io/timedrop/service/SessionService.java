@@ -270,14 +270,10 @@ public class SessionService
 		ConnectionManager.closeConnection();
 	}
 
-	public ArrayList<Object> findInterruptionsBySession(Session session) throws Exception
+	public ArrayList<Object> findInterruptionsToday() throws Exception
 	{
 		Statement statement = ConnectionManager.openConnection().createStatement();
 		String query = " ";
-
-		// -------------------------------------------------------
-
-		long idTask = session.getTask().getIdTask();
 
 		// -------------------------------------------------------
 
@@ -299,8 +295,8 @@ public class SessionService
 		query += " LEFT JOIN project ON project.idProject = task.idProject ";
 		query += " LEFT JOIN organization ON organization.idOrganization = project.idOrganization ";
 
-		query += " WHERE session.idTask = " + idTask + " ";
-		query += " AND session.idTask != interruption.idTask ";
+		query += " WHERE ";
+		query += " session.idTask != interruption.idTask ";
 		query += " AND interruption.idInterruption IS NOT NULL ";
 		query += " AND interruption.idTask IS NOT NULL ";
 		query += " AND DATE(interruption.initiated/1000,'unixepoch') = DATE('now') ";

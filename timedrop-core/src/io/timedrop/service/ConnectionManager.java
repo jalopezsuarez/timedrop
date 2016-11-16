@@ -14,7 +14,7 @@ public class ConnectionManager
 	{
 		if (connection != null && connection instanceof Connection && !connection.isClosed())
 		{
-			// System.out.println("Database Ready!");
+			// System.out.println("SQLite Database Ready!");
 		}
 		else
 		{
@@ -80,6 +80,18 @@ public class ConnectionManager
 				query += " FOREIGN KEY (idInterruption) REFERENCES session(idSession) ON DELETE CASCADE ";
 				query += " ); ";
 			}
+			// ----------------------------------------------------------
+			{
+				query += " CREATE TABLE IF NOT EXISTS configuration ( ";
+				query += " idConfiguration INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ";
+				query += " sizeHeight INTEGER NOT NULL DEFAULT 525, ";
+				query += " sizeWidth INTEGER NOT NULL DEFAULT 700, ";
+				query += " trayColor TEXT NOT NULL DEFAULT '000000', ";
+				query += " record INTEGER NOT NULL, ";
+				query += " version INTEGER NOT NULL ";
+				query += " ); ";
+			}
+
 			// ===========================================================
 			// ===========================================================
 
@@ -91,16 +103,42 @@ public class ConnectionManager
 			{
 				try
 				{
+					long epoch = System.currentTimeMillis();
 					Statement statementDebug = connection.createStatement();
 					String queryDebug = " ";
-					queryDebug += " INSERT INTO organization (idOrganization, description, record, version) ";
-					queryDebug += " VALUES (1, 'DEFAULT', 0, 0) ";
+					queryDebug += " INSERT INTO organization (";
+					queryDebug += " idOrganization, ";
+					queryDebug += " record, ";
+					queryDebug += " version ) ";
+					queryDebug += " VALUES ( ";
+					queryDebug += " 1, ";
+					queryDebug += " " + epoch + ", ";
+					queryDebug += " " + epoch + " ) ";
 					statementDebug.executeUpdate(queryDebug);
 					statementDebug.close();
 				}
 				catch (Exception ex)
 				{
-
+				}
+				// ----------------------------------------------------------
+				try
+				{
+					long epoch = System.currentTimeMillis();
+					Statement statementDebug = connection.createStatement();
+					String queryDebug = " ";
+					queryDebug += " INSERT INTO configuration ( ";
+					queryDebug += " idConfiguration, ";
+					queryDebug += " record, ";
+					queryDebug += " version ) ";
+					queryDebug += " VALUES ( ";
+					queryDebug += " 1, ";
+					queryDebug += " " + epoch + ", ";
+					queryDebug += " " + epoch + " ) ";
+					statementDebug.executeUpdate(queryDebug);
+					statementDebug.close();
+				}
+				catch (Exception ex)
+				{
 				}
 			}
 			// ===========================================================

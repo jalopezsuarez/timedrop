@@ -1,5 +1,6 @@
 package io.timedrop.ui.components.table;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -19,6 +20,8 @@ public class Table extends JTable
 		setBorder(BorderFactory.createEmptyBorder());
 		setShowGrid(false);
 		setTableHeader(null);
+		
+		setBackground(Color.decode("#373737"));
 
 		setRowMargin(0);
 		getColumnModel().setColumnMargin(0);

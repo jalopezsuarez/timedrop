@@ -83,7 +83,7 @@ public class LightComboBox<E> extends JComboBox<E>
 		}
 
 		UIManager.put("ComboBox.selectionForeground", Color.decode("#4A4A4A"));
-		UIManager.put("ComboBox.selectionBackground", Color.decode("#086ada"));
+		UIManager.put("ComboBox.selectionBackground", Color.decode("#4196fe"));
 
 		this.setRenderer(new DefaultListCellRenderer()
 		{
@@ -93,19 +93,19 @@ public class LightComboBox<E> extends JComboBox<E>
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 			{
 				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				c.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
+				c.setFont(UIManager.getFont("TextField.font").deriveFont(15f));
 				JPanel p = new JPanel();
 				p.setLayout(new BorderLayout());
-				p.setBorder(new EmptyBorder(0, 10, 0, 10));
+				p.setBorder(new EmptyBorder(5, 10, 5, 10));
 				if (isSelected)
 				{
 					c.setForeground(Color.decode("#ffffff"));
-					c.setBackground(Color.decode("#086ada"));
-					p.setBackground(Color.decode("#086ada"));
+					c.setBackground(Color.decode("#4196fe"));
+					p.setBackground(Color.decode("#4196fe"));
 				}
 				else
 				{
-					c.setForeground(Color.decode("#4A4A4A"));
+					c.setForeground(Color.decode("#ffffff"));
 					c.setBackground(Color.decode("#F3F3F3"));
 					p.setBackground(Color.decode("#F3F3F3"));
 				}

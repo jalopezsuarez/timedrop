@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.Timer;
 
+import io.timedrop.business.notifications.NotificationSound;
 import io.timedrop.domain.Session;
 import io.timedrop.domain.Task;
 import io.timedrop.service.ProjectService;
@@ -29,13 +30,12 @@ public class TrackerManager
 	private boolean paused;
 
 	private Timer timer;
-
 	private long internal;
 
 	// ~ Methods
 	// =======================================================
 
-	public TrackerManager()
+	public TrackerManager(TrackerApplication appliation)
 	{
 		projectService = new ProjectService();
 		taskService = new TaskService();
@@ -64,6 +64,8 @@ public class TrackerManager
 				try
 				{
 					run(false);
+
+					appliation.track(internal);
 					internal++;
 				}
 				catch (Exception ex)
@@ -391,7 +393,7 @@ public class TrackerManager
 	{
 		if (enabled && paused)
 		{
-			if (internal % 300 == 0 || force)
+			if (internal % 600 == 0 || force)
 			{
 				if (breaks)
 				{
@@ -406,7 +408,7 @@ public class TrackerManager
 		else if (enabled && breaks)
 		{
 			long duration = interruption.getDuration();
-			if (duration % 300 == 0 || force)
+			if (duration % 600 == 0 || force)
 			{
 				long hours = TimeUnit.SECONDS.toHours(duration);
 				duration -= TimeUnit.HOURS.toSeconds(hours);
@@ -416,11 +418,15 @@ public class TrackerManager
 				String timeString = String.format("%02d:%02d", hours, minutes);
 				NotificationCenter.notify("Interruption " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
 			}
+			if (duration % 60 == 0)
+			{
+				NotificationSound.play();
+			}
 		}
 		else if (enabled && running)
 		{
 			long duration = session.getDuration();
-			if (duration % 300 == 0 || force)
+			if (duration % 600 == 0 || force)
 			{
 				long hours = TimeUnit.SECONDS.toHours(duration);
 				duration -= TimeUnit.HOURS.toSeconds(hours);
@@ -430,10 +436,14 @@ public class TrackerManager
 				String timeString = String.format("%02d:%02d", hours, minutes);
 				NotificationCenter.notify("Tracking " + timeString, session.getTask().getDescription() + " - " + session.getTask().getProject().getDescription(), 15);
 			}
+			if (duration % 60 == 0)
+			{
+				NotificationSound.play();
+			}
 		}
 		else if (enabled)
 		{
-			if (internal % 300 == 0)
+			if (internal % 600 == 0)
 			{
 				NotificationCenter.notify("No task", "Start tracking by selecting the task you are working on", 15);
 			}
@@ -456,6 +466,11 @@ public class TrackerManager
 	public boolean isPaused()
 	{
 		return paused;
+	}
+
+	public long getIntertal()
+	{
+		return internal;
 	}
 
 }

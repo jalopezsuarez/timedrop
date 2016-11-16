@@ -34,7 +34,7 @@ public class DarkComboBox<E> extends JComboBox<E>
 		JTextField textField = (JTextField) getEditor().getEditorComponent();
 		textField.setCaretColor(Color.decode("#ffffff"));
 		textField.setForeground(Color.decode("#ffffff"));
-		textField.setBackground(Color.decode("#161F26"));
+		textField.setBackground(Color.decode("#1f1f1f"));
 		setEditable(true);
 
 		String os = System.getProperty("os.name").toLowerCase();
@@ -54,9 +54,9 @@ public class DarkComboBox<E> extends JComboBox<E>
 
 		setFont(UIManager.getFont("TextField.font").deriveFont(24f));
 		setForeground(Color.decode("#ffffff"));
-		setBackground(Color.decode("#161F26"));
+		setBackground(Color.decode("#1f1f1f"));
 
-		Border lines = BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#525B61"));
+		Border lines = BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#333333"));
 		Border empty = new EmptyBorder(0, 10, 0, 10);
 		setBorder(new CompoundBorder(lines, empty));
 
@@ -83,7 +83,7 @@ public class DarkComboBox<E> extends JComboBox<E>
 		}
 
 		UIManager.put("ComboBox.selectionForeground", Color.decode("#ffffff"));
-		UIManager.put("ComboBox.selectionBackground", Color.decode("#086ada"));
+		UIManager.put("ComboBox.selectionBackground", Color.decode("#4196fe"));
 
 		this.setRenderer(new DefaultListCellRenderer()
 		{
@@ -93,21 +93,21 @@ public class DarkComboBox<E> extends JComboBox<E>
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 			{
 				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				c.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
+				c.setFont(UIManager.getFont("TextField.font").deriveFont(15f));
 				JPanel p = new JPanel();
 				p.setLayout(new BorderLayout());
-				p.setBorder(new EmptyBorder(0, 10, 0, 10));
+				p.setBorder(new EmptyBorder(5, 10, 5, 10));
 				if (isSelected)
 				{
 					c.setForeground(Color.decode("#ffffff"));
-					c.setBackground(Color.decode("#086ada"));
-					p.setBackground(Color.decode("#086ada"));
+					c.setBackground(Color.decode("#4196fe"));
+					p.setBackground(Color.decode("#4196fe"));
 				}
 				else
 				{
-					c.setForeground(Color.decode("#C9C9C9"));
-					c.setBackground(Color.decode("#161F26"));
-					p.setBackground(Color.decode("#161F26"));
+					c.setForeground(Color.decode("#ffffff"));
+					c.setBackground(Color.decode("#1f1f1f"));
+					p.setBackground(Color.decode("#1f1f1f"));
 				}
 				p.add(c, BorderLayout.WEST);
 				return p;
