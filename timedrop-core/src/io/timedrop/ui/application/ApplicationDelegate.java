@@ -1,6 +1,5 @@
 package io.timedrop.ui.application;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.MenuItem;
@@ -23,12 +22,11 @@ import io.timedrop.commons.configuration.ConfigurationHelper;
 import io.timedrop.commons.i18n.Localizable;
 import io.timedrop.ui.controller.application.ApplicationController;
 import io.timedrop.ui.controller.tracker.TrackerController;
+import io.timedrop.ui.themes.UITheme;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -196,20 +194,14 @@ public class ApplicationDelegate implements NativeKeyListener, TrackerApplicatio
 
 		// -------------------------------------------------------
 
-		System.setProperty("apple.awt.graphics.UseQuartz", "true");
-		System.setProperty("awt.useSystemAAFontSettings", "on");
-		System.setProperty("sun.java2d.xrender", "true");
-		System.setProperty("swing.aatext", "true");
-
-		// -------------------------------------------------------
-
-		UIManager.put("ScrollBarUI", "io.timedrop.ui.components.UIScrollBar");
+		try
 		{
-			UIManager.put("ToolTip.background", Color.decode("#efefef"));
-			UIManager.put("ToolTip.foreground", Color.decode("#4A4A4A"));
-			Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#9B9B9B"));
-			Border padding = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-			UIManager.put("ToolTip.border", BorderFactory.createCompoundBorder(border, padding));
+			UITheme.initializeLookAndFeelTheme();
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		}
+		catch (Exception ex)
+		{
+			System.exit(1);
 		}
 
 		// -------------------------------------------------------
@@ -221,15 +213,6 @@ public class ApplicationDelegate implements NativeKeyListener, TrackerApplicatio
 			// GlobalScreen.unregisterNativeHook();
 		}
 		catch (NativeHookException ex)
-		{
-			System.exit(1);
-		}
-
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		}
-		catch (Exception ex)
 		{
 			System.exit(1);
 		}

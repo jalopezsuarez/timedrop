@@ -48,11 +48,11 @@ import io.timedrop.ui.components.TextArea;
 import io.timedrop.ui.components.TextField;
 import io.timedrop.ui.components.layout.GridHelper;
 import io.timedrop.ui.components.selector.DarkComboBox;
-import io.timedrop.ui.components.selector.LightComboBox;
 import io.timedrop.ui.components.selector.ProjectSearchBox;
 import io.timedrop.ui.components.selector.SelectorAction;
 import io.timedrop.ui.components.selector.TaskSearchBox;
 import io.timedrop.ui.components.table.TableView;
+import io.timedrop.ui.themes.UITheme;
 
 public class TrackerController extends ViewController implements TrackerInterface
 {
@@ -168,10 +168,10 @@ public class TrackerController extends ViewController implements TrackerInterfac
 	// -------------------------------------------------------
 
 	private Label labelBreakEditorProject;
-	private LightComboBox<Object> comboBreakEditorProject;
+	private DarkComboBox<Object> comboBreakEditorProject;
 
 	private Label labelBreakEditorTask;
-	private LightComboBox<Object> comboBreakEditorTask;
+	private DarkComboBox<Object> comboBreakEditorTask;
 
 	private Label labelBreakEditorReason;
 	private TextArea editorBreakEditorReason;
@@ -258,19 +258,19 @@ public class TrackerController extends ViewController implements TrackerInterfac
 		{
 			panelTracker = new Panel();
 			panelTracker.setLayout(new BorderLayout());
-			panelTracker.setBackground(Color.decode("#333333"));
+			panelTracker.setBackground(UITheme.UIBackground());
 			{
 				panelTrackerEditor = new Panel();
 				panelTrackerEditor.setLayout(new CardLayout());
 				{
 					panelTrackerEditorProject = new Panel();
-					panelTrackerEditorProject.setBackground(Color.decode("#333333"));
+					panelTrackerEditorProject.setBackground(UITheme.UIBackground());
 					panelTrackerEditorProject.setLayout(new BorderLayout());
 					{
 						labelTrackerProjectTitle = new Label("PROJECT");
 						labelTrackerProjectTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 						labelTrackerProjectTitle.setForeground(Color.decode("#929292"));
-						labelTrackerProjectTitle.setBackground(Color.decode("#333333"));
+						labelTrackerProjectTitle.setBackground(UITheme.UIBackground());
 						labelTrackerProjectTitle.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
 						panelTrackerEditorProject.add(labelTrackerProjectTitle, BorderLayout.NORTH);
 					}
@@ -285,13 +285,13 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				}
 				{
 					panelTrackerEditorTask = new Panel();
-					panelTrackerEditorTask.setBackground(Color.decode("#212B33"));
+					panelTrackerEditorTask.setBackground(UITheme.UIBackground());
 					panelTrackerEditorTask.setLayout(new BorderLayout());
 					{
 						labelTrackerTaskTitle = new Label("TASK");
 						labelTrackerTaskTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
-						labelTrackerTaskTitle.setForeground(Color.decode("#929292"));
-						labelTrackerTaskTitle.setBackground(Color.decode("#333333"));
+						labelTrackerTaskTitle.setForeground(UITheme.UIText());
+						labelTrackerTaskTitle.setBackground(UITheme.UIBackground());
 						labelTrackerTaskTitle.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
 						panelTrackerEditorTask.add(labelTrackerTaskTitle, BorderLayout.NORTH);
 					}
@@ -307,19 +307,19 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				{
 					panelTrackerEditorTimer = new Panel();
 					panelTrackerEditorTimer.setFocusTraversalPolicyProvider(true);
-					panelTrackerEditorTimer.setBackground(Color.decode("#333333"));
+					panelTrackerEditorTimer.setBackground(UITheme.UIBackground());
 					panelTrackerEditorTimer.setLayout(new BorderLayout());
 					{
 						labelEstimationTitle = new Label("ESTIMATED HOURS");
 						labelEstimationTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 						labelEstimationTitle.setForeground(Color.decode("#525B61"));
-						labelEstimationTitle.setBackground(Color.decode("#333333"));
+						labelEstimationTitle.setBackground(UITheme.UIBackground());
 						labelEstimationTitle.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
 						panelTrackerEditorTimer.add(labelEstimationTitle, BorderLayout.NORTH);
 					}
 					{
 						panelTrackerEditorEstimator = new Panel();
-						panelTrackerEditorEstimator.setBackground(Color.decode("#333333"));
+						panelTrackerEditorEstimator.setBackground(UITheme.UIBackground());
 						panelTrackerEditorEstimator.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#525B61")));
 
 						GridHelper layoutTrackerEditorEstimation = new GridHelper(panelTrackerEditorEstimator);
@@ -343,7 +343,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueEstimationTask = new Label("--h");
 							valueEstimationTask.setFont(UIManager.getFont("TextField.font").deriveFont(32f));
 							valueEstimationTask.setForeground(Color.decode("#79ADD7"));
-							valueEstimationTask.setBackground(Color.decode("#161F26"));
+							valueEstimationTask.setBackground(UITheme.UIBackground());
 							layoutTrackerEditorEstimation.constrains().gridheight = 2;
 							layoutTrackerEditorEstimation.constrains().anchor = GridBagConstraints.CENTER;
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(0, 5, 0, 10);
@@ -353,7 +353,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							labelEstimationWorking = new Label("WORKED");
 							labelEstimationWorking.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationWorking.setForeground(Color.decode("#A6AEB4"));
-							labelEstimationWorking.setBackground(Color.decode("#161F26"));
+							labelEstimationWorking.setBackground(UITheme.UIBackground());
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 15, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationWorking, 3, 1);
 						}
@@ -361,7 +361,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueEstimationWorking = new Label("--");
 							valueEstimationWorking.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationWorking.setForeground(Color.decode("#ffffff"));
-							valueEstimationWorking.setBackground(Color.decode("#161F26"));
+							valueEstimationWorking.setBackground(UITheme.UIBackground());
 							valueEstimationWorking.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationWorking, 4, 1);
@@ -370,7 +370,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							labelEstimationRemaining = new Label("REMAINING");
 							labelEstimationRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationRemaining.setForeground(Color.decode("#A6AEB4"));
-							labelEstimationRemaining.setBackground(Color.decode("#161F26"));
+							labelEstimationRemaining.setBackground(UITheme.UIBackground());
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 15, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationRemaining, 3, 2);
 						}
@@ -378,7 +378,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueEstimationRemaining = new Label("--");
 							valueEstimationRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationRemaining.setForeground(Color.decode("#ffffff"));
-							valueEstimationRemaining.setBackground(Color.decode("#161F26"));
+							valueEstimationRemaining.setBackground(UITheme.UIBackground());
 							valueEstimationRemaining.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationRemaining, 4, 2);
@@ -387,7 +387,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							labelEstimationInitial = new Label("INITIAL");
 							labelEstimationInitial.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationInitial.setForeground(Color.decode("#A6AEB4"));
-							labelEstimationInitial.setBackground(Color.decode("#161F26"));
+							labelEstimationInitial.setBackground(UITheme.UIBackground());
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 25, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationInitial, 5, 1);
 						}
@@ -395,7 +395,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueEstimationInitial = new Label("--");
 							valueEstimationInitial.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationInitial.setForeground(Color.decode("#ffffff"));
-							valueEstimationInitial.setBackground(Color.decode("#161F26"));
+							valueEstimationInitial.setBackground(UITheme.UIBackground());
 							valueEstimationInitial.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(3, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationInitial, 6, 1);
@@ -404,7 +404,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							labelEstimationCurrent = new Label("CURRENT");
 							labelEstimationCurrent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelEstimationCurrent.setForeground(Color.decode("#A6AEB4"));
-							labelEstimationCurrent.setBackground(Color.decode("#161F26"));
+							labelEstimationCurrent.setBackground(UITheme.UIBackground());
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 25, 0, 0);
 							layoutTrackerEditorEstimation.add(labelEstimationCurrent, 5, 2);
 						}
@@ -412,7 +412,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueEstimationCurrent = new Label("--");
 							valueEstimationCurrent.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueEstimationCurrent.setForeground(Color.decode("#edc45a"));
-							valueEstimationCurrent.setBackground(Color.decode("#161F26"));
+							valueEstimationCurrent.setBackground(UITheme.UIBackground());
 							valueEstimationCurrent.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerEditorEstimation.constrains().insets = new Insets(2, 10, 0, 0);
 							layoutTrackerEditorEstimation.add(valueEstimationCurrent, 6, 2);
@@ -436,24 +436,24 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				panelTrackerSection.setLayout(new CardLayout());
 				{
 					panelTrackerManager = new Panel();
-					panelTrackerManager.setBackground(Color.decode("#333333"));
+					panelTrackerManager.setBackground(UITheme.UIBackground());
 					GridHelper layoutTrackerManager = new GridHelper(panelTrackerManager);
 					{
 						Panel panelTrackerManagerInformation = new Panel();
-						panelTrackerManagerInformation.setBackground(Color.decode("#333333"));
+						panelTrackerManagerInformation.setBackground(UITheme.UIBackground());
 						panelTrackerManagerInformation.setLayout(new BorderLayout());
 						{
 							textTrackerTimerTask = new TextArea("No task");
 							textTrackerTimerTask.setFont(UIManager.getFont("TextField.font").deriveFont(20f));
-							textTrackerTimerTask.setBackground(Color.decode("#333333"));
 							textTrackerTimerTask.setForeground(Color.decode("#ffffff"));
+							textTrackerTimerTask.setBackground(UITheme.UIBackground());
 							panelTrackerManagerInformation.add(textTrackerTimerTask, BorderLayout.NORTH);
 						}
 						{
 							textTrackerTimerProject = new TextArea("Start tracking by selecting the task you are working on");
-							textTrackerTimerProject.setBackground(Color.decode("#333333"));
-							textTrackerTimerProject.setForeground(Color.decode("#A6AEB4"));
 							textTrackerTimerProject.setFont(UIManager.getFont("Label.font").deriveFont(14f));
+							textTrackerTimerProject.setForeground(Color.decode("#A6AEB4"));
+							textTrackerTimerProject.setBackground(UITheme.UIBackground());
 							textTrackerTimerProject.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 							panelTrackerManagerInformation.add(textTrackerTimerProject, BorderLayout.CENTER);
 						}
@@ -465,11 +465,11 @@ public class TrackerController extends ViewController implements TrackerInterfac
 					}
 					{
 						Panel panelTrackerManagerTimer = new Panel();
-						panelTrackerManagerTimer.setBackground(Color.decode("#333333"));
+						panelTrackerManagerTimer.setBackground(UITheme.UIBackground());
 						GridHelper layoutTrackerManagerTimer = new GridHelper(panelTrackerManagerTimer);
 						{
 							buttonTrackerTimerDecrease = new ImageButton("tracking_decrease");
-							buttonTrackerTimerDecrease.setBackground(Color.decode("#333333"));
+							buttonTrackerTimerDecrease.setBackground(UITheme.UIBackground());
 							buttonTrackerTimerDecrease.setToolTipText("Decrease tracking time");
 							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
@@ -477,7 +477,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 						}
 						{
 							buttonTrackerTimerIncrease = new ImageButton("tracking_increase");
-							buttonTrackerTimerIncrease.setBackground(Color.decode("#212B33"));
+							buttonTrackerTimerIncrease.setBackground(UITheme.UIBackground());
 							buttonTrackerTimerIncrease.setToolTipText("Increase tracking time");
 							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
@@ -487,7 +487,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueTrackerTimer = new Label("--:--");
 							valueTrackerTimer.setFont(UIManager.getFont("TextField.font").deriveFont(32f));
 							valueTrackerTimer.setForeground(Color.decode("#ffffff"));
-							valueTrackerTimer.setBackground(Color.decode("#333333"));
+							valueTrackerTimer.setBackground(UITheme.UIBackground());
 							valueTrackerTimer.setHorizontalAlignment(JLabel.RIGHT);
 							valueTrackerTimer.setToolTipText("Pause/Resume current task CTRL+P");
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
@@ -498,7 +498,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 						}
 						{
 							buttonTrackerDetails = new ImageButton("tracking_details");
-							buttonTrackerDetails.setBackground(Color.decode("#333333"));
+							buttonTrackerDetails.setBackground(UITheme.UIBackground());
 							buttonTrackerDetails.setToolTipText("Task information CTRL+D");
 							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
@@ -506,7 +506,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 						}
 						{
 							buttonTrackerAnnotation = new ImageButton("tracking_annotation");
-							buttonTrackerAnnotation.setBackground(Color.decode("#333333"));
+							buttonTrackerAnnotation.setBackground(UITheme.UIBackground());
 							buttonTrackerAnnotation.setToolTipText("Session annotations CTRL+S");
 							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 10);
 							layoutTrackerManagerTimer.constrains().anchor = GridBagConstraints.CENTER;
@@ -516,7 +516,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueTrackerTimerStarted = new Label("--:--h");
 							valueTrackerTimerStarted.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerStarted.setForeground(Color.decode("#A6AEB4"));
-							valueTrackerTimerStarted.setBackground(Color.decode("#212B33"));
+							valueTrackerTimerStarted.setBackground(UITheme.UIBackground());
 							valueTrackerTimerStarted.setHorizontalAlignment(JLabel.RIGHT);
 							valueTrackerTimerStarted.setToolTipText("Generate tracker report CTRL+R");
 							layoutTrackerManagerTimer.constrains().weightx = 1.0;
@@ -526,7 +526,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							Label separator = new Label(" / ");
 							separator.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							separator.setForeground(Color.decode("#A6AEB4"));
-							separator.setBackground(Color.decode("#212B33"));
+							separator.setBackground(UITheme.UIBackground());
 							separator.setHorizontalAlignment(JLabel.RIGHT);
 							layoutTrackerManagerTimer.add(separator, 3, 1);
 						}
@@ -534,7 +534,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							valueTrackerTimerRemaining = new Label("--h");
 							valueTrackerTimerRemaining.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							valueTrackerTimerRemaining.setForeground(Color.decode("#A6AEB4"));
-							valueTrackerTimerRemaining.setBackground(Color.decode("#212B33"));
+							valueTrackerTimerRemaining.setBackground(UITheme.UIBackground());
 							valueTrackerTimerRemaining.setHorizontalAlignment(JLabel.RIGHT);
 							valueTrackerTimerRemaining.setToolTipText("Generate tracker report CTRL+R");
 							layoutTrackerManagerTimer.constrains().insets = new Insets(0, 0, 0, 2);
@@ -548,14 +548,14 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				{
 					panelTrackerDetails = new Panel();
 					panelTrackerDetails.setLayout(new BorderLayout());
-					panelTrackerDetails.setBackground(Color.decode("#212B33"));
+					panelTrackerDetails.setBackground(UITheme.UIBackground());
 					panelTrackerDetails.setVisible(false);
 					{
 						{
 							labelTrackerDetails = new Label("TASK DETAILS");
 							labelTrackerDetails.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerDetails.setForeground(Color.decode("#525B61"));
-							labelTrackerDetails.setBackground(Color.decode("#333333"));
+							labelTrackerDetails.setBackground(UITheme.UIBackground());
 							labelTrackerDetails.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
 							panelTrackerDetails.add(labelTrackerDetails, BorderLayout.NORTH);
 						}
@@ -564,7 +564,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							editorTrackerDetails.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
 							editorTrackerDetails.setCaretColor(Color.decode("#ffffff"));
 							editorTrackerDetails.setForeground(Color.decode("#ffffff"));
-							editorTrackerDetails.setBackground(Color.decode("#333333"));
+							editorTrackerDetails.setBackground(UITheme.UIBackground());
 							editorTrackerDetails.setBorder(BorderFactory.createEmptyBorder(0, 12, 6, 6));
 							panelTrackerDetails.add(editorTrackerDetails, BorderLayout.CENTER);
 						}
@@ -574,14 +574,14 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				{
 					panelTrackerAnnotation = new Panel();
 					panelTrackerAnnotation.setLayout(new BorderLayout());
-					panelTrackerAnnotation.setBackground(Color.decode("#212B33"));
+					panelTrackerAnnotation.setBackground(UITheme.UIBackground());
 					panelTrackerAnnotation.setVisible(false);
 					{
 						{
 							labelTrackerAnnotation = new Label("SESSION ANNOTATIONS");
 							labelTrackerAnnotation.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelTrackerAnnotation.setForeground(Color.decode("#525B61"));
-							labelTrackerAnnotation.setBackground(Color.decode("#333333"));
+							labelTrackerAnnotation.setBackground(UITheme.UIBackground());
 							labelTrackerAnnotation.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 10));
 							panelTrackerAnnotation.add(labelTrackerAnnotation, BorderLayout.NORTH);
 						}
@@ -590,7 +590,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							editorTrackerAnnotation.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
 							editorTrackerAnnotation.setCaretColor(Color.decode("#ffffff"));
 							editorTrackerAnnotation.setForeground(Color.decode("#ffffff"));
-							editorTrackerAnnotation.setBackground(Color.decode("#333333"));
+							editorTrackerAnnotation.setBackground(UITheme.UIBackground());
 							editorTrackerAnnotation.setBorder(BorderFactory.createEmptyBorder(0, 12, 6, 6));
 							panelTrackerAnnotation.add(editorTrackerAnnotation, BorderLayout.CENTER);
 						}
@@ -606,16 +606,16 @@ public class TrackerController extends ViewController implements TrackerInterfac
 		{
 			panelBreakManager = new Panel();
 			panelBreakManager.setLayout(new CardLayout());
-			panelBreakManager.setBackground(Color.decode("#333333"));
+			panelBreakManager.setBackground(UITheme.UIBackground());
 			panelBreakManager.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#282828")));
 			{
 				panelBreakEmpty = new Panel();
 				GridHelper layoutBreakEmpty = new GridHelper(panelBreakEmpty);
-				panelBreakEmpty.setBackground(Color.decode("#333333"));
+				panelBreakEmpty.setBackground(UITheme.UIBackground());
 				{
 					labelBreakEmptyTitle = new Label("INTERRUPTIONS");
 					labelBreakEmptyTitle.setForeground(Color.decode("#9B9B9B"));
-					labelBreakEmptyTitle.setBackground(Color.decode("#333333"));
+					labelBreakEmptyTitle.setBackground(UITheme.UIBackground());
 					labelBreakEmptyTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 					layoutBreakEmpty.constrains().weightx = 1.0;
 					layoutBreakEmpty.constrains().insets = new Insets(2, 8, 4, 8);
@@ -624,12 +624,12 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				{
 					Panel panelEmptyHelper = new Panel();
 					GridHelper layoutEmptyHelper = new GridHelper(panelEmptyHelper);
-					panelEmptyHelper.setBackground(Color.decode("#333333"));
+					panelEmptyHelper.setBackground(UITheme.UIBackground());
 					panelEmptyHelper.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#282828")));
 					{
 						buttonBreakEmptyHelper = new ImageButton("interruption_create_b");
 						buttonBreakEmptyHelper.setForeground(Color.decode("#9B9B9B"));
-						buttonBreakEmptyHelper.setBackground(Color.decode("#333333"));
+						buttonBreakEmptyHelper.setBackground(UITheme.UIBackground());
 						buttonBreakEmptyHelper.setToolTipText("Interrupt current task CTRL+I");
 						layoutEmptyHelper.constrains().weighty = 1.0;
 						layoutEmptyHelper.constrains().fill = GridBagConstraints.HORIZONTAL;
@@ -640,7 +640,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 					{
 						labelBreakEmptyHelper = new Label("Interrupt current task");
 						labelBreakEmptyHelper.setForeground(Color.decode("#9B9B9B"));
-						labelBreakEmptyHelper.setBackground(Color.decode("#333333"));
+						labelBreakEmptyHelper.setBackground(UITheme.UIBackground());
 						labelBreakEmptyHelper.setFont(UIManager.getFont("TextField.font").deriveFont(32f));
 						layoutEmptyHelper.constrains().weightx = 1.0;
 						layoutEmptyHelper.constrains().weighty = 1.0;
@@ -669,14 +669,14 @@ public class TrackerController extends ViewController implements TrackerInterfac
 						{
 							labelBreakEditorProject = new Label("INTERRUPTION PROJECT");
 							labelBreakEditorProject.setForeground(Color.decode("#9B9B9B"));
-							labelBreakEditorProject.setBackground(Color.decode("#333333"));
+							labelBreakEditorProject.setBackground(UITheme.UIBackground());
 							labelBreakEditorProject.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							layoutBreakTrackerProject.constrains().weightx = 1.0;
 							layoutBreakTrackerProject.constrains().insets = new Insets(2, 8, 2, 8);
 							layoutBreakTrackerProject.add(labelBreakEditorProject, 0, 0);
 						}
 						{
-							comboBreakEditorProject = new LightComboBox<Object>();
+							comboBreakEditorProject = new DarkComboBox<Object>();
 							selectorBreakProject = new ProjectSearchBox(comboBreakEditorProject, breakTask.getProject());
 							comboBreakEditorProject.setModel(selectorBreakProject);
 							comboBreakEditorProject.addItemListener(selectorBreakProject);
@@ -690,14 +690,14 @@ public class TrackerController extends ViewController implements TrackerInterfac
 						{
 							labelBreakEditorTask = new Label("INTERRUPTION TASK");
 							labelBreakEditorTask.setForeground(Color.decode("#9B9B9B"));
-							labelBreakEditorTask.setBackground(Color.decode("#333333"));
+							labelBreakEditorTask.setBackground(UITheme.UIBackground());
 							labelBreakEditorTask.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							layoutBreakTrackerTask.constrains().weightx = 1.0;
 							layoutBreakTrackerTask.constrains().insets = new Insets(2, 8, 2, 8);
 							layoutBreakTrackerTask.add(labelBreakEditorTask, 0, 0);
 						}
 						{
-							comboBreakEditorTask = new LightComboBox<Object>();
+							comboBreakEditorTask = new DarkComboBox<Object>();
 							selectorBreakTask = new TaskSearchBox(comboBreakEditorTask, breakTask);
 							comboBreakEditorTask.setModel(selectorBreakTask);
 							comboBreakEditorTask.addItemListener(selectorBreakTask);
@@ -712,7 +712,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							labelBreakEditorReason = new Label("REASON");
 							labelBreakEditorReason.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 							labelBreakEditorReason.setForeground(Color.decode("#9B9B9B"));
-							labelBreakEditorReason.setBackground(Color.decode("#333333"));
+							labelBreakEditorReason.setBackground(UITheme.UIBackground());
 							labelBreakEditorReason.setBorder(BorderFactory.createEmptyBorder(2, 8, 2, 8));
 							panelBreakTrackerReason.add(labelBreakEditorReason, BorderLayout.NORTH);
 						}
@@ -721,7 +721,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 							editorBreakEditorReason.setFont(UIManager.getFont("TextField.font").deriveFont(16f));
 							editorBreakEditorReason.setCaretColor(Color.decode("#4A4A4A"));
 							editorBreakEditorReason.setForeground(Color.decode("#4A4A4A"));
-							editorBreakEditorReason.setBackground(Color.decode("#333333"));
+							editorBreakEditorReason.setBackground(UITheme.UIBackground());
 
 							Border lineBorder = BorderFactory.createMatteBorder(1, 0, 1, 0, Color.decode("#DCDCDC"));
 							Border emptyBorder = BorderFactory.createEmptyBorder(3, 8, 3, 8);
@@ -736,7 +736,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 				{
 					panelBreakTrackerTimer = new Panel();
 					panelBreakTrackerTimer.setForeground(Color.decode("#4A4A4A"));
-					panelBreakTrackerTimer.setBackground(Color.decode("#333333"));
+					panelBreakTrackerTimer.setBackground(UITheme.UIBackground());
 					GridHelper layoutBreakTrackerTimer = new GridHelper(panelBreakTrackerTimer);
 					{
 						labelBreakTrackerTitle = new Label("Break started at --:--");
@@ -795,16 +795,17 @@ public class TrackerController extends ViewController implements TrackerInterfac
 		{
 			panelBreakList = new Panel();
 			panelBreakList.setLayout(new BorderLayout());
-			panelBreakList.setBackground(Color.decode("#333333"));
+			panelBreakList.setBackground(UITheme.UIBackground());
 			{
 				Panel panelInterruptionsTitle = new Panel();
+				panelInterruptionsTitle.setBackground(UITheme.UIBackground());
 				panelInterruptionsTitle.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#DCDCDC")));
 				GridHelper layoutInterruptionsTitle = new GridHelper(panelInterruptionsTitle);
 				{
 					labelInterruptionsTitle = new Label("TODAY");
 					labelInterruptionsTitle.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 					labelInterruptionsTitle.setForeground(Color.decode("#9B9B9B"));
-					labelInterruptionsTitle.setBackground(Color.decode("#333333"));
+					labelInterruptionsTitle.setBackground(UITheme.UIBackground());
 					layoutInterruptionsTitle.constrains().weightx = 1.0;
 					layoutInterruptionsTitle.constrains().anchor = GridBagConstraints.CENTER;
 					layoutInterruptionsTitle.constrains().insets = new Insets(2, 8, 2, 8);
@@ -814,7 +815,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 					labelInterruptionsSummary = new Label("");
 					labelInterruptionsSummary.setFont(UIManager.getFont("Label.font").deriveFont(12f));
 					labelInterruptionsSummary.setForeground(Color.decode("#9B9B9B"));
-					labelInterruptionsSummary.setBackground(Color.decode("#333333"));
+					labelInterruptionsSummary.setBackground(UITheme.UIBackground());
 					layoutInterruptionsTitle.constrains().anchor = GridBagConstraints.CENTER;
 					layoutInterruptionsTitle.constrains().insets = new Insets(2, 8, 2, 8);
 					layoutInterruptionsTitle.add(labelInterruptionsSummary, 1, 0);
@@ -2282,7 +2283,7 @@ public class TrackerController extends ViewController implements TrackerInterfac
 			super();
 
 			GridHelper layout = new GridHelper(this);
-			setBackground(Color.decode("#333333"));
+			setBackground(UITheme.UIBackground());
 
 			Border borderSuperior = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#515151"));
 			Border borderDecorator = BorderFactory.createMatteBorder(0, 4, 0, 0, Color.decode("#515151"));
@@ -2368,11 +2369,11 @@ public class TrackerController extends ViewController implements TrackerInterfac
 			}
 			if (isSelected)
 			{
-				setBackground(Color.decode("#414141"));
+				setBackground(UITheme.UISelectorActive());
 			}
 			else
 			{
-				setBackground(Color.decode("#333333"));
+				setBackground(UITheme.UIBackground());
 			}
 
 			// -------------------------------------------------------

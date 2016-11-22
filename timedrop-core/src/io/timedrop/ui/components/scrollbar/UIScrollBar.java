@@ -1,4 +1,4 @@
-package io.timedrop.ui.components;
+package io.timedrop.ui.components.scrollbar;
 
 import java.awt.Color;
 import java.awt.Dimension;
